@@ -1,12 +1,12 @@
 package com.example.preorder.user.core.entity;
 
 import com.example.preorder.common.entity.BaseTimeEntity;
-import io.micrometer.observation.Observation;
 import jakarta.persistence.*;
 import lombok.*;
-import org.springframework.util.StringUtils;
 
 import java.time.LocalDateTime;
+
+import static org.springframework.util.StringUtils.*;
 
 @Entity
 @Getter
@@ -39,17 +39,22 @@ public class UserEntity extends BaseTimeEntity {
     }
 
     public static UserEntity createUser(String email, String name, String password, String profileImage) {
+        if (!hasText(email) || !hasText(name) || !hasText(password)) {
+            throw new IllegalArgumentException(
+                    String.format("Args should have text. %s %s %s", email, name, password)
+            );
+        }
         return new UserEntity(email, name, password, profileImage);
     }
 
     public void changeInfo(String name, String password, String profileImage) {
-        if (!StringUtils.hasText(name) && !this.name.equals(name)) {
+        if (hasText(name) && !this.name.equals(name)) {
             this.name = name;
         }
-        if (!StringUtils.hasText(password) && !this.password.equals(password)) {
+        if (hasText(password) && !this.password.equals(password)) {
             this.password = password;
         }
-        if (!StringUtils.hasText(profileImage) && !this.profileImage.equals(profileImage)) {
+        if (hasText(profileImage) && !this.profileImage.equals(profileImage)) {
             this.profileImage = profileImage;
         }
     }
