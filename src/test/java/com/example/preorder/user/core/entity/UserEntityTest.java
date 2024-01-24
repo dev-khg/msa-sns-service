@@ -14,6 +14,6 @@ class UserEntityTest {
     @Test
     @DisplayName("t")
     void createUser() {
-
+        throw new RuntimeException();
     }
 }
