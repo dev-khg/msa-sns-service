@@ -11,8 +11,8 @@ import java.util.UUID;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-@ActiveProfiles("test")
 @SpringBootTest
+@ActiveProfiles("local")
 class RedisManagerTest {
     @Autowired
     RedisManager redisManager;

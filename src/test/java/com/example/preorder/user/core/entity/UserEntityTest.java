@@ -13,8 +13,8 @@ import static com.example.preorder.user.core.entity.UserEntity.*;
 import static org.assertj.core.api.Assertions.*;
 import static org.junit.jupiter.api.Assertions.*;
 
-@ActiveProfiles("test")
 @SpringBootTest
+@ActiveProfiles("local")
 class UserEntityTest {
 
     @Test
