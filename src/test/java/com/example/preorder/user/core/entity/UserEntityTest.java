@@ -1,7 +1,5 @@
 package com.example.preorder.user.core.entity;
 
-import io.micrometer.observation.Observation;
-import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -67,13 +65,13 @@ class UserEntityTest {
         // then
         // Case 1: User Entity's profile image is null
         assertEquals(userEntityWithProfileImageNull.getEmail(), email);
-        assertEquals(userEntityWithProfileImageNull.getName(), name);
+        assertEquals(userEntityWithProfileImageNull.getUsername(), name);
         assertEquals(userEntityWithProfileImageNull.getPassword(), password);
         assertEquals(userEntityWithProfileImageNull.getProfileImage(), null);
 
         // Case 2: User Entity's profile image is not null
         assertEquals(userEntityWithProfileImageNotNull.getEmail(), email);
-        assertEquals(userEntityWithProfileImageNotNull.getName(), name);
+        assertEquals(userEntityWithProfileImageNotNull.getUsername(), name);
         assertEquals(userEntityWithProfileImageNotNull.getPassword(), password);
         assertEquals(userEntityWithProfileImageNotNull.getProfileImage(), profileImage);
     }
@@ -90,7 +88,7 @@ class UserEntityTest {
         // then
         // Case 1: Change name
         userEntity.changeInfo(createRandomUUID(), null, null);
-        assertNotEquals(oldName, userEntity.getName());
+        assertNotEquals(oldName, userEntity.getUsername());
         assertEquals(oldPassword, userEntity.getPassword());
         assertEquals(oldProfileImage, userEntity.getProfileImage());
 
