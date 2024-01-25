@@ -23,6 +23,6 @@ public class RedisManager {
     }
 
     public void deleteKey(String key) {
-        stringRedisTemplate.unlink(key);
+        stringRedisTemplate.delete(key);
     }
 }
