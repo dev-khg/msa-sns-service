@@ -20,7 +20,7 @@ public class UserEntity extends BaseTimeEntity {
     private String email;
 
     @Column(nullable = false, length = 50)
-    private String name;
+    private String username;
 
     @Column(nullable = false, length = 80)
     private String password;
@@ -31,9 +31,9 @@ public class UserEntity extends BaseTimeEntity {
     @Column(nullable = true)
     private LocalDateTime deletedAt;
 
-    private UserEntity(String email, String name, String password, String profileImage) {
+    private UserEntity(String email, String username, String password, String profileImage) {
         this.email = email;
-        this.name = name;
+        this.username = username;
         this.password = password;
         this.profileImage = profileImage;
     }
@@ -48,8 +48,8 @@ public class UserEntity extends BaseTimeEntity {
     }
 
     public void changeInfo(String name, String password, String profileImage) {
-        if (hasText(name) && !this.name.equals(name)) {
-            this.name = name;
+        if (hasText(name) && !this.username.equals(name)) {
+            this.username = name;
         }
         if (hasText(password) && !this.password.equals(password)) {
             this.password = password;
