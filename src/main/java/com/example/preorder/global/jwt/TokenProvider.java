@@ -31,6 +31,19 @@ public class TokenProvider {
         return createToken(subject, refreshTokenExpiration);
     }
 
+    public String getSubject(String token) {
+        try {
+            return Jwts.parser()
+                    .setSigningKey(secretKey)
+                    .parseClaimsJws(token)
+                    .getBody()
+                    .getSubject();
+        } catch (Exception e) {
+            log.debug("token is invalid : token : [{}]", token);
+            return null;
+        }
+    }
+
     public boolean isValidateToken(String token) {
         try {
             Jwts.parser().setSigningKey(secretKey).parseClaimsJws(token);
@@ -58,5 +71,13 @@ public class TokenProvider {
 
     private long getRandomSeconds() {
         return (atomicLong.incrementAndGet() % 10) * 1000;
+    }
+
+    public Long getAccessTokenExpiration() {
+        return accessTokenExpiration;
+    }
+
+    public Long getRefreshTokenExpiration() {
+        return refreshTokenExpiration;
     }
 }
