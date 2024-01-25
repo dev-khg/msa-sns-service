@@ -41,3 +41,8 @@ spring:
     username: ${MAIL_USERNAME}
     password: ${MAIL_PASSWORD}
     port: ${MAIL_PORT}
+
+jwt:
+  secret: ${JWT_SECRET}
+  access_token_expiration: 1000 * 60 * 30 # 0.5 Hours
+  refresh_token_expiration: 1000 * 60 * 60 * 24 * 7 # 7 Days

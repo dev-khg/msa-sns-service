@@ -41,3 +41,8 @@ spring:
     username: test@test.com
     password: test-password
     port: 123
+
+jwt:
+  secret: testhjgjkasgsfngadsgasgwgewgagdsgdsa34234afeasgajsgsafdss
+  access_token_expiration: 1800000 # 0.5 Hours
+  refresh_token_expiration: 604800000 # 7 Days
