@@ -86,6 +86,21 @@ class TokenProviderTest {
         assertEquals(tokenSet.size(), loopCount * 2);
     }
 
+    @Test
+    @DisplayName("토큰 생성 시, 올바른 Subject가 반환되어야 한다.")
+    void get_subject_must_be_valid() {
+        // given
+        String subject = createRandomUUID();
+        String accessToken = tokenProvider.createAccessToken(subject);
+        String refreshToken = tokenProvider.createRefreshToken(subject);
+
+        // when
+
+        //then
+        assertEquals(tokenProvider.getSubject(accessToken), subject);
+        assertEquals(tokenProvider.getSubject(refreshToken), subject);
+    }
+
     private String createRandomUUID() {
         return UUID.randomUUID().toString();
     }
