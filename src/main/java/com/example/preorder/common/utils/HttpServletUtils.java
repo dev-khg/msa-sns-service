@@ -7,13 +7,14 @@ import jakarta.servlet.http.HttpServletResponse;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import org.springframework.stereotype.Component;
 import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
 
 import java.util.Arrays;
 import java.util.Optional;
 
-@NoArgsConstructor(access = AccessLevel.PRIVATE)
+@Component
 public final class HttpServletUtils {
     @Getter
     public enum CookieType {
@@ -37,15 +38,15 @@ public final class HttpServletUtils {
         }
     }
 
-    public static Optional<String> getHeader(HeaderType type) {
+    public Optional<String> getHeader(HeaderType type) {
         return Optional.ofNullable(getServletRequest().getHeader(type.getKey()));
     }
 
-    public static void putHeader(HeaderType type, String value) {
+    public void putHeader(HeaderType type, String value) {
         getServletResponse().addHeader(type.getKey(), value);
     }
 
-    public static void addCookie(CookieType type, String value, int seconds) {
+    public void addCookie(CookieType type, String value, int seconds) {
         Cookie cookie = new Cookie(type.getKey(), value);
         cookie.setPath("/");
         cookie.setHttpOnly(true);
@@ -53,7 +54,7 @@ public final class HttpServletUtils {
         getServletResponse().addCookie(cookie);
     }
 
-    public static void deleteCookie(CookieType type) {
+    public void deleteCookie(CookieType type) {
         getCookie(type).ifPresent((cookie) -> {
             cookie.setMaxAge(0);
             cookie.setValue("");
@@ -61,13 +62,13 @@ public final class HttpServletUtils {
         });
     }
 
-    public static Optional<Cookie> getCookie(CookieType type) {
+    public Optional<Cookie> getCookie(CookieType type) {
         return Arrays.stream(getServletRequest().getCookies())
                 .filter(cookie -> cookie.getName().equals(type.getKey()))
                 .findAny();
     }
 
-    public static HttpServletRequest getServletRequest() {
+    public HttpServletRequest getServletRequest() {
         return ((ServletRequestAttributes) RequestContextHolder.getRequestAttributes()).getRequest();
     }
 

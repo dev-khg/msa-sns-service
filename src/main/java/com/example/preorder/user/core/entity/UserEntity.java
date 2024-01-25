@@ -1,6 +1,7 @@
 package com.example.preorder.user.core.entity;
 
 import com.example.preorder.common.entity.BaseTimeEntity;
+import com.example.preorder.common.exception.BadRequestException;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -60,6 +61,13 @@ public class UserEntity extends BaseTimeEntity {
         if (hasText(description) && !description.equals(this.description)) {
             this.description = description;
         }
+    }
+
+    public void changePassword(String currentPassword, String newPassword) {
+        if (!currentPassword.equals(this.password)) {
+            throw new BadRequestException("Current Password is not matched.");
+        }
+        this.password = newPassword;
     }
 
     public void signOut() {
