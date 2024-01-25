@@ -10,7 +10,7 @@ import redis.embedded.RedisServer;
 
 @Slf4j
 @Configuration
-@Profile("local")
+@Profile("test")
 public class EmbeddedRedisConfig {
     private final RedisServer redisServer;
 

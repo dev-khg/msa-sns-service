@@ -37,7 +37,7 @@ spring:
           auth: true
           connectiontimeout: 5000
           writetimeout: 5000
-    host: ${MAIL_HOST}
-    username: ${MAIL_USERNAME}
-    password: ${MAIL_PASSWORD}
-    port: ${MAIL_PORT}
+    host: test.host
+    username: test@test.com
+    password: test-password
+    port: 123
