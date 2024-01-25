@@ -81,25 +81,26 @@ class UserEntityTest {
     void valid_change_info_only_not_null_field() {
         // given
         String oldName = createRandomUUID();
-        String oldPassword = createRandomUUID();
         String oldProfileImage = createRandomUUID();
-        UserEntity userEntity = createUser(createRandomUUID(), oldName, oldPassword, oldProfileImage);
+        String description = createRandomUUID();
+
+        UserEntity userEntity = createUser(createRandomUUID(), oldName, createRandomUUID(), oldProfileImage);
 
         // then
         // Case 1: Change name
         userEntity.changeInfo(createRandomUUID(), null, null);
         assertNotEquals(oldName, userEntity.getUsername());
-        assertEquals(oldPassword, userEntity.getPassword());
         assertEquals(oldProfileImage, userEntity.getProfileImage());
+        assertNull(userEntity.getDescription());
 
-        // Case 2: Change password
+        // Case 2: Change ProfileImage
         userEntity.changeInfo(null, createRandomUUID(), null);
-        assertNotEquals(oldPassword, userEntity.getPassword());
-        assertEquals(oldProfileImage, userEntity.getProfileImage());
-
-        // Case 3: Change ProfileImage
-        userEntity.changeInfo(null, null, createRandomUUID());
         assertNotEquals(oldProfileImage, userEntity.getProfileImage());
+        assertNull(userEntity.getDescription());
+
+        // Case 3: Change Description
+        userEntity.changeInfo(null, null, description);
+        assertNotNull(userEntity.getDescription());
     }
 
     @Test
