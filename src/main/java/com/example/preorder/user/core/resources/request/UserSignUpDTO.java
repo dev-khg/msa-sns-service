@@ -1,10 +1,12 @@
 package com.example.preorder.user.core.resources.request;
 
 import jakarta.validation.constraints.*;
+import lombok.AllArgsConstructor;
 import lombok.Getter;
 import org.springframework.web.multipart.MultipartFile;
 
 @Getter
+@AllArgsConstructor
 public class UserSignUpDTO {
     @Email(message = "email field's is invalid form.")
     @NotEmpty(message = "email field must not empty.")
