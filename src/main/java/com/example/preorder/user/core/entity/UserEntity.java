@@ -19,11 +19,14 @@ public class UserEntity extends BaseTimeEntity {
     @Column(nullable = false, unique = true, length = 50)
     private String email;
 
-    @Column(nullable = false, length = 50)
+    @Column(nullable = false, unique = true, length = 50)
     private String username;
 
     @Column(nullable = false, length = 80)
     private String password;
+
+    @Column(nullable = true, length = 200)
+    private String description;
 
     @Column(nullable = true, length = 100)
     private String profileImage;
@@ -47,15 +50,15 @@ public class UserEntity extends BaseTimeEntity {
         return new UserEntity(email, name, password, profileImage);
     }
 
-    public void changeInfo(String name, String password, String profileImage) {
-        if (hasText(name) && !this.username.equals(name)) {
+    public void changeInfo(String name, String profileImage, String description) {
+        if (hasText(name) && !name.equals(this.username)) {
             this.username = name;
         }
-        if (hasText(password) && !this.password.equals(password)) {
-            this.password = password;
-        }
-        if (hasText(profileImage) && !this.profileImage.equals(profileImage)) {
+        if (hasText(profileImage) && !profileImage.equals(this.profileImage)) {
             this.profileImage = profileImage;
+        }
+        if (hasText(description) && !description.equals(this.description)) {
+            this.description = description;
         }
     }
 
