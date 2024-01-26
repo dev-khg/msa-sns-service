@@ -1,8 +1,10 @@
 package com.example.preorder.user.presentation.resources.response;
 
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 
 @Getter
+@NoArgsConstructor
 public class UserInfoResponse {
     private String username;
     private String profileImage;

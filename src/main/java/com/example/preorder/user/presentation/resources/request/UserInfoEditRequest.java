@@ -13,6 +13,4 @@ public class UserInfoEditRequest {
     private String username;
 
     private String description;
-
-    private MultipartFile file;
 }

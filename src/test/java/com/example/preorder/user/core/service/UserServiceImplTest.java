@@ -268,10 +268,10 @@ class UserServiceImplTest {
         UserChangePasswordRequest userChangePasswordRequest = new UserChangePasswordRequest(createRandomUUID(), inputPassword);
 
         // when
-        when(userRepository.findByEmail(savedEntity.getEmail())).thenReturn(ofNullable(savedEntity));
+        when(userRepository.findById(any())).thenReturn(ofNullable(savedEntity));
 
         // then
-        assertThatThrownBy(() -> userService.editPassword(userChangePasswordRequest))
+        assertThatThrownBy(() -> userService.editPassword(savedEntity, userChangePasswordRequest))
                 .isInstanceOf(BadRequestException.class);
     }
 
@@ -287,14 +287,17 @@ class UserServiceImplTest {
                 .thenReturn(ofNullable(createRandomUUID()));
         when(tokenProvider.getSubject(any()))
                 .thenReturn(savedEntity.getEmail());
-        when(userRepository.findByEmail(savedEntity.getEmail()))
+        when(userRepository.findById(any()))
                 .thenReturn(ofNullable(savedEntity));
-        // then
-        userService.editPassword(userChangePasswordRequest);
+        when(passwordEncoder.matches(any(), any()))
+                .thenReturn(true);
 
-        assertEquals(savedEntity.getPassword(), newPassword);
+        // then
+        userService.editPassword(savedEntity, userChangePasswordRequest);
+
+        assertNotEquals(savedEntity.getPassword(), newPassword);
     }
-    
+
     @Test
     @DisplayName("회원정보 변경 시, 올바르게 변경되어야 한다.")
     public void valid_edit_user_info() {
@@ -313,11 +316,11 @@ class UserServiceImplTest {
                 .thenReturn(ofNullable(accessToken));
         when(tokenProvider.getSubject(accessToken))
                 .thenReturn(savedEntity.getEmail());
-        when(userRepository.findByEmail(savedEntity.getEmail()))
+        when(userRepository.findById(any()))
                 .thenReturn(ofNullable(savedEntity));
 
         //  then
-        userService.editInfo(new UserInfoEditRequest(username, description, mockMultipart));
+        userService.editInfo(savedEntity, new UserInfoEditRequest(username, description), mockMultipart);
 
         assertEquals(savedEntity.getProfileImage(), imageFile);
         assertEquals(savedEntity.getDescription(), description);

@@ -10,17 +10,22 @@ import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
+import org.springframework.context.annotation.Bean;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
 
 import java.io.IOException;
+import java.util.ArrayList;
 
 import static com.example.preorder.common.utils.HttpServletUtils.HeaderType.*;
 import static com.example.preorder.common.utils.RedisKeyGenerator.*;
 import static com.example.preorder.common.utils.RedisKeyGenerator.RedisKeyType.*;
 
+@Component
 @RequiredArgsConstructor
 public class JwtFilter extends OncePerRequestFilter {
     private final TokenProvider tokenProvider;
@@ -35,7 +40,10 @@ public class JwtFilter extends OncePerRequestFilter {
         if (accessToken != null && !isBlackList(accessToken) && tokenProvider.isValidateToken(accessToken)) {
             String email = tokenProvider.getSubject(accessToken);
             LoginUser loginUser = (LoginUser) userDetailsService.loadUserByUsername(email);
-            SecurityContextHolder.getContext().setAuthentication(loginUser);
+
+            SecurityContextHolder.getContext().setAuthentication(
+                    new UsernamePasswordAuthenticationToken(loginUser, "", new ArrayList<>())
+            );
         }
 
         filterChain.doFilter(request, response);

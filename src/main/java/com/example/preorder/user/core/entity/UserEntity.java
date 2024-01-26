@@ -4,6 +4,7 @@ import com.example.preorder.common.entity.BaseTimeEntity;
 import com.example.preorder.common.exception.BadRequestException;
 import jakarta.persistence.*;
 import lombok.*;
+import org.springframework.security.crypto.password.PasswordEncoder;
 
 import java.time.LocalDateTime;
 
@@ -11,6 +12,7 @@ import static org.springframework.util.StringUtils.*;
 
 @Entity
 @Getter
+@Table(name = "users")
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class UserEntity extends BaseTimeEntity {
     @Id
@@ -23,7 +25,7 @@ public class UserEntity extends BaseTimeEntity {
     @Column(nullable = false, unique = true, length = 50)
     private String username;
 
-    @Column(nullable = false, length = 80)
+    @Column(nullable = false, length = 80, updatable = true)
     private String password;
 
     @Column(nullable = true, length = 200)
@@ -63,11 +65,10 @@ public class UserEntity extends BaseTimeEntity {
         }
     }
 
-    public void changePassword(String currentPassword, String newPassword) {
-        if (!currentPassword.equals(this.password)) {
+    public void changePassword(PasswordEncoder passwordEncoder, String currentPassword, String newPassword) {
+        if (!passwordEncoder.matches(currentPassword, this.password))
             throw new BadRequestException("Current Password is not matched.");
-        }
-        this.password = newPassword;
+        this.password = passwordEncoder.encode(newPassword);
     }
 
     public void signOut() {

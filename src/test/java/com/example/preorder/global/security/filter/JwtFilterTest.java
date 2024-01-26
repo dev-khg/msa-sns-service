@@ -130,9 +130,8 @@ class JwtFilterTest {
 
         // then
         jwtFilter.doFilterInternal(request, response, filterChain);
-        assertEquals(
-                SecurityContextHolder.getContext().getAuthentication(),
-                mock
+        assertNotNull(
+                SecurityContextHolder.getContext().getAuthentication()
         );
     }
 }
