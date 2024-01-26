@@ -81,9 +81,9 @@ class UserServiceImplTest {
         // when
 
         // then
-        assertThatThrownBy(() -> userService.signUp(duplicateEmail))
+        assertThatThrownBy(() -> userService.signUp(duplicateEmail, null))
                 .isInstanceOf(BadRequestException.class);
-        assertThatThrownBy(() -> userService.signUp(duplicateName))
+        assertThatThrownBy(() -> userService.signUp(duplicateName, null))
                 .isInstanceOf(BadRequestException.class);
     }
 
@@ -96,8 +96,7 @@ class UserServiceImplTest {
                 createRandomUUID(),
                 createRandomUUID(),
                 createRandomUUID(),
-                null,
-                createRandomUUID()
+                null
         );
 
         // when
@@ -105,7 +104,7 @@ class UserServiceImplTest {
                 .thenReturn(ofNullable(createRandomUUID()));
 
         // then
-        assertThatThrownBy(() -> userService.signUp(userSignUpDTO))
+        assertThatThrownBy(() -> userService.signUp(userSignUpDTO, null))
                 .isInstanceOf(BadRequestException.class);
     }
 
@@ -119,7 +118,6 @@ class UserServiceImplTest {
                 createRandomUUID(),
                 createRandomUUID(),
                 createRandomUUID(),
-                null,
                 createRandomUUID()
         );
 
@@ -134,7 +132,7 @@ class UserServiceImplTest {
                 .thenReturn(encodedPassword);
 
         // then
-        TokenDTO tokenDTO = userService.signUp(userSignUpDTO);
+        TokenDTO tokenDTO = userService.signUp(userSignUpDTO, null);
 
         assertThat(tokenDTO.getAccessToken()).isNotNull();
         assertThat(tokenDTO.getRefreshToken()).isNotNull();
@@ -332,8 +330,7 @@ class UserServiceImplTest {
                 username,
                 createRandomUUID(),
                 createRandomUUID(),
-                null,
-                createRandomUUID()
+                null
         );
     }
 
