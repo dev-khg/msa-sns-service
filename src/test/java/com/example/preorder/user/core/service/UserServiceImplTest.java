@@ -8,11 +8,11 @@ import com.example.preorder.global.redis.RedisManager;
 import com.example.preorder.global.storage.service.StorageService;
 import com.example.preorder.user.core.entity.UserEntity;
 import com.example.preorder.user.core.repository.UserRepository;
-import com.example.preorder.user.presentation.resources.request.UserChangePasswordDTO;
-import com.example.preorder.user.presentation.resources.request.UserInfoEditDTO;
-import com.example.preorder.user.presentation.resources.request.UserSignUpDTO;
-import com.example.preorder.user.presentation.resources.response.TokenDTO;
-import com.example.preorder.user.presentation.resources.response.UserInfoDTO;
+import com.example.preorder.user.presentation.resources.request.UserChangePasswordRequest;
+import com.example.preorder.user.presentation.resources.request.UserInfoEditRequest;
+import com.example.preorder.user.presentation.resources.request.UserSignUpRequest;
+import com.example.preorder.user.presentation.resources.response.TokenResponse;
+import com.example.preorder.user.presentation.resources.response.UserInfoResponse;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -75,8 +75,8 @@ class UserServiceImplTest {
     @DisplayName("이미 존재하는 메일이나 이름으로 회원가입 시, 예외가 발생한다")
     void invalid_sign_up_duplicate_name_or_email() {
         // given
-        UserSignUpDTO duplicateEmail = createSignDTO(savedEntity.getEmail(), createRandomUUID());
-        UserSignUpDTO duplicateName = createSignDTO(savedEntity.getEmail(), createRandomUUID());
+        UserSignUpRequest duplicateEmail = createSignDTO(savedEntity.getEmail(), createRandomUUID());
+        UserSignUpRequest duplicateName = createSignDTO(savedEntity.getEmail(), createRandomUUID());
 
         // when
 
@@ -91,7 +91,7 @@ class UserServiceImplTest {
     @DisplayName("회원가입 시, 인증 코드가 일치하지 않으면 예외가 발생한다.")
     void invalid_sign_up_auth_code_throws_exception() {
         // given
-        UserSignUpDTO userSignUpDTO = new UserSignUpDTO(
+        UserSignUpRequest userSignUpRequest = new UserSignUpRequest(
                 createRandomUUID(),
                 createRandomUUID(),
                 createRandomUUID(),
@@ -100,11 +100,11 @@ class UserServiceImplTest {
         );
 
         // when
-        when(redisManager.getValue(EMAIL_CERT, userSignUpDTO.getEmail()))
+        when(redisManager.getValue(EMAIL_CERT, userSignUpRequest.getEmail()))
                 .thenReturn(ofNullable(createRandomUUID()));
 
         // then
-        assertThatThrownBy(() -> userService.signUp(userSignUpDTO, null))
+        assertThatThrownBy(() -> userService.signUp(userSignUpRequest, null))
                 .isInstanceOf(BadRequestException.class);
     }
 
@@ -113,7 +113,7 @@ class UserServiceImplTest {
     void valid_sign_up() {
         // given
         String encodedPassword = createRandomUUID();
-        UserSignUpDTO userSignUpDTO = new UserSignUpDTO(
+        UserSignUpRequest userSignUpRequest = new UserSignUpRequest(
                 createRandomUUID(),
                 createRandomUUID(),
                 createRandomUUID(),
@@ -122,20 +122,20 @@ class UserServiceImplTest {
         );
 
         // when
-        when(redisManager.getValue(EMAIL_CERT, userSignUpDTO.getEmail()))
-                .thenReturn(ofNullable(userSignUpDTO.getAuthCode()));
-        when(tokenProvider.createAccessToken(userSignUpDTO.getEmail()))
+        when(redisManager.getValue(EMAIL_CERT, userSignUpRequest.getEmail()))
+                .thenReturn(ofNullable(userSignUpRequest.getAuthCode()));
+        when(tokenProvider.createAccessToken(userSignUpRequest.getEmail()))
                 .thenReturn(createRandomUUID());
-        when(tokenProvider.createRefreshToken(userSignUpDTO.getEmail()))
+        when(tokenProvider.createRefreshToken(userSignUpRequest.getEmail()))
                 .thenReturn(createRandomUUID());
-        when(passwordEncoder.encode(userSignUpDTO.getPassword()))
+        when(passwordEncoder.encode(userSignUpRequest.getPassword()))
                 .thenReturn(encodedPassword);
 
         // then
-        TokenDTO tokenDTO = userService.signUp(userSignUpDTO, null);
+        TokenResponse tokenResponse = userService.signUp(userSignUpRequest, null);
 
-        assertThat(tokenDTO.getAccessToken()).isNotNull();
-        assertThat(tokenDTO.getRefreshToken()).isNotNull();
+        assertThat(tokenResponse.getAccessToken()).isNotNull();
+        assertThat(tokenResponse.getRefreshToken()).isNotNull();
     }
 
     @Test
@@ -177,9 +177,9 @@ class UserServiceImplTest {
                 .thenReturn(createRandomUUID());
 
         // then
-        TokenDTO tokenDTO = userService.reissueToken(correctToken);
-        assertNotNull(tokenDTO.getRefreshToken());
-        assertNotNull(tokenDTO.getAccessToken());
+        TokenResponse tokenResponse = userService.reissueToken(correctToken);
+        assertNotNull(tokenResponse.getRefreshToken());
+        assertNotNull(tokenResponse.getAccessToken());
     }
 
     @ParameterizedTest
@@ -207,7 +207,7 @@ class UserServiceImplTest {
                 .thenReturn(ofNullable(savedEntity));
 
         // then
-        UserInfoDTO userInfo = userService.getUserInfo(pk);
+        UserInfoResponse userInfo = userService.getUserInfo(pk);
         assertNotNull(userInfo);
         assertEquals(userInfo.getDescription(), savedEntity.getDescription());
         assertEquals(userInfo.getUsername(), savedEntity.getUsername());
@@ -265,13 +265,13 @@ class UserServiceImplTest {
     void invalid_password_change_throws_exception() {
         // given
         String inputPassword = createRandomUUID();
-        UserChangePasswordDTO userChangePasswordDTO = new UserChangePasswordDTO(createRandomUUID(), inputPassword);
+        UserChangePasswordRequest userChangePasswordRequest = new UserChangePasswordRequest(createRandomUUID(), inputPassword);
 
         // when
         when(userRepository.findByEmail(savedEntity.getEmail())).thenReturn(ofNullable(savedEntity));
 
         // then
-        assertThatThrownBy(() -> userService.editPassword(userChangePasswordDTO))
+        assertThatThrownBy(() -> userService.editPassword(userChangePasswordRequest))
                 .isInstanceOf(BadRequestException.class);
     }
 
@@ -280,7 +280,7 @@ class UserServiceImplTest {
     void valid_password_change() {
         // given
         String newPassword = createRandomUUID();
-        UserChangePasswordDTO userChangePasswordDTO = new UserChangePasswordDTO(savedEntity.getPassword(), newPassword);
+        UserChangePasswordRequest userChangePasswordRequest = new UserChangePasswordRequest(savedEntity.getPassword(), newPassword);
 
         // when
         when(servletUtils.getHeader(any()))
@@ -290,7 +290,7 @@ class UserServiceImplTest {
         when(userRepository.findByEmail(savedEntity.getEmail()))
                 .thenReturn(ofNullable(savedEntity));
         // then
-        userService.editPassword(userChangePasswordDTO);
+        userService.editPassword(userChangePasswordRequest);
 
         assertEquals(savedEntity.getPassword(), newPassword);
     }
@@ -317,15 +317,15 @@ class UserServiceImplTest {
                 .thenReturn(ofNullable(savedEntity));
 
         //  then
-        userService.editInfo(new UserInfoEditDTO(username, description, mockMultipart));
+        userService.editInfo(new UserInfoEditRequest(username, description, mockMultipart));
 
         assertEquals(savedEntity.getProfileImage(), imageFile);
         assertEquals(savedEntity.getDescription(), description);
         assertEquals(savedEntity.getUsername(), username);
     }
 
-    private UserSignUpDTO createSignDTO(String email, String username) {
-        return new UserSignUpDTO(
+    private UserSignUpRequest createSignDTO(String email, String username) {
+        return new UserSignUpRequest(
                 email,
                 username,
                 createRandomUUID(),
