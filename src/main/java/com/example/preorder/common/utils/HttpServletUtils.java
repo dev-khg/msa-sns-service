@@ -18,12 +18,14 @@ import java.util.Optional;
 public final class HttpServletUtils {
     @Getter
     public enum CookieType {
-        REFRESH_TOKEN("RefreshToken");
+        REFRESH_TOKEN("RefreshToken", (int) RedisKeyGenerator.RedisKeyType.REFRESH_TOKEN.getExpiration() / 1000);
 
         private final String key;
+        private final int expiration;
 
-        CookieType(String key) {
+        CookieType(String key, int expiration) {
             this.key = key;
+            this.expiration = expiration;
         }
     }
 
@@ -46,11 +48,11 @@ public final class HttpServletUtils {
         getServletResponse().addHeader(type.getKey(), value);
     }
 
-    public void addCookie(CookieType type, String value, int seconds) {
+    public void addCookie(CookieType type, String value) {
         Cookie cookie = new Cookie(type.getKey(), value);
         cookie.setPath("/");
         cookie.setHttpOnly(true);
-        cookie.setMaxAge(seconds);
+        cookie.setMaxAge(type.getExpiration());
         getServletResponse().addCookie(cookie);
     }
 
