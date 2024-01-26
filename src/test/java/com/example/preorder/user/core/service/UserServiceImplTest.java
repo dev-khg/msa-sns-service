@@ -22,6 +22,7 @@ import org.junit.jupiter.params.provider.ValueSource;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -53,6 +54,8 @@ class UserServiceImplTest {
     RedisManager redisManager;
     @Mock
     HttpServletUtils servletUtils;
+    @Mock
+    PasswordEncoder passwordEncoder;
 
     UserEntity savedEntity;
 
@@ -110,6 +113,7 @@ class UserServiceImplTest {
     @DisplayName("정상회원 가입 시, 올바른 토큰이 반환되어야 한다.")
     void valid_sign_up() {
         // given
+        String encodedPassword = createRandomUUID();
         UserSignUpDTO userSignUpDTO = new UserSignUpDTO(
                 createRandomUUID(),
                 createRandomUUID(),
@@ -126,6 +130,8 @@ class UserServiceImplTest {
                 .thenReturn(createRandomUUID());
         when(tokenProvider.createRefreshToken(userSignUpDTO.getEmail()))
                 .thenReturn(createRandomUUID());
+        when(passwordEncoder.encode(userSignUpDTO.getPassword()))
+                .thenReturn(encodedPassword);
 
         // then
         TokenDTO tokenDTO = userService.signUp(userSignUpDTO);

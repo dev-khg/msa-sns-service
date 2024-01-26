@@ -15,6 +15,7 @@ import com.example.preorder.user.core.resources.request.UserSignUpDTO;
 import com.example.preorder.user.core.resources.response.TokenDTO;
 import com.example.preorder.user.core.resources.response.UserInfoDTO;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
@@ -36,6 +37,7 @@ public class UserServiceImpl implements UserService {
     private final StorageService storageService;
     private final TokenProvider tokenProvider;
     private final HttpServletUtils servletUtils;
+    private final PasswordEncoder passwordEncoder;
 
     @Override
     @Transactional
@@ -46,11 +48,10 @@ public class UserServiceImpl implements UserService {
 
         String profileImageUrl = uploadFile(signUpDTO.getFile());
 
-        // TODO : need to password encryption
         UserEntity userEntity = createUser(
                 signUpDTO.getEmail(),
                 signUpDTO.getUsername(),
-                signUpDTO.getPassword(),
+                passwordEncoder.encode(signUpDTO.getPassword()),
                 profileImageUrl
         );
 
