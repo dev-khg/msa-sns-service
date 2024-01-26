@@ -23,8 +23,6 @@ public class UserSignUpDTO {
 
     private String description;
 
-    private MultipartFile file;
-
     @Size(min = 6, max = 6, message = "Auth code length must be 6.")
     private String authCode;
 }

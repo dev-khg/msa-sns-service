@@ -41,12 +41,12 @@ public class UserServiceImpl implements UserService {
 
     @Override
     @Transactional
-    public TokenDTO signUp(UserSignUpDTO signUpDTO) {
+    public TokenDTO signUp(UserSignUpDTO signUpDTO, MultipartFile file) {
         checkEmailDuplication(signUpDTO.getEmail());
         checkUsernameDuplication(signUpDTO.getUsername());
         checkAuthCode(signUpDTO.getEmail(), signUpDTO.getAuthCode());
 
-        String profileImageUrl = uploadFile(signUpDTO.getFile());
+        String profileImageUrl = uploadFile(file);
 
         UserEntity userEntity = createUser(
                 signUpDTO.getEmail(),
