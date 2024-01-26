@@ -316,7 +316,7 @@ class UserServiceImplTest {
                 .thenReturn(ofNullable(accessToken));
         when(tokenProvider.getSubject(accessToken))
                 .thenReturn(savedEntity.getEmail());
-        when(userRepository.findByEmail(savedEntity.getEmail()))
+        when(userRepository.findById(any()))
                 .thenReturn(ofNullable(savedEntity));
 
         //  then

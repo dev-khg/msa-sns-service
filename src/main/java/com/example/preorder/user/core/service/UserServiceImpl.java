@@ -93,7 +93,8 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public void logout(String accessToken, String refreshToken) {
-        accessToken = accessToken.substring(7);
+        if (accessToken != null)
+            accessToken = accessToken.substring(7);
         String email = tokenProvider.getSubject(accessToken);
 
         if (tokenProvider.isValidateToken(accessToken)) {
@@ -133,7 +134,7 @@ public class UserServiceImpl implements UserService {
 
         Optional<UserEntity> optionalUser = userRepository.findById(userEntity.getId());
 
-        if(optionalUser.isEmpty()) {
+        if (optionalUser.isEmpty()) {
             throw new InternalErrorException("Sorry. Server has problem");
         }
 
