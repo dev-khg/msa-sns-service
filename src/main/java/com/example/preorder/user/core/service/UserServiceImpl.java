@@ -9,11 +9,11 @@ import com.example.preorder.global.redis.RedisManager;
 import com.example.preorder.global.storage.service.StorageService;
 import com.example.preorder.user.core.entity.UserEntity;
 import com.example.preorder.user.core.repository.UserRepository;
-import com.example.preorder.user.core.resources.request.UserChangePasswordDTO;
-import com.example.preorder.user.core.resources.request.UserInfoEditDTO;
-import com.example.preorder.user.core.resources.request.UserSignUpDTO;
-import com.example.preorder.user.core.resources.response.TokenDTO;
-import com.example.preorder.user.core.resources.response.UserInfoDTO;
+import com.example.preorder.user.presentation.resources.request.UserChangePasswordRequest;
+import com.example.preorder.user.presentation.resources.request.UserInfoEditRequest;
+import com.example.preorder.user.presentation.resources.request.UserSignUpRequest;
+import com.example.preorder.user.presentation.resources.response.TokenResponse;
+import com.example.preorder.user.presentation.resources.response.UserInfoResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -41,7 +41,7 @@ public class UserServiceImpl implements UserService {
 
     @Override
     @Transactional
-    public TokenDTO signUp(UserSignUpDTO signUpDTO, MultipartFile file) {
+    public TokenResponse signUp(UserSignUpRequest signUpDTO, MultipartFile file) {
         checkEmailDuplication(signUpDTO.getEmail());
         checkUsernameDuplication(signUpDTO.getUsername());
         checkAuthCode(signUpDTO.getEmail(), signUpDTO.getAuthCode());
@@ -61,7 +61,7 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public TokenDTO reissueToken(String refreshToken) {
+    public TokenResponse reissueToken(String refreshToken) {
         String email = tokenProvider.getSubject(refreshToken);
         Optional<String> value = redisManager.getValue(REFRESH_TOKEN, email);
 
@@ -75,7 +75,7 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public UserInfoDTO getUserInfo(Long userId) {
+    public UserInfoResponse getUserInfo(Long userId) {
         UserEntity userEntity = userRepository.findById(userId).orElseThrow(
                 () -> new BadRequestException("Not found User.")
         );
@@ -105,7 +105,7 @@ public class UserServiceImpl implements UserService {
 
     @Override
     @Transactional
-    public void editPassword(UserChangePasswordDTO changePasswordDTO) {
+    public void editPassword(UserChangePasswordRequest changePasswordDTO) {
         String accessToken = getAccessToken();
         String email = tokenProvider.getSubject(accessToken);
 
@@ -116,7 +116,7 @@ public class UserServiceImpl implements UserService {
 
     @Override
     @Transactional
-    public void editInfo(UserInfoEditDTO infoEditDTO) {
+    public void editInfo(UserInfoEditRequest infoEditDTO) {
         String accessToken = getAccessToken();
         String email = tokenProvider.getSubject(accessToken);
         String uploadUrl = uploadFile(infoEditDTO.getFile());
@@ -133,18 +133,18 @@ public class UserServiceImpl implements UserService {
         return accessToken;
     }
 
-    private UserInfoDTO entityToInfoDTO(UserEntity userEntity) {
-        UserInfoDTO userInfoDTO = new UserInfoDTO(userEntity.getUsername(), userEntity.getProfileImage(), userEntity.getDescription());
-        return userInfoDTO;
+    private UserInfoResponse entityToInfoDTO(UserEntity userEntity) {
+        UserInfoResponse userInfoResponse = new UserInfoResponse(userEntity.getUsername(), userEntity.getProfileImage(), userEntity.getDescription());
+        return userInfoResponse;
     }
 
-    private TokenDTO generateTokenDTOByEmail(String email) {
+    private TokenResponse generateTokenDTOByEmail(String email) {
         String accessToken = tokenProvider.createAccessToken(email);
         String refreshToken = tokenProvider.createRefreshToken(email);
 
         redisManager.putValue(REFRESH_TOKEN, email, refreshToken);
 
-        return new TokenDTO(accessToken, refreshToken);
+        return new TokenResponse(accessToken, refreshToken);
     }
 
     private String uploadFile(MultipartFile file) {
