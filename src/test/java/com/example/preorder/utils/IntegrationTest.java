@@ -22,6 +22,8 @@ import org.springframework.test.web.servlet.MvcResult;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.nio.charset.StandardCharsets;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.UUID;
 
 import static com.example.preorder.common.utils.RedisKeyGenerator.RedisKeyType.*;
@@ -49,6 +51,8 @@ public abstract class IntegrationTest {
 
     protected UserEntity userEntity;
     protected String password;
+    protected UserEntity otherUserEntityA;
+    protected UserEntity otherUserEntityB;
 
     @BeforeEach
     void beforeEach() {
@@ -59,7 +63,21 @@ public abstract class IntegrationTest {
                 passwordEncoder.encode(password),
                 createRandomUUID()
         );
+        otherUserEntityA = UserEntity.createUser(
+                "ABCEEFG1@email.com",
+                createRandomUUID(),
+                passwordEncoder.encode(password),
+                createRandomUUID()
+        );
+        otherUserEntityB = UserEntity.createUser(
+                "ABCEEFG2@email.com",
+                createRandomUUID(),
+                passwordEncoder.encode(password),
+                createRandomUUID()
+        );
         userEntity = userRepository.save(userEntity);
+        otherUserEntityA = userRepository.save(otherUserEntityA);
+        otherUserEntityB = userRepository.save(otherUserEntityB);
         accessToken = tokenProvider.createAccessToken(userEntity.getEmail());
         refreshToken = tokenProvider.createRefreshToken(userEntity.getEmail());
         redisManager.putValue(REFRESH_TOKEN, userEntity.getEmail(), refreshToken);

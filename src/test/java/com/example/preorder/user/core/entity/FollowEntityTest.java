@@ -13,7 +13,7 @@ import static org.junit.jupiter.api.Assertions.*;
 
 @SpringBootTest
 @ActiveProfiles("test")
-class UserEntityTest {
+class FollowEntityTest {
 
     @Test
     @DisplayName("인스턴스 생성 시, 아이디, 비밀번호, 이름 중 어떤 필드라도 비어있으면 예외가 발생한다")
