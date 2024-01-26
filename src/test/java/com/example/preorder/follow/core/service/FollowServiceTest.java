@@ -36,8 +36,6 @@ class FollowServiceTest extends IntegrationTest {
     FollowService followService;
     @Autowired
     FollowRepository followRepository;
-    @Mock
-    ApplicationEventPublisher applicationEventPublisher;
 
     @ParameterizedTest
     @DisplayName("존재하지 않는 유저 팔로우시 예외가 반환되어야 한다.")

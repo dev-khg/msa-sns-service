@@ -1,5 +1,6 @@
 package com.example.preorder.follow.presentation;
 
+import com.example.preorder.common.event.EventType;
 import com.example.preorder.follow.core.service.FollowService;
 import com.example.preorder.follow.core.vo.FollowStatus;
 import com.example.preorder.global.security.annotation.AuthorizationRequired;
@@ -20,9 +21,10 @@ public class FollowController {
     private final FollowService followService;
 
     @PostMapping("/{targetId}")
-    @AuthorizationRequired
+//    @AuthorizationRequired
     public ResponseEntity<Void> follow(@CurrentUser UserEntity userEntity, @PathVariable Long targetId) {
-        followService.handleFollow(userEntity.getId(), targetId, ACTIVE);
+        followService.handleFollow(1L, 2L, ACTIVE);
+
         return new ResponseEntity<>(NO_CONTENT);
     }
 
