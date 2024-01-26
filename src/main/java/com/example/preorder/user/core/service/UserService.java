@@ -1,5 +1,6 @@
 package com.example.preorder.user.core.service;
 
+import com.example.preorder.user.core.entity.UserEntity;
 import com.example.preorder.user.presentation.resources.request.UserChangePasswordRequest;
 import com.example.preorder.user.presentation.resources.request.UserInfoEditRequest;
 import com.example.preorder.user.presentation.resources.response.TokenResponse;
@@ -19,7 +20,7 @@ public interface UserService {
 
     void logout(String accessToken, String refreshToken);
 
-    void editPassword(UserChangePasswordRequest changePasswordDTO);
+    void editPassword(UserEntity userEntity, UserChangePasswordRequest changePasswordDTO);
 
-    void editInfo(UserInfoEditRequest infoEditDTO);
+    void editInfo(UserEntity userEntity, UserInfoEditRequest infoEditDTO, MultipartFile file);
 }

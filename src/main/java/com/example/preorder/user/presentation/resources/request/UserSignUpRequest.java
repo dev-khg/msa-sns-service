@@ -3,9 +3,11 @@ package com.example.preorder.user.presentation.resources.request;
 import jakarta.validation.constraints.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 
 @Getter
 @AllArgsConstructor
+@NoArgsConstructor
 public class UserSignUpRequest {
     @Email(message = "email field's is invalid form.")
     @NotEmpty(message = "email field must not empty.")

@@ -9,7 +9,7 @@ import java.util.ArrayList;
 
 @Getter
 public class LoginUser extends User implements Authentication {
-    private final UserEntity userEntity;
+    private UserEntity userEntity;
 
     public LoginUser(UserEntity userEntity) {
         super(userEntity.getEmail(), userEntity.getPassword(), new ArrayList<>());

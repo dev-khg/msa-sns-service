@@ -1,6 +1,7 @@
 package com.example.preorder.user.core.service;
 
 import com.example.preorder.common.exception.BadRequestException;
+import com.example.preorder.common.exception.InternalErrorException;
 import com.example.preorder.common.utils.HttpServletUtils;
 import com.example.preorder.common.utils.RandomGenerator;
 import com.example.preorder.global.jwt.TokenProvider;
@@ -92,6 +93,7 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public void logout(String accessToken, String refreshToken) {
+        accessToken = accessToken.substring(7);
         String email = tokenProvider.getSubject(accessToken);
 
         if (tokenProvider.isValidateToken(accessToken)) {
@@ -105,25 +107,39 @@ public class UserServiceImpl implements UserService {
 
     @Override
     @Transactional
-    public void editPassword(UserChangePasswordRequest changePasswordDTO) {
-        String accessToken = getAccessToken();
-        String email = tokenProvider.getSubject(accessToken);
+    public void editPassword(UserEntity userEntity, UserChangePasswordRequest changePasswordDTO) {
+        if (userEntity == null) {
+            throw new BadRequestException("please do login.");
+        }
 
-        userRepository.findByEmail(email).ifPresent((user) -> {
-            user.changePassword(changePasswordDTO.getCurrentPassword(), changePasswordDTO.getNewPassword());
-        });
+        Optional<UserEntity> userOptional = userRepository.findById(userEntity.getId());
+
+        if (userOptional.isEmpty()) {
+            throw new InternalErrorException("not found user");
+        }
+
+        UserEntity foundUser = userOptional.get();
+        foundUser.changePassword(
+                passwordEncoder,
+                changePasswordDTO.getCurrentPassword(),
+                changePasswordDTO.getNewPassword()
+        );
     }
 
     @Override
     @Transactional
-    public void editInfo(UserInfoEditRequest infoEditDTO) {
-        String accessToken = getAccessToken();
-        String email = tokenProvider.getSubject(accessToken);
-        String uploadUrl = uploadFile(infoEditDTO.getFile());
+    public void editInfo(UserEntity userEntity, UserInfoEditRequest infoEditDTO, MultipartFile file) {
+        String uploadUrl = uploadFile(file);
 
-        userRepository.findByEmail(email).ifPresent((user) -> {
-            user.changeInfo(infoEditDTO.getUsername(), uploadUrl, infoEditDTO.getDescription());
-        });
+        Optional<UserEntity> optionalUser = userRepository.findById(userEntity.getId());
+
+        if(optionalUser.isEmpty()) {
+            throw new InternalErrorException("Sorry. Server has problem");
+        }
+
+        UserEntity foundUser = optionalUser.get();
+        foundUser.changeInfo(infoEditDTO.getUsername(), uploadUrl, infoEditDTO.getDescription());
+        userRepository.save(userEntity);
     }
 
     private String getAccessToken() {
