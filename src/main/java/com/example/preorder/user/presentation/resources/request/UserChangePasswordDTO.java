@@ -1,4 +1,4 @@
-package com.example.preorder.user.core.resources.request;
+package com.example.preorder.user.presentation.resources.request;
 
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;

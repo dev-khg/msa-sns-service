@@ -1,10 +1,10 @@
 package com.example.preorder.user.core.service;
 
-import com.example.preorder.user.core.resources.request.UserChangePasswordDTO;
-import com.example.preorder.user.core.resources.request.UserInfoEditDTO;
-import com.example.preorder.user.core.resources.response.TokenDTO;
-import com.example.preorder.user.core.resources.request.UserSignUpDTO;
-import com.example.preorder.user.core.resources.response.UserInfoDTO;
+import com.example.preorder.user.presentation.resources.request.UserChangePasswordDTO;
+import com.example.preorder.user.presentation.resources.request.UserInfoEditDTO;
+import com.example.preorder.user.presentation.resources.response.TokenDTO;
+import com.example.preorder.user.presentation.resources.request.UserSignUpDTO;
+import com.example.preorder.user.presentation.resources.response.UserInfoDTO;
 import org.springframework.web.multipart.MultipartFile;
 
 public interface UserService {

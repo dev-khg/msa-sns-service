@@ -1,4 +1,4 @@
-package com.example.preorder.user.core.resources.response;
+package com.example.preorder.user.presentation.resources.response;
 
 import lombok.Getter;
 
