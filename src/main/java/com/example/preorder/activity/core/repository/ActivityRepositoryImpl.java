@@ -20,11 +20,12 @@ public class ActivityRepositoryImpl implements ActivityRepository {
         return activityJpaRepository.save(activityEntity);
     }
 
+    //TODO: 수정필요
     @Override
     public List<ActivityEntity> findValidActivitiesByUserId(List<Long> userId,
                                                             ActivityStatus status,
                                                             Pageable pageable) {
-        return activityJpaRepository.findActivitiesByUserId(userId, status, pageable);
+        return null;
     }
 
     @Override

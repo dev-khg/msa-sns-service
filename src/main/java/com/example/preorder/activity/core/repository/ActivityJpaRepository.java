@@ -23,11 +23,12 @@ public interface ActivityJpaRepository extends JpaRepository<ActivityEntity, Lon
                              @Param("type") ActivityType activityType,
                              @Param("status") ActivityStatus status);
 
-    @Query("select a from ActivityEntity a " +
-            "where a.status = :status and a.userId in (:user_id_list)")
-    List<ActivityEntity> findActivitiesByUserId(@Param("user_id_list") List<Long> userIdList,
-                                                @Param("status") ActivityStatus status,
-                                                Pageable pageable);
+    // TODO : 수정 필요
+//    @Query("select a from ActivityEntity a " +
+//            "where a.status = :status and a.userId in (:user_id_list)")
+//    List<ActivityEntity> findActivitiesByUserId(@Param("user_id_list") List<Long> userIdList,
+//                                                @Param("status") ActivityStatus status,
+//                                                Pageable pageable);
 
     Optional<ActivityEntity> findByUserIdAndTargetIdAndActivityTypeAndStatus(Long userId,
                                                                              Long targetId,
