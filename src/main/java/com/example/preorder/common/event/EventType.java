@@ -4,5 +4,6 @@ public enum EventType {
     USER,
     COMMENT,
     POST,
+    POST_LIKE,
     FOLLOW,
 }

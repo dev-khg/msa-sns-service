@@ -1,8 +1,10 @@
 package com.example.preorder.post.presentation.response;
 
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 
 @Getter
+@NoArgsConstructor
 public class PostInfoResponse {
     private String username;
     private Long postId;
