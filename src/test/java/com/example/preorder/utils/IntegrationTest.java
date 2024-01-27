@@ -48,6 +48,8 @@ public abstract class IntegrationTest {
     protected EntityManager em;
 
     protected UserEntity userEntity;
+    protected UserEntity userEntityA;
+    protected UserEntity userEntityB;
     protected String password;
 
     @BeforeEach
@@ -60,6 +62,20 @@ public abstract class IntegrationTest {
                 createRandomUUID()
         );
         userEntity = userRepository.save(userEntity);
+        userEntityA = UserEntity.createUser(
+                "ABCEEFG1@email.com",
+                createRandomUUID(),
+                passwordEncoder.encode(password),
+                createRandomUUID()
+        );
+        userEntityA = userRepository.save(userEntityA);
+        userEntityB = UserEntity.createUser(
+                "ABCEEFG2@email.com",
+                createRandomUUID(),
+                passwordEncoder.encode(password),
+                createRandomUUID()
+        );
+        userEntityB = userRepository.save(userEntityB);
         accessToken = tokenProvider.createAccessToken(userEntity.getEmail());
         refreshToken = tokenProvider.createRefreshToken(userEntity.getEmail());
         redisManager.putValue(REFRESH_TOKEN, userEntity.getEmail(), refreshToken);
@@ -96,7 +112,8 @@ public abstract class IntegrationTest {
         assertNull(mvcResult.getResponse().getCookie(name));
     }
 
-    private void init() {
-
+    protected void flushAndClearPersistence() {
+        em.flush();
+        em.clear();
     }
 }
