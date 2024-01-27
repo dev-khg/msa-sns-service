@@ -1,20 +1,43 @@
 package com.example.preorder.activity.core.repository;
 
 import com.example.preorder.activity.core.entity.ActivityEntity;
+import com.example.preorder.activity.core.entity.ActivityStatus;
 import com.example.preorder.activity.core.entity.ActivityType;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
 
+import java.awt.print.Pageable;
 import java.util.List;
+import java.util.Optional;
 
 @Repository
-public class ActivityRepositoryImpl implements ActivityRepository{
+@RequiredArgsConstructor
+public class ActivityRepositoryImpl implements ActivityRepository {
+    private final ActivityJpaRepository activityJpaRepository;
+
     @Override
-    public List<ActivityEntity> findValidActivitiesByUserId(List<Long> userId) {
+    public ActivityEntity save(ActivityEntity activityEntity) {
+        return activityJpaRepository.save(activityEntity);
+    }
+
+    //TODO: 수정필요
+    @Override
+    public List<ActivityEntity> findValidActivitiesByUserId(List<Long> userId,
+                                                            ActivityStatus status,
+                                                            Pageable pageable) {
         return null;
     }
 
     @Override
-    public void changeInvalidStatus(Long targetId, ActivityType type) {
+    public Optional<ActivityEntity> findByUserIdAndTargetIdAndTypeAndStatus(Long userId,
+                                                                            Long targetId,
+                                                                            ActivityType type,
+                                                                            ActivityStatus status) {
+        return activityJpaRepository.findByUserIdAndTargetIdAndActivityTypeAndStatus(userId, targetId, type, status);
+    }
 
+    @Override
+    public void changeStatus(Long userId, Long targetId, ActivityType type, ActivityStatus status) {
+        activityJpaRepository.updateInvalidStatus(userId, targetId, type, status);
     }
 }

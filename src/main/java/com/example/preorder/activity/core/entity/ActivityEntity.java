@@ -1,6 +1,7 @@
 package com.example.preorder.activity.core.entity;
 
 import com.example.preorder.common.entity.BaseTimeEntity;
+import com.example.preorder.common.event.DomainEvent;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
 import lombok.Getter;
