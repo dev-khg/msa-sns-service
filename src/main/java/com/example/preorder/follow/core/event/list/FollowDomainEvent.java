@@ -8,10 +8,10 @@ import static com.example.preorder.common.event.EventType.*;
 
 @Getter
 public class FollowDomainEvent extends DomainEvent {
-    private FollowEvent followEvent;
-    private Long followerId;
-    private Long followeeId;
-    private FollowStatus status;
+    private final FollowEvent followEvent;
+    private final Long followerId;
+    private final Long followeeId;
+    private final FollowStatus status;
 
     public FollowDomainEvent(FollowEvent followEvent,
                              Long followerId,

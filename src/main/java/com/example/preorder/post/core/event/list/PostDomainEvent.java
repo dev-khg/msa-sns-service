@@ -7,12 +7,12 @@ import lombok.Getter;
 import java.io.Serializable;
 
 @Getter
-public class PostCreateEvent extends DomainEvent implements Serializable {
+public class PostDomainEvent extends DomainEvent implements Serializable {
     private final PostEvent postEvent;
     private final Long userId;
     private final Long postId;
 
-    public PostCreateEvent(PostEvent postEvent, Long userId, Long postId) {
+    public PostDomainEvent(PostEvent postEvent, Long userId, Long postId) {
         super(EventType.POST);
         this.postEvent = postEvent;
         this.userId = userId;
