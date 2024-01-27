@@ -3,6 +3,8 @@ package com.example.preorder.utils;
 import com.example.preorder.common.utils.RedisKeyGenerator;
 import com.example.preorder.global.jwt.TokenProvider;
 import com.example.preorder.global.redis.RedisManager;
+import com.example.preorder.post.core.entity.PostEntity;
+import com.example.preorder.post.core.repository.PostRepository;
 import com.example.preorder.user.core.entity.UserEntity;
 import com.example.preorder.user.core.repository.UserRepository;
 import com.example.preorder.user.core.service.UserService;
@@ -22,6 +24,8 @@ import org.springframework.test.web.servlet.MvcResult;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.nio.charset.StandardCharsets;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.UUID;
 
 import static com.example.preorder.common.utils.RedisKeyGenerator.RedisKeyType.*;
@@ -52,6 +56,11 @@ public abstract class IntegrationTest {
     protected UserEntity userEntityB;
     protected String password;
 
+    @Autowired
+    protected PostRepository postRepository;
+
+    protected List<PostEntity> postEntityList;
+
     @BeforeEach
     void beforeEach() {
         password = "ABCDEFGH";
@@ -79,6 +88,12 @@ public abstract class IntegrationTest {
         accessToken = tokenProvider.createAccessToken(userEntity.getEmail());
         refreshToken = tokenProvider.createRefreshToken(userEntity.getEmail());
         redisManager.putValue(REFRESH_TOKEN, userEntity.getEmail(), refreshToken);
+
+        postEntityList = new ArrayList<>();
+        postEntityList.add(savePostEntity(userEntity.getId(), createRandomUUID()));
+        postEntityList.add(savePostEntity(userEntity.getId(), createRandomUUID()));
+        postEntityList.add(savePostEntity(userEntity.getId(), createRandomUUID()));
+
         em.flush();
         em.clear();
     }
@@ -115,5 +130,10 @@ public abstract class IntegrationTest {
     protected void flushAndClearPersistence() {
         em.flush();
         em.clear();
+    }
+
+    protected PostEntity savePostEntity(Long userId, String content) {
+        UserEntity foundUser = userRepository.findById(userId).orElseThrow();
+        return postRepository.save(PostEntity.create(foundUser, content));
     }
 }
