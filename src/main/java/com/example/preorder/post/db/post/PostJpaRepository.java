@@ -1,4 +1,4 @@
-package com.example.preorder.post.db;
+package com.example.preorder.post.db.post;
 
 import com.example.preorder.post.core.entity.PostEntity;
 import com.example.preorder.post.db.dto.PostDto;

@@ -1,4 +1,4 @@
-package com.example.preorder.post.db;
+package com.example.preorder.post.db.post;
 
 import com.example.preorder.post.core.entity.PostLikeEntity;
 import com.example.preorder.post.core.vo.PostLikeStatus;

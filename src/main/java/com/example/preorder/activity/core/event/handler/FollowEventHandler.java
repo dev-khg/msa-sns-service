@@ -34,14 +34,14 @@ public class FollowEventHandler extends EventHandler {
         FollowData data = (FollowData) event.data();
         ActivityKey key = ActivityKey.create(event.eventType(), event.ordinal());
 
-        ActivityEntity activityEntity = create(
-                key,
-                event.getPublisher(),
-                data.followeeId(),
-                data.status().ordinal(),
-                VALID
-        );
+//        ActivityEntity activityEntity = create(
+//                key,
+//                event.getPublisher(),
+//                data.followeeId(),
+//                data.status().ordinal(),
+//                VALID
+//        );
 
-        activityRepository.save(activityEntity);
+//        activityRepository.save(activityEntity);
     }
 }

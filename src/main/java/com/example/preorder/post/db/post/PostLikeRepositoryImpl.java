@@ -1,8 +1,7 @@
-package com.example.preorder.post.db;
+package com.example.preorder.post.db.post;
 
 import com.example.preorder.post.core.entity.PostLikeEntity;
 import com.example.preorder.post.core.repository.PostLikeRepository;
-import com.example.preorder.post.core.repository.PostRepository;
 import com.example.preorder.post.core.vo.PostLikeStatus;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;

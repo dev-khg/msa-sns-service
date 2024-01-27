@@ -34,11 +34,6 @@ public class FollowDomainEvent implements Event, Serializable {
     }
 
     @Override
-    public Long getPublisher() {
-        return followerData.followerId();
-    }
-
-    @Override
     public Object data() {
         return followerData;
     }

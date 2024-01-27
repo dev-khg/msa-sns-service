@@ -1,8 +1,7 @@
-package com.example.preorder.post.db;
+package com.example.preorder.post.db.post;
 
 import com.example.preorder.post.core.entity.PostEntity;
 import com.example.preorder.post.core.repository.PostRepository;
-import com.example.preorder.post.db.dto.PostDto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Repository;

@@ -1,4 +1,4 @@
-package com.example.preorder.post.db;
+package com.example.preorder.post.db.post;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
