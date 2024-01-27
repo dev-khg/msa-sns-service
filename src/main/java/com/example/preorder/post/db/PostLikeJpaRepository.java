@@ -13,11 +13,4 @@ public interface PostLikeJpaRepository extends JpaRepository<PostLikeEntity, Lon
 
     List<PostLikeEntity> findAllByUserIdInAndStatusOrderByCreatedAtDesc(List<Long> userId, PostLikeStatus status);
 
-    // public PostLikeResponse(Long userId, Long postId, Long postUserId, String username, String postUsername) {
-    @Query("select new com.example.preorder.post.presentation.response.PostLikeResponse(u.id, p.id, p.userEntity.id, u.username, p.userEntity.username) " +
-            "from PostEntity p " +
-            "left join UserEntity u1 on u1.id = p.userEntity.id " +
-            "" +
-            "where p.id = :postId")
-    void temp(Long whoLikePerson, Long postId);
 }
