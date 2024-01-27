@@ -1,6 +1,7 @@
 package com.example.preorder.utils;
 
 import com.example.preorder.comment.core.entity.CommentEntity;
+import com.example.preorder.comment.core.repository.CommentLikeRepository;
 import com.example.preorder.comment.core.repository.CommentRepository;
 import com.example.preorder.global.jwt.TokenProvider;
 import com.example.preorder.global.redis.RedisManager;
@@ -61,6 +62,9 @@ public abstract class IntegrationTest {
 
     @Autowired
     protected CommentRepository commentRepository;
+
+    @Autowired
+    protected CommentLikeRepository commentLikeRepository;
 
     protected List<PostEntity> postEntityList;
 
