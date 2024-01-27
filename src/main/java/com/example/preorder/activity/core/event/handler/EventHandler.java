@@ -15,7 +15,7 @@ public abstract class EventHandler {
 
     @TransactionalEventListener(phase = AFTER_COMMIT)
     public void checkHandle(Event event) {
-        if (this.eventType == event.getEventType()) {
+        if (this.eventType == event.eventType()) {
             handle(event);
         }
     }

@@ -27,18 +27,22 @@ public class PostEntity extends BaseTimeEntity {
     private Long userId;
 
     @Column(nullable = false)
+    private String username;
+
+    @Column(nullable = false)
     private PostStatus status;
 
     private LocalDateTime deletedAt;
 
-    public PostEntity(Long userId, String content, PostStatus status) {
+    public PostEntity(Long userId, String username, String content, PostStatus status) {
         this.userId = userId;
         this.content = content;
+        this.username = username;
         this.status = status;
     }
 
-    public static PostEntity create(Long userId, String content) {
-        return new PostEntity(userId, content, PostStatus.ACTIVE);
+    public static PostEntity create(Long userId, String username, String content) {
+        return new PostEntity(userId, username, content, PostStatus.ACTIVE);
     }
 
     public void deletePost(Long userId) {

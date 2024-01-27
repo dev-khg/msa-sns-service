@@ -27,11 +27,6 @@ public class PostRepositoryImpl implements PostRepository {
 
     @Override
     public List<PostEntity> findPostByUserIds(List<Long> userIds, Pageable pageable) {
-        return null;
-    }
-
-    @Override
-    public PostDto findByPostIdFetchUsername(Long postId) {
-        return postJpaRepository.findByPostIdFetchUsername(postId);
+        return findPostByUserIds(userIds, pageable);
     }
 }

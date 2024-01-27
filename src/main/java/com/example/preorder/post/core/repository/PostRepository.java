@@ -16,5 +16,4 @@ public interface PostRepository {
 
     List<PostEntity> findPostByUserIds(List<Long> userIds, Pageable pageable);
 
-    PostDto findByPostIdFetchUsername(Long postId);
 }

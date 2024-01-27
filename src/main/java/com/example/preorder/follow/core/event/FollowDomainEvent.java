@@ -24,12 +24,12 @@ public class FollowDomainEvent implements Event, Serializable {
     }
 
     @Override
-    public EventType getEventType() {
+    public EventType eventType() {
         return EventType.FOLLOW;
     }
 
     @Override
-    public Integer getOrdinal() {
+    public Integer ordinal() {
         return followEvent.ordinal();
     }
 
@@ -39,7 +39,7 @@ public class FollowDomainEvent implements Event, Serializable {
     }
 
     @Override
-    public Object getData() {
+    public Object data() {
         return followerData;
     }
 }

@@ -16,8 +16,10 @@ public interface PostJpaRepository extends JpaRepository<PostEntity, Long> {
     List<PostEntity> findPostsByUserId(@Param("user_ids") List<Long> userIds,
                                        Pageable pageable);
 
-    @Query("select new com.example.preorder.post.db.dto.PostDto(p.id, p.userId, u.username) from PostEntity p " +
-            "left join UserEntity u on u.id = p.userId " +
-            "where p.id = :postId")
-    PostDto findByPostIdFetchUsername(@Param("postId") Long postId);
+//    @Query("select new com.example.preorder.post.db.dto.PostDto(p.id, p.userId, u.username) from PostEntity p " +
+//            "left join UserEntity u on u.id = p.userId " +
+//            "where p.id = :postId")
+//    PostDto findByPostIdFetchUsername(@Param("postId") Long postId);
+
+    List<PostEntity> findByUserIdIn(List<Long> userId, Pageable pageable);
 }

@@ -1,33 +1,46 @@
 package com.example.preorder.post.core.service;
 
+import com.example.preorder.common.event.DomainEvent;
+import com.example.preorder.common.event.EventPublisher;
+import com.example.preorder.common.event.EventType;
 import com.example.preorder.common.exception.BadRequestException;
 import com.example.preorder.post.core.entity.PostEntity;
+import com.example.preorder.post.core.event.data.PostCreateData;
 import com.example.preorder.post.core.repository.PostRepository;
 import com.example.preorder.post.presentation.request.PostCreateRequest;
 import com.example.preorder.post.presentation.response.PostInfoResponse;
 import com.example.preorder.user.core.entity.UserEntity;
 import com.example.preorder.user.core.repository.UserRepository;
-import lombok.RequiredArgsConstructor;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Sort;
+import org.springframework.context.ApplicationEventPublisher;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
-import static org.springframework.data.domain.Sort.Direction.*;
+import static com.example.preorder.post.core.event.PostEvent.*;
 
 @Service
-@RequiredArgsConstructor
-public class PostService {
+public class PostPublisher extends EventPublisher {
     private final PostRepository postRepository;
     private final UserRepository userRepository;
 
-    @Transactional
-    public Long createPost(Long userId, PostCreateRequest postCreate) {
-        UserEntity userEntity = getUserEntity(userId);
+    public PostPublisher(ApplicationEventPublisher publisher, PostRepository postRepository, UserRepository userRepository) {
+        super(publisher);
+        this.postRepository = postRepository;
+        this.userRepository = userRepository;
+    }
 
-        PostEntity postEntity = PostEntity.create(userEntity.getId(), postCreate.getContent());
+    @Transactional
+    public Long createPost(Long userId, String username, PostCreateRequest postCreate) {
+        UserEntity userEntity = getUserEntity(userId);
+        PostEntity postEntity = PostEntity.create(userEntity.getId(), username, postCreate.getContent());
+
+        publishEvent(new DomainEvent(
+                EventType.POST, POST_CREATED.ordinal(),
+                new PostCreateData(userId,
+                        postEntity.getId()))
+        );
 
         return postRepository.save(postEntity).getId();
     }
@@ -37,40 +50,24 @@ public class PostService {
         UserEntity userEntity = getUserEntity(userId);
         PostEntity postEntity = getPostEntity(postId);
 
+        publishEvent(new DomainEvent(
+                EventType.POST, POST_DELETED.ordinal(), postId)
+        );
+
         postEntity.deletePost(userEntity.getId());
     }
 
     public PostInfoResponse getPost(Long postId) {
         PostEntity postEntity = getPostEntity(postId);
-        UserEntity userEntity = getUserEntity(postEntity.getUserId());
 
-        return entityToResponse(postEntity, userEntity);
+        return PostInfoResponse.of(postEntity);
     }
 
-    public List<PostInfoResponse> getPosts(List<Long> userId) {
-        PageRequest pageable = PageRequest
-                .of(0, 5, DESC, "created_at");
-
+    public List<PostInfoResponse> getPosts(List<Long> userId, Pageable pageable) {
         return postRepository.findPostByUserIds(userId, pageable)
                 .stream()
-                .map(this::entityToResponse)
+                .map(PostInfoResponse::of)
                 .toList();
-    }
-
-    private PostInfoResponse entityToResponse(PostEntity postEntity, UserEntity userEntity) {
-        return new PostInfoResponse(
-                userEntity.getUsername(),
-                userEntity.getId(),
-                postEntity.getContent()
-        );
-    }
-
-    private PostInfoResponse entityToResponse(PostEntity postEntity) {
-        return new PostInfoResponse(
-                null,
-                postEntity.getUserId(),
-                postEntity.getContent()
-        );
     }
 
     private PostEntity getPostEntity(Long postId) {

@@ -1,11 +1,9 @@
 package com.example.preorder.common.event;
 
 public interface Event {
-    EventType getEventType();
+    EventType eventType();
 
-    Integer getOrdinal();
+    Integer ordinal();
 
-    Long getPublisher();
-
-    Object getData();
+    Object data();
 }

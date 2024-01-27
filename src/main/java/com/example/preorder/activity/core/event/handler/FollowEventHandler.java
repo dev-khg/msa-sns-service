@@ -24,15 +24,15 @@ public class FollowEventHandler extends EventHandler {
 
     @Override
     protected void handle(Event event) {
-        switch (FollowEvent.values()[event.getOrdinal()]) {
+        switch (FollowEvent.values()[event.ordinal()]) {
             case FOLLOW -> handleFollowEvent(event);
         }
     }
 
     @Transactional
     protected void handleFollowEvent(Event event) {
-        FollowData data = (FollowData) event.getData();
-        ActivityKey key = ActivityKey.create(event.getEventType(), event.getOrdinal());
+        FollowData data = (FollowData) event.data();
+        ActivityKey key = ActivityKey.create(event.eventType(), event.ordinal());
 
         ActivityEntity activityEntity = create(
                 key,
