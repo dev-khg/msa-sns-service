@@ -1,13 +1,13 @@
 package com.example.preorder.utils;
 
-import com.example.preorder.common.utils.RedisKeyGenerator;
+import com.example.preorder.comment.core.entity.CommentEntity;
+import com.example.preorder.comment.core.repository.CommentRepository;
 import com.example.preorder.global.jwt.TokenProvider;
 import com.example.preorder.global.redis.RedisManager;
 import com.example.preorder.post.core.entity.PostEntity;
 import com.example.preorder.post.core.repository.PostRepository;
 import com.example.preorder.user.core.entity.UserEntity;
 import com.example.preorder.user.core.repository.UserRepository;
-import com.example.preorder.user.core.service.UserService;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import jakarta.persistence.EntityManager;
@@ -59,7 +59,12 @@ public abstract class IntegrationTest {
     @Autowired
     protected PostRepository postRepository;
 
+    @Autowired
+    protected CommentRepository commentRepository;
+
     protected List<PostEntity> postEntityList;
+
+    protected List<CommentEntity> commentEntityList;
 
     @BeforeEach
     void beforeEach() {
@@ -93,6 +98,10 @@ public abstract class IntegrationTest {
         postEntityList.add(savePostEntity(userEntity.getId(), createRandomUUID()));
         postEntityList.add(savePostEntity(userEntity.getId(), createRandomUUID()));
         postEntityList.add(savePostEntity(userEntity.getId(), createRandomUUID()));
+
+        commentEntityList = new ArrayList<>();
+        commentEntityList.add(saveCommentEntity(userEntity.getId(), postEntityList.get(0).getId(), createRandomUUID()));
+        commentEntityList.add(saveCommentEntity(userEntity.getId(), postEntityList.get(0).getId(), createRandomUUID()));
 
         em.flush();
         em.clear();
@@ -135,5 +144,11 @@ public abstract class IntegrationTest {
     protected PostEntity savePostEntity(Long userId, String content) {
         UserEntity foundUser = userRepository.findById(userId).orElseThrow();
         return postRepository.save(PostEntity.create(foundUser, content));
+    }
+
+    protected CommentEntity saveCommentEntity(Long userId, Long postId, String content) {
+        UserEntity foundUser = userRepository.findById(userId).orElseThrow();
+        PostEntity postEntity = postRepository.findById(postId).orElseThrow();
+        return commentRepository.save(CommentEntity.create(foundUser, postEntity, content));
     }
 }
