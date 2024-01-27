@@ -14,4 +14,6 @@ public interface UserRepository {
     UserEntity save(UserEntity userEntity);
 
     Optional<UserEntity> findByEmail(String email);
+
+    String findUsernameById(Long userId);
 }
