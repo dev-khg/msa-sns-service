@@ -1,5 +1,6 @@
 package com.example.preorder.user.core.service;
 
+import com.example.preorder.common.event.EventPublisher;
 import com.example.preorder.common.exception.BadRequestException;
 import com.example.preorder.common.exception.InternalErrorException;
 import com.example.preorder.common.utils.HttpServletUtils;
@@ -16,6 +17,7 @@ import com.example.preorder.user.presentation.resources.request.UserSignUpReques
 import com.example.preorder.user.presentation.resources.response.TokenResponse;
 import com.example.preorder.user.presentation.resources.response.UserInfoResponse;
 import lombok.RequiredArgsConstructor;
+import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -30,8 +32,7 @@ import static com.example.preorder.global.storage.service.StorageService.Bucket.
 import static com.example.preorder.user.core.entity.UserEntity.*;
 
 @Service
-@RequiredArgsConstructor
-public class UserServiceImpl implements UserService {
+public class UserServiceImpl extends EventPublisher implements UserService {
     private final RedisManager redisManager;
     private final UserRepository userRepository;
     private final EmailService emailService;
@@ -39,6 +40,24 @@ public class UserServiceImpl implements UserService {
     private final TokenProvider tokenProvider;
     private final HttpServletUtils servletUtils;
     private final PasswordEncoder passwordEncoder;
+
+    public UserServiceImpl(ApplicationEventPublisher publisher,
+                           RedisManager redisManager,
+                           UserRepository userRepository,
+                           EmailService emailService,
+                           StorageService storageService,
+                           TokenProvider tokenProvider,
+                           HttpServletUtils servletUtils,
+                           PasswordEncoder passwordEncoder) {
+        super(publisher);
+        this.redisManager = redisManager;
+        this.userRepository = userRepository;
+        this.emailService = emailService;
+        this.storageService = storageService;
+        this.tokenProvider = tokenProvider;
+        this.servletUtils = servletUtils;
+        this.passwordEncoder = passwordEncoder;
+    }
 
     @Override
     @Transactional
@@ -140,14 +159,9 @@ public class UserServiceImpl implements UserService {
 
         UserEntity foundUser = optionalUser.get();
         foundUser.changeInfo(infoEditDTO.getUsername(), uploadUrl, infoEditDTO.getDescription());
+
+
         userRepository.save(userEntity);
-    }
-
-    private String getAccessToken() {
-        String accessToken = servletUtils.getHeader(HeaderType.ACCESS_TOKEN)
-                .orElseThrow(() -> new BadRequestException("Please do login."));
-
-        return accessToken;
     }
 
     private UserInfoResponse entityToInfoDTO(UserEntity userEntity) {
