@@ -71,34 +71,6 @@ class PostControllerTest extends IntegrationTest {
         assertNull(postEntity.getDeletedAt());
     }
 
-    @Test
-    @DisplayName("아이디로 조회시, 저장된 포스트들이 반환되어야 한다.")
-    void valid_find_all_post_by_id() throws Exception {
-        // given
-        List<Long> postIds = this.postEntityList.stream()
-                .map(PostEntity::getId)
-                .toList();
-        PostGetRequest postGetRequest = new PostGetRequest(postIds);
-
-        // when
-        MvcResult mvcResult = mockMvc.perform(post("/post/all")
-                        .content(objectMapper.writeValueAsString(postGetRequest))
-                        .contentType(APPLICATION_JSON)
-                ).andExpect(status().isOk())
-                .andDo(print())
-                .andReturn();
-
-        // then
-        String contentAsString = mvcResult.getResponse().getContentAsString();
-        PostInfoResponse[] postInfoResponses = objectMapper.readValue(contentAsString, PostInfoResponse[].class);
-
-        for (PostInfoResponse postInfoResponse : postInfoResponses) {
-            assertNotNull(postInfoResponse.getPostId());
-            assertNotNull(postInfoResponse.getUsername());
-            assertNotNull(postInfoResponse.getUserId());
-        }
-    }
-
     @Autowired
     PostLikeJpaRepository temp;
 

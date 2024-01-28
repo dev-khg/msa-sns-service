@@ -37,16 +37,6 @@ public class CommentController {
         return ok(commentService.enrollComment(user.getId(), postId, createRequest.getContent()));
     }
 
-    @GetMapping("/{postId}")
-    public ResponseEntity<List<CommentInfoResponse>> getComments(@PathVariable Long postId) {
-        return ok(commentService.getComments(postId));
-    }
-
-    @PostMapping
-    public ResponseEntity<List<CommentActivityResponse>> getComments(@RequestBody CommentGetRequest commentGetRequest) {
-        return ok(commentService.getComments(commentGetRequest.getCommentIdList()));
-    }
-
     @PostMapping("/{commentId}/like")
     @AuthorizationRequired
     public ResponseEntity<Void> likeComment(@CurrentUser UserEntity userEntity, @PathVariable Long commentId) {
@@ -61,10 +51,5 @@ public class CommentController {
         commentLikeService.handleCommentLike(userEntity.getId(), commentId, DEACTIVATE);
 
         return ok().build();
-    }
-
-    @GetMapping("/like")
-    public ResponseEntity<List<CommentLikeActivityResponse>> getLikeActivities(@RequestBody CommentLikeGetRequest commentLikeGetRequest) {
-        return ok(commentLikeService.getCommentActivity(commentLikeGetRequest.getCommentLikeIdList()));
     }
 }
