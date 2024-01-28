@@ -1,5 +1,7 @@
 package com.example.preorder.post.core.service;
 
+import com.example.preorder.common.activity.ActivityOffer;
+import com.example.preorder.common.activity.ActivityResponse;
 import com.example.preorder.common.exception.InternalErrorException;
 import com.example.preorder.post.core.entity.PostEntity;
 import com.example.preorder.post.core.event.PostEventPublisher;
@@ -15,7 +17,7 @@ import java.util.List;
 
 @Service
 @RequiredArgsConstructor
-public class PostService {
+public class PostService implements ActivityOffer {
     private final PostRepository postRepository;
     private final UserRepository userRepository;
     private final PostEventPublisher eventPublisher;
@@ -30,18 +32,24 @@ public class PostService {
         return postRepository.save(postEntity).getId();
     }
 
+    @Override
     @Transactional(readOnly = true)
-    public List<PostInfoResponse> getPostByIds(List<Long> postIdList) {
-        List<PostEntity> postEntityList = postRepository.findPostIn(postIdList);
+    public List<ActivityResponse> handleActivity(List<Long> targetIdList) {
+        List<PostEntity> postEntityList = postRepository.findPostIn(targetIdList);
 
         return postEntityList.stream()
-                .map(this::entityToResponse)
+                .map(this::entityToActivityResponse)
                 .toList();
     }
 
-    private PostInfoResponse entityToResponse(PostEntity postEntity) {
+    private ActivityResponse entityToActivityResponse(PostEntity postEntity) {
         UserEntity userEntity = postEntity.getUserEntity();
-        return new PostInfoResponse(userEntity.getUsername(), postEntity.getId(), userEntity.getId());
+        return new PostInfoResponse(
+                userEntity.getUsername(),
+                postEntity.getId(),
+                userEntity.getId(),
+                postEntity.getCreatedAt()
+        );
     }
 
     private UserEntity getUserEntity(Long userId) {

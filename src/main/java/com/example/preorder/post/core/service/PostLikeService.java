@@ -1,5 +1,7 @@
 package com.example.preorder.post.core.service;
 
+import com.example.preorder.common.activity.ActivityOffer;
+import com.example.preorder.common.activity.ActivityResponse;
 import com.example.preorder.common.exception.BadRequestException;
 import com.example.preorder.common.exception.InternalErrorException;
 import com.example.preorder.post.core.entity.PostEntity;
@@ -7,6 +9,7 @@ import com.example.preorder.post.core.entity.PostLikeEntity;
 import com.example.preorder.post.core.event.PostLikeEventPublisher;
 import com.example.preorder.post.core.repository.PostLikeRepository;
 import com.example.preorder.post.core.repository.PostRepository;
+import com.example.preorder.post.presentation.response.PostInfoResponse;
 import com.example.preorder.post.presentation.response.PostLikeInfoResponse;
 import com.example.preorder.user.core.entity.UserEntity;
 import com.example.preorder.user.core.repository.UserRepository;
@@ -23,7 +26,7 @@ import static com.example.preorder.post.core.event.list.PostLikeEvent.*;
 
 @Service
 @RequiredArgsConstructor
-public class PostLikeService {
+public class PostLikeService implements ActivityOffer {
     private final PostLikeRepository postLikeRepository;
     private final UserRepository userRepository;
     private final PostRepository postRepository;
@@ -45,12 +48,13 @@ public class PostLikeService {
         postLikeRepository.save(postLike);
     }
 
+    @Override
     @Transactional(readOnly = true)
-    public List<PostLikeInfoResponse> findPostLikeByIdList(List<Long> postLikeIdList) {
-        List<PostLikeEntity> postLikeList = postLikeRepository.findPostLikeByIdList(postLikeIdList);
+    public List<ActivityResponse> handleActivity(List<Long> targetIdList) {
+        List<PostLikeEntity> postLikeList = postLikeRepository.findPostLikeByIdList(targetIdList);
 
         return postLikeList.stream()
-                .map(PostLikeInfoResponse::new)
+                .map(this::entityToActivityResponse)
                 .toList();
     }
 
@@ -64,5 +68,9 @@ public class PostLikeService {
         return userRepository.findById(userId).orElseThrow(
                 () -> new InternalErrorException("Server Error.")
         );
+    }
+
+    private ActivityResponse entityToActivityResponse(PostLikeEntity postLike) {
+        return new PostLikeInfoResponse(postLike);
     }
 }

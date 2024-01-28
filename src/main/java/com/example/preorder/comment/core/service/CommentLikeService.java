@@ -8,6 +8,8 @@ import com.example.preorder.comment.core.event.list.CommentLikeEvent;
 import com.example.preorder.comment.core.repository.CommentLikeRepository;
 import com.example.preorder.comment.core.repository.CommentRepository;
 import com.example.preorder.comment.presentation.response.CommentLikeActivityResponse;
+import com.example.preorder.common.activity.ActivityOffer;
+import com.example.preorder.common.activity.ActivityResponse;
 import com.example.preorder.common.exception.BadRequestException;
 import com.example.preorder.common.exception.InternalErrorException;
 import com.example.preorder.user.core.entity.UserEntity;
@@ -25,7 +27,7 @@ import static com.example.preorder.comment.core.event.list.CommentLikeEvent.*;
 
 @Service
 @RequiredArgsConstructor
-public class CommentLikeService {
+public class CommentLikeService implements ActivityOffer {
     private final CommentLikeRepository commentLikeRepository;
     private final CommentRepository commentRepository;
     private final UserRepository userRepository;
@@ -49,12 +51,13 @@ public class CommentLikeService {
         commentLikeRepository.save(commentLikeEntity);
     }
 
+    @Override
     @Transactional(readOnly = true)
-    public List<CommentLikeActivityResponse> getCommentActivity(List<Long> commentLikeIdList) {
-        List<CommentLikeEntity> commentLikeEntityList = commentLikeRepository.findByIdList(commentLikeIdList);
+    public List<ActivityResponse> handleActivity(List<Long> targetIdList) {
+        List<CommentLikeEntity> commentLikeEntityList = commentLikeRepository.findByIdList(targetIdList);
 
         return commentLikeEntityList.stream()
-                .map(CommentLikeActivityResponse::new)
+                .map(this::entityToActivityResponse)
                 .toList();
     }
 
@@ -68,5 +71,9 @@ public class CommentLikeService {
         return userRepository.findById(userId).orElseThrow(
                 () -> new InternalErrorException("Server Error.")
         );
+    }
+
+    private ActivityResponse entityToActivityResponse(CommentLikeEntity entity) {
+        return new CommentLikeActivityResponse(entity);
     }
 }

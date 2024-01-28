@@ -5,6 +5,8 @@ import com.example.preorder.comment.core.event.CommentEventPublisher;
 import com.example.preorder.comment.core.repository.CommentRepository;
 import com.example.preorder.comment.presentation.response.CommentActivityResponse;
 import com.example.preorder.comment.presentation.response.CommentInfoResponse;
+import com.example.preorder.common.activity.ActivityOffer;
+import com.example.preorder.common.activity.ActivityResponse;
 import com.example.preorder.common.exception.BadRequestException;
 import com.example.preorder.common.exception.InternalErrorException;
 import com.example.preorder.post.core.entity.PostEntity;
@@ -21,7 +23,7 @@ import java.util.List;
 
 @Service
 @RequiredArgsConstructor
-public class CommentService {
+public class CommentService implements ActivityOffer {
     private final CommentRepository commentRepository;
     private final UserRepository userRepository;
     private final PostRepository postRepository;
@@ -38,22 +40,13 @@ public class CommentService {
 
         return commentRepository.save(commentEntity).getId();
     }
-
+    @Override
     @Transactional(readOnly = true)
-    public List<CommentInfoResponse> getComments(Long postId) {
-        List<CommentEntity> comments = commentRepository.findByPostId(postId);
-
-        return comments.stream()
-                .map(CommentInfoResponse::new)
-                .toList();
-    }
-
-    @Transactional(readOnly = true)
-    public List<CommentActivityResponse> getComments(List<Long> commentIdList) {
-        List<CommentEntity> commentByList = commentRepository.findCommentByList(commentIdList);
+    public List<ActivityResponse> handleActivity(List<Long> targetIdList) {
+        List<CommentEntity> commentByList = commentRepository.findCommentByList(targetIdList);
 
         return commentByList.stream()
-                .map(CommentActivityResponse::new)
+                .map(this::entityToActivityResponse)
                 .toList();
     }
 
@@ -67,5 +60,9 @@ public class CommentService {
         return userRepository.findById(userId).orElseThrow(
                 () -> new InternalErrorException("Server Error.")
         );
+    }
+
+    private ActivityResponse entityToActivityResponse(CommentEntity commentEntity) {
+        return new CommentActivityResponse(commentEntity);
     }
 }

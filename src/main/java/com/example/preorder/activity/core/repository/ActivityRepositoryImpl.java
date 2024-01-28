@@ -4,9 +4,9 @@ import com.example.preorder.activity.core.entity.ActivityEntity;
 import com.example.preorder.activity.core.entity.ActivityStatus;
 import com.example.preorder.activity.core.entity.ActivityType;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Repository;
 
-import java.awt.print.Pageable;
 import java.util.List;
 import java.util.Optional;
 

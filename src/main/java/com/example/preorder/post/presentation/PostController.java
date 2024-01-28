@@ -33,11 +33,6 @@ public class PostController {
         return ok(postService.enrollPost(userEntity.getId(), postCreateRequest.getContent()));
     }
 
-    @PostMapping("/all")
-    public ResponseEntity<List<PostInfoResponse>> findAll(@RequestBody PostGetRequest postGetRequest) {
-        return ok(postService.getPostByIds(postGetRequest.getPostIdList()));
-    }
-
     @PostMapping("/{postId}/like")
     @AuthorizationRequired
     public ResponseEntity<Void> likePost(@CurrentUser UserEntity userEntity, @PathVariable Long postId) {
@@ -52,10 +47,5 @@ public class PostController {
         postLikeService.handlePostLike(userEntity.getId(), postId, false);
 
         return ResponseEntity.ok().build();
-    }
-
-    @PostMapping("/like/all")
-    public ResponseEntity<List<PostLikeInfoResponse>> findPostLikeAll(@RequestBody PostLikeGetRequest postLikeGetRequest) {
-        return ok(postLikeService.findPostLikeByIdList(postLikeGetRequest.getPostLikeIdList()));
     }
 }
