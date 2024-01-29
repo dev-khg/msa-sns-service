@@ -1,5 +1,6 @@
 package com.example.preorder.user.presentation;
 
+import com.example.preorder.common.ApiResponse;
 import com.example.preorder.common.utils.HttpServletUtils;
 import com.example.preorder.global.security.annotation.AuthorizationRequired;
 import com.example.preorder.global.security.annotation.CurrentUser;
@@ -18,10 +19,12 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
+import static com.example.preorder.common.ApiResponse.*;
 import static com.example.preorder.common.utils.HttpServletUtils.CookieType.*;
 import static com.example.preorder.common.utils.HttpServletUtils.HeaderType.*;
 import static org.springframework.http.HttpHeaders.*;
 import static org.springframework.http.HttpStatus.*;
+import static org.springframework.http.ResponseEntity.*;
 
 @RestController
 @RequiredArgsConstructor
@@ -38,7 +41,7 @@ public class UserController {
         TokenResponse tokenResponse = userService.signUp(userSignUp, file);
         applyToken(tokenResponse);
 
-        return new ResponseEntity<>(CREATED);
+        return noContent().build();
     }
 
     @PostMapping("/token")
@@ -48,29 +51,28 @@ public class UserController {
         TokenResponse tokenResponse = userService.reissueToken(refreshToken);
         applyToken(tokenResponse);
 
-        return new ResponseEntity<>(OK);
+        return noContent().build();
     }
 
     @PatchMapping("/password")
     @AuthorizationRequired
     public ResponseEntity<Void> changePassword(
-            @CurrentUser UserEntity currentUser,
-            @Valid @RequestBody UserChangePasswordRequest passwordRequest
-            ) {
+            @CurrentUser UserEntity currentUser, @Valid @RequestBody UserChangePasswordRequest passwordRequest
+    ) {
         userService.editPassword(currentUser, passwordRequest);
 
-        return new ResponseEntity<>(OK);
+        return noContent().build();
     }
 
     @GetMapping("/info/{userId}")
-    public ResponseEntity<UserInfoResponse> getUserInfo(@PathVariable Long userId) {
-        return ResponseEntity.ok(userService.getUserInfo(userId));
+    public ResponseEntity<ApiResponse<UserInfoResponse>> getUserInfo(@PathVariable Long userId) {
+        return ok(success(userService.getUserInfo(userId)));
     }
 
     @GetMapping("/info")
     @AuthorizationRequired
-    public ResponseEntity<UserInfoResponse> getMyInfo(@CurrentUser UserEntity userEntity) {
-        return ResponseEntity.ok(userService.getUserInfo(userEntity.getId()));
+    public ResponseEntity<ApiResponse<UserInfoResponse>> getMyInfo(@CurrentUser UserEntity userEntity) {
+        return ok(success(userService.getUserInfo(userEntity.getId())));
     }
 
     @AuthorizationRequired
@@ -80,13 +82,13 @@ public class UserController {
             @RequestPart(value = "file", required = false) MultipartFile file,
             @Valid @RequestPart(value = "user_info_edit", required = false) UserInfoEditRequest userEdit) {
         userService.editInfo(userEntity, userEdit, file);
-        return new ResponseEntity<>(OK);
+        return noContent().build();
     }
 
     @PostMapping("/email")
     public ResponseEntity<Void> sendEmail(@RequestPart("email") String email) {
         userService.sendAuthCode(email);
-        return new ResponseEntity<>(NO_CONTENT);
+        return noContent().build();
     }
 
     @DeleteMapping
@@ -96,7 +98,7 @@ public class UserController {
             @CookieValue(value = "RefreshToken", required = false) String refreshToken
     ) {
         userService.logout(accessToken, refreshToken);
-        return new ResponseEntity<>(NO_CONTENT);
+        return noContent().build();
     }
 
     private void applyToken(TokenResponse tokenResponse) {
