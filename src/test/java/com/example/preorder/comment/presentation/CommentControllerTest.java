@@ -46,13 +46,11 @@ class CommentControllerTest extends IntegrationTest {
         CommentCreateRequest commentCreateRequest = new CommentCreateRequest(createRandomUUID());
 
         // when
-        MvcResult mvcResult = mockMvc.perform(post("/comment/" + 100L)
-                        .header(AUTHORIZATION, "Bearer " + accessToken)
-                        .content(objectMapper.writeValueAsString(commentCreateRequest))
-                        .contentType(APPLICATION_JSON)
-                ).andExpect(status().isBadRequest())
-                .andDo(print())
-                .andReturn();
+        mockMvc.perform(post("/comment/" + 100L)
+                .header(AUTHORIZATION, "Bearer " + accessToken)
+                .content(objectMapper.writeValueAsString(commentCreateRequest))
+                .contentType(APPLICATION_JSON)
+        ).andExpect(status().isBadRequest());
 
         // then
     }
@@ -70,7 +68,6 @@ class CommentControllerTest extends IntegrationTest {
                         .content(objectMapper.writeValueAsString(commentCreateRequest))
                         .contentType(APPLICATION_JSON)
                 ).andExpect(status().isOk())
-                .andDo(print())
                 .andReturn();
 
         // then
@@ -90,11 +87,9 @@ class CommentControllerTest extends IntegrationTest {
 
         // when
         mockMvc.perform(post("/comment/" + commentId + "/like")
-                        .contentType(APPLICATION_JSON)
-                        .header(AUTHORIZATION, "Bearer " + accessToken)
-                ).andExpect(status().isNoContent())
-                .andDo(print())
-                .andReturn();
+                .contentType(APPLICATION_JSON)
+                .header(AUTHORIZATION, "Bearer " + accessToken)
+        ).andExpect(status().isNoContent());
 
         // then
         CommentLikeEntity commentLikeEntity = commentLikeRepository.findByUserIdAndCommentId(
@@ -115,11 +110,9 @@ class CommentControllerTest extends IntegrationTest {
 
         // when
         mockMvc.perform(delete("/comment/" + commentId + "/like")
-                        .contentType(APPLICATION_JSON)
-                        .header(AUTHORIZATION, "Bearer " + accessToken)
-                ).andExpect(status().isOk())
-                .andDo(print())
-                .andReturn();
+                .contentType(APPLICATION_JSON)
+                .header(AUTHORIZATION, "Bearer " + accessToken)
+        ).andExpect(status().isOk());
 
         // then
         CommentLikeEntity commentLikeEntity = commentLikeRepository.findByUserIdAndCommentId(

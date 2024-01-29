@@ -31,11 +31,9 @@ class FollowControllerTest extends IntegrationTest {
 
         // when
         mockMvc.perform(post("/follow/" + 100L)
-                        .header(AUTHORIZATION, accessToken)
-                        .contentType(APPLICATION_JSON)
-                )
-                .andExpect(status().isBadRequest())
-                .andDo(print());
+                .header(AUTHORIZATION, accessToken)
+                .contentType(APPLICATION_JSON)
+        ).andExpect(status().isBadRequest());
 
         // then
     }
@@ -46,12 +44,10 @@ class FollowControllerTest extends IntegrationTest {
         // given
 
         // when
-        ResultActions resultActions = mockMvc.perform(post("/follow/" + userEntityA.getId())
-                        .header(AUTHORIZATION, accessToken)
-                        .contentType(APPLICATION_JSON)
-                )
-                .andExpect(status().isNoContent())
-                .andDo(print());
+        mockMvc.perform(post("/follow/" + userEntityA.getId())
+                .header(AUTHORIZATION, accessToken)
+                .contentType(APPLICATION_JSON)
+        ).andExpect(status().isNoContent());
 
         flushAndClearPersistence();
 

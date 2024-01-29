@@ -59,7 +59,6 @@ class PostControllerTest extends IntegrationTest {
                         .content(objectMapper.writeValueAsString(postCreateRequest))
                         .header(AUTHORIZATION, "Bearer " + accessToken)
                 ).andExpect(status().isOk())
-                .andDo(print())
                 .andReturn();
 
         // then
@@ -83,11 +82,9 @@ class PostControllerTest extends IntegrationTest {
 
         // when
         mockMvc.perform(post("/post/" + postId + "/like")
-                        .contentType(APPLICATION_JSON)
-                        .header(AUTHORIZATION, "Bearer " + accessToken)
-                ).andExpect(status().isNoContent())
-                .andDo(print())
-                .andReturn();
+                .contentType(APPLICATION_JSON)
+                .header(AUTHORIZATION, "Bearer " + accessToken)
+        ).andExpect(status().isNoContent());
         flushAndClearPersistence();
 
         // then
@@ -110,11 +107,9 @@ class PostControllerTest extends IntegrationTest {
 
         // when
         mockMvc.perform(delete("/post/" + postId + "/like")
-                        .contentType(APPLICATION_JSON)
-                        .header(AUTHORIZATION, "Bearer " + accessToken)
-                ).andExpect(status().isNoContent())
-                .andDo(print())
-                .andReturn();
+                .contentType(APPLICATION_JSON)
+                .header(AUTHORIZATION, "Bearer " + accessToken)
+        ).andExpect(status().isNoContent());
         flushAndClearPersistence();
 
         // then
