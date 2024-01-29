@@ -5,9 +5,11 @@ import com.example.preorder.global.security.annotation.AuthorizationRequired;
 import com.example.preorder.global.security.annotation.CurrentUser;
 import com.example.preorder.user.core.entity.UserEntity;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import static com.example.preorder.follow.core.entity.FollowStatus.*;
+import static org.springframework.http.ResponseEntity.*;
 
 @RestController
 @RequiredArgsConstructor
@@ -17,13 +19,17 @@ public class FollowController {
 
     @PostMapping("/{userId}")
     @AuthorizationRequired
-    public void follow(@CurrentUser UserEntity userEntity, @PathVariable Long userId) {
+    public ResponseEntity<Void> follow(@CurrentUser UserEntity userEntity, @PathVariable Long userId) {
         followService.handleFollow(userEntity.getId(), userId, FOLLOWING);
+
+        return noContent().build();
     }
 
     @DeleteMapping("/{userId}")
     @AuthorizationRequired
-    public void unFollow(@CurrentUser UserEntity userEntity, @PathVariable Long userId) {
+    public ResponseEntity<Void> unFollow(@CurrentUser UserEntity userEntity, @PathVariable Long userId) {
         followService.handleFollow(userEntity.getId(), userId, UNFOLLOWING);
+
+        return noContent().build();
     }
 }

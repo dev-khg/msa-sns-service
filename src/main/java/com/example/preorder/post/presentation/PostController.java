@@ -1,5 +1,6 @@
 package com.example.preorder.post.presentation;
 
+import com.example.preorder.common.ApiResponse;
 import com.example.preorder.global.security.annotation.AuthorizationRequired;
 import com.example.preorder.global.security.annotation.CurrentUser;
 import com.example.preorder.post.core.service.PostLikeService;
@@ -17,6 +18,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
+import static com.example.preorder.common.ApiResponse.*;
 import static org.springframework.http.ResponseEntity.*;
 
 @RestController
@@ -28,9 +30,11 @@ public class PostController {
 
     @PostMapping
     @AuthorizationRequired
-    public ResponseEntity<Long> enrollPost(@CurrentUser UserEntity userEntity,
+    public ResponseEntity<ApiResponse<Long>> enrollPost(@CurrentUser UserEntity userEntity,
                                            @Valid @RequestBody PostCreateRequest postCreateRequest) {
-        return ok(postService.enrollPost(userEntity.getId(), postCreateRequest.getContent()));
+        return ok(
+                success(postService.enrollPost(userEntity.getId(), postCreateRequest.getContent()))
+        );
     }
 
     @PostMapping("/{postId}/like")
@@ -38,7 +42,7 @@ public class PostController {
     public ResponseEntity<Void> likePost(@CurrentUser UserEntity userEntity, @PathVariable Long postId) {
         postLikeService.handlePostLike(userEntity.getId(), postId, true);
 
-        return ResponseEntity.ok().build();
+        return noContent().build();
     }
 
     @DeleteMapping("/{postId}/like")
@@ -46,6 +50,6 @@ public class PostController {
     public ResponseEntity<Void> unLikePost(@CurrentUser UserEntity userEntity, @PathVariable Long postId) {
         postLikeService.handlePostLike(userEntity.getId(), postId, false);
 
-        return ResponseEntity.ok().build();
+        return noContent().build();
     }
 }

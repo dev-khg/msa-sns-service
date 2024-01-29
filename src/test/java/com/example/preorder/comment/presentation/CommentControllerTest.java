@@ -8,6 +8,7 @@ import com.example.preorder.comment.presentation.request.CommentCreateRequest;
 import com.example.preorder.comment.presentation.request.CommentGetRequest;
 import com.example.preorder.comment.presentation.response.CommentActivityResponse;
 import com.example.preorder.comment.presentation.response.CommentInfoResponse;
+import com.example.preorder.common.ApiResponse;
 import com.example.preorder.utils.IntegrationTest;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -53,11 +54,7 @@ class CommentControllerTest extends IntegrationTest {
                 .andDo(print())
                 .andReturn();
 
-        TestTransaction.end();
-
         // then
-
-
     }
 
     @Test
@@ -77,8 +74,8 @@ class CommentControllerTest extends IntegrationTest {
                 .andReturn();
 
         // then
-        String commentId = mvcResult.getResponse().getContentAsString();
-        CommentEntity commentEntity = commentRepository.findById(Long.valueOf(commentId)).orElseThrow();
+        ApiResponse<Integer> response = readJson(mvcResult.getResponse().getContentAsString());
+        CommentEntity commentEntity = commentRepository.findById(response.getData().longValue()).orElseThrow();
 
         assertEquals(commentEntity.getUserEntity().getId(), userEntity.getId());
         assertEquals(commentEntity.getContent(), commentCreateRequest.getContent());
@@ -95,7 +92,7 @@ class CommentControllerTest extends IntegrationTest {
         mockMvc.perform(post("/comment/" + commentId + "/like")
                         .contentType(APPLICATION_JSON)
                         .header(AUTHORIZATION, "Bearer " + accessToken)
-                ).andExpect(status().isOk())
+                ).andExpect(status().isNoContent())
                 .andDo(print())
                 .andReturn();
 

@@ -9,6 +9,7 @@ import com.example.preorder.comment.presentation.request.CommentLikeGetRequest;
 import com.example.preorder.comment.presentation.response.CommentActivityResponse;
 import com.example.preorder.comment.presentation.response.CommentInfoResponse;
 import com.example.preorder.comment.presentation.response.CommentLikeActivityResponse;
+import com.example.preorder.common.ApiResponse;
 import com.example.preorder.global.security.annotation.AuthorizationRequired;
 import com.example.preorder.global.security.annotation.CurrentUser;
 import com.example.preorder.user.core.entity.UserEntity;
@@ -19,6 +20,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 import static com.example.preorder.comment.core.entity.CommentLikeStatus.*;
+import static com.example.preorder.common.ApiResponse.*;
 import static org.springframework.http.ResponseEntity.*;
 
 @RestController
@@ -30,11 +32,13 @@ public class CommentController {
 
     @PostMapping("/{postId}")
     @AuthorizationRequired
-    public ResponseEntity<Long> enrollComment(
+    public ResponseEntity<ApiResponse<Long>> enrollComment(
             @CurrentUser UserEntity user,
             @PathVariable Long postId,
             @RequestBody CommentCreateRequest createRequest) {
-        return ok(commentService.enrollComment(user.getId(), postId, createRequest.getContent()));
+        return ok(success(
+                commentService.enrollComment(user.getId(), postId, createRequest.getContent())
+        ));
     }
 
     @PostMapping("/{commentId}/like")
@@ -42,7 +46,7 @@ public class CommentController {
     public ResponseEntity<Void> likeComment(@CurrentUser UserEntity userEntity, @PathVariable Long commentId) {
         commentLikeService.handleCommentLike(userEntity.getId(), commentId, ACTIVATE);
 
-        return ok().build();
+        return noContent().build();
     }
 
     @DeleteMapping("/{commentId}/like")
