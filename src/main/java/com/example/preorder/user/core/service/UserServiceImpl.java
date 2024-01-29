@@ -38,7 +38,6 @@ public class UserServiceImpl extends EventPublisher implements UserService {
     private final EmailService emailService;
     private final StorageService storageService;
     private final TokenProvider tokenProvider;
-    private final HttpServletUtils servletUtils;
     private final PasswordEncoder passwordEncoder;
 
     public UserServiceImpl(ApplicationEventPublisher publisher,
@@ -55,7 +54,6 @@ public class UserServiceImpl extends EventPublisher implements UserService {
         this.emailService = emailService;
         this.storageService = storageService;
         this.tokenProvider = tokenProvider;
-        this.servletUtils = servletUtils;
         this.passwordEncoder = passwordEncoder;
     }
 
