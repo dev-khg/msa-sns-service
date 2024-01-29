@@ -1,0 +1,14 @@
+1706513018676|0|statement|connection 52|url jdbc:h2:mem:test|     drop table if exists activity cascade |     drop table if exists activity cascade 
+1706513018677|0|statement|connection 52|url jdbc:h2:mem:test|     drop table if exists comment cascade |     drop table if exists comment cascade 
+1706513018677|0|statement|connection 52|url jdbc:h2:mem:test|     drop table if exists comment_like cascade |     drop table if exists comment_like cascade 
+1706513018678|0|statement|connection 52|url jdbc:h2:mem:test|     drop table if exists follow cascade |     drop table if exists follow cascade 
+1706513018678|0|statement|connection 52|url jdbc:h2:mem:test|     drop table if exists post cascade |     drop table if exists post cascade 
+1706513018678|0|statement|connection 52|url jdbc:h2:mem:test|     drop table if exists post_like cascade |     drop table if exists post_like cascade 
+1706513018678|0|statement|connection 52|url jdbc:h2:mem:test|     drop table if exists users cascade |     drop table if exists users cascade 
+1706513018695|0|statement|connection 53|url jdbc:h2:mem:test|     drop table if exists activity cascade |     drop table if exists activity cascade 
+1706513018695|0|statement|connection 53|url jdbc:h2:mem:test|     drop table if exists comment cascade |     drop table if exists comment cascade 
+1706513018695|0|statement|connection 53|url jdbc:h2:mem:test|     drop table if exists comment_like cascade |     drop table if exists comment_like cascade 
+1706513018695|0|statement|connection 53|url jdbc:h2:mem:test|     drop table if exists follow cascade |     drop table if exists follow cascade 
+1706513018695|0|statement|connection 53|url jdbc:h2:mem:test|     drop table if exists post cascade |     drop table if exists post cascade 
+1706513018695|0|statement|connection 53|url jdbc:h2:mem:test|     drop table if exists post_like cascade |     drop table if exists post_like cascade 
+1706513018695|0|statement|connection 53|url jdbc:h2:mem:test|     drop table if exists users cascade |     drop table if exists users cascade 

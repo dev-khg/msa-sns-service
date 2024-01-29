@@ -41,6 +41,9 @@ spring:
     username: test@test.com
     password: test-password
     port: 123
+  sql:
+    init:
+      mode: never
 
 jwt:
   secret: testhjgjkasgsfngadsgasgwgewgagdsgdsa34234afeasgajsgsafdss

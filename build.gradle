@@ -47,9 +47,7 @@ dependencies {
     //mysql connector
     runtimeOnly 'com.mysql:mysql-connector-j'
 
-    implementation 'com.github.gavlyukovskiy:p6spy-spring-boot-starter:1.9.0'
-
-
+    testRuntimeOnly 'com.h2database:h2'
     compileOnly 'org.projectlombok:lombok'
     annotationProcessor "org.springframework.boot:spring-boot-configuration-processor"
     annotationProcessor 'org.projectlombok:lombok'
