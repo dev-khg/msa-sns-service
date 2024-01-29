@@ -51,11 +51,10 @@ class UserControllerTest extends IntegrationTest {
 
         // when
         mockMvc.perform(multipart(HttpMethod.POST, "/user")
-                        .file(jsonMultiPartFile)
-                        .file(jsonMultiPartFile)
-                        .contentType(MediaType.MULTIPART_FORM_DATA)
-                ).andExpect(status().isBadRequest())
-                .andDo(print());
+                .file(jsonMultiPartFile)
+                .file(jsonMultiPartFile)
+                .contentType(MediaType.MULTIPART_FORM_DATA)
+        ).andExpect(status().isBadRequest());
     }
 
     @Test
@@ -73,11 +72,10 @@ class UserControllerTest extends IntegrationTest {
 
         // when
         mockMvc.perform(multipart("/user")
-                        .file(jsonMultiPartFile)
-                        .file(jsonMultiPartFile)
-                        .contentType(MediaType.MULTIPART_FORM_DATA)
-                ).andExpect(status().isBadRequest())
-                .andDo(print());
+                .file(jsonMultiPartFile)
+                .file(jsonMultiPartFile)
+                .contentType(MediaType.MULTIPART_FORM_DATA)
+        ).andExpect(status().isBadRequest());
     }
 
     @Test
@@ -95,11 +93,10 @@ class UserControllerTest extends IntegrationTest {
 
         // when
         mockMvc.perform(multipart("/user")
-                        .file(jsonMultiPartFile)
-                        .file(jsonMultiPartFile)
-                        .contentType(MediaType.MULTIPART_FORM_DATA)
-                ).andExpect(status().isBadRequest())
-                .andDo(print());
+                .file(jsonMultiPartFile)
+                .file(jsonMultiPartFile)
+                .contentType(MediaType.MULTIPART_FORM_DATA)
+        ).andExpect(status().isBadRequest());
     }
 
     @Test
@@ -173,12 +170,11 @@ class UserControllerTest extends IntegrationTest {
 
         // when
         mockMvc.perform(
-                        patch("/user/password")
-                                .contentType(MediaType.APPLICATION_JSON)
-                                .content(objectMapper.writeValueAsString(userChangePasswordRequest))
-                                .header(AUTHORIZATION, "Bearer " + accessToken + "a")
-                ).andDo(print())
-                .andExpect(status().isBadRequest());
+                patch("/user/password")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(userChangePasswordRequest))
+                        .header(AUTHORIZATION, "Bearer " + accessToken + "a")
+        ).andExpect(status().isBadRequest());
     }
 
     @Test
@@ -191,12 +187,11 @@ class UserControllerTest extends IntegrationTest {
 
         // when
         mockMvc.perform(
-                        patch("/user/password")
-                                .content(objectMapper.writeValueAsString(userChangePasswordRequest))
-                                .contentType(MediaType.APPLICATION_JSON)
-                                .header(AUTHORIZATION, "Bearer " + accessToken)
-                ).andDo(print())
-                .andExpect(status().isBadRequest());
+                patch("/user/password")
+                        .content(objectMapper.writeValueAsString(userChangePasswordRequest))
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .header(AUTHORIZATION, "Bearer " + accessToken)
+        ).andExpect(status().isBadRequest());
     }
 
     @Test
@@ -209,12 +204,11 @@ class UserControllerTest extends IntegrationTest {
 
         // when
         mockMvc.perform(
-                        patch("/user/password")
-                                .content(objectMapper.writeValueAsString(userChangePasswordRequest))
-                                .contentType(MediaType.APPLICATION_JSON)
-                                .header(AUTHORIZATION, "Bearer " + accessToken)
-                ).andDo(print())
-                .andExpect(status().isNoContent());
+                patch("/user/password")
+                        .content(objectMapper.writeValueAsString(userChangePasswordRequest))
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .header(AUTHORIZATION, "Bearer " + accessToken)
+        ).andExpect(status().isNoContent());
 
         // then
         UserEntity changedEntity = userRepository.findById(userEntity.getId()).orElseThrow();
@@ -229,10 +223,9 @@ class UserControllerTest extends IntegrationTest {
 
         // when
         mockMvc.perform(
-                        get("/user/info/" + existsId)
-                                .contentType(MediaType.APPLICATION_JSON)
-                ).andDo(print())
-                .andExpect(status().isBadRequest());
+                get("/user/info/" + existsId)
+                        .contentType(MediaType.APPLICATION_JSON)
+        ).andExpect(status().isBadRequest());
     }
 
     @Test
@@ -245,8 +238,7 @@ class UserControllerTest extends IntegrationTest {
         MvcResult mvcResult = mockMvc.perform(
                         get("/user/info/" + existsId)
                                 .contentType(MediaType.APPLICATION_JSON)
-                ).andDo(print())
-                .andExpect(status().isOk())
+                ).andExpect(status().isOk())
                 .andReturn();
 
         // then
@@ -267,11 +259,10 @@ class UserControllerTest extends IntegrationTest {
 
         // when
         mockMvc.perform(
-                        get("/user/info")
-                                .header(AUTHORIZATION, "Bearer " + accessToken + "a")
-                                .contentType(MediaType.APPLICATION_JSON)
-                ).andDo(print())
-                .andExpect(status().isBadRequest());
+                get("/user/info")
+                        .header(AUTHORIZATION, "Bearer " + accessToken + "a")
+                        .contentType(MediaType.APPLICATION_JSON)
+        ).andExpect(status().isBadRequest());
     }
 
     @Test
@@ -281,11 +272,10 @@ class UserControllerTest extends IntegrationTest {
 
         // when
         mockMvc.perform(
-                        get("/user/info")
-                                .header(AUTHORIZATION, "Bearer " + accessToken)
-                                .contentType(MediaType.APPLICATION_JSON)
-                ).andDo(print())
-                .andExpect(status().isOk());
+                get("/user/info")
+                        .header(AUTHORIZATION, "Bearer " + accessToken)
+                        .contentType(MediaType.APPLICATION_JSON)
+        ).andExpect(status().isOk());
     }
 
     @Test
@@ -297,11 +287,10 @@ class UserControllerTest extends IntegrationTest {
 
         // when
         mockMvc.perform(multipart(HttpMethod.PATCH, "/user")
-                        .file(jsonMultiPartFile)
-                        .header(AUTHORIZATION, "Bearer " + accessToken + "a")
-                        .contentType(MediaType.MULTIPART_FORM_DATA)
-                ).andExpect(status().isBadRequest())
-                .andDo(print());
+                .file(jsonMultiPartFile)
+                .header(AUTHORIZATION, "Bearer " + accessToken + "a")
+                .contentType(MediaType.MULTIPART_FORM_DATA)
+        ).andExpect(status().isBadRequest());
     }
 
     @Test
@@ -314,12 +303,12 @@ class UserControllerTest extends IntegrationTest {
 
         // when
         mockMvc.perform(multipart(HttpMethod.PATCH, "/user")
-                        .file(jsonMultiPartFile)
-                        .file(file)
-                        .header(AUTHORIZATION, "Bearer " + accessToken)
-                        .contentType(MediaType.MULTIPART_FORM_DATA)
-                ).andExpect(status().isNoContent())
-                .andDo(print());
+                .file(jsonMultiPartFile)
+                .file(file)
+                .header(AUTHORIZATION, "Bearer " + accessToken)
+                .contentType(MediaType.MULTIPART_FORM_DATA)
+        ).andExpect(status().isNoContent());
+
         em.flush();
         em.clear();
         // then
@@ -332,19 +321,19 @@ class UserControllerTest extends IntegrationTest {
 
     @Test
     @DisplayName("로그아웃 시, 액세스 토큰이 블랙리스트에 저장되어야 하고, 리프레쉬토큰은 없어져야 한다.")
-    void valid_logout() throws Exception{
+    void valid_logout() throws Exception {
         // given
 
         // when
         mockMvc.perform(delete("/user")
-                        .header(AUTHORIZATION, "Bearer " + accessToken)
-                        .cookie(new Cookie("RefreshToken", refreshToken))
-                        .contentType(MediaType.MULTIPART_FORM_DATA)
-                ).andExpect(status().isNoContent())
-                .andDo(print());
+                .header(AUTHORIZATION, "Bearer " + accessToken)
+                .cookie(new Cookie("RefreshToken", refreshToken))
+                .contentType(MediaType.MULTIPART_FORM_DATA)
+        ).andExpect(status().isNoContent());`
 
         // then
-        assertTrue(redisManager.getValue(BLACKLIST_TOKEN, accessToken).isPresent());;
+        assertTrue(redisManager.getValue(BLACKLIST_TOKEN, accessToken).isPresent());
+        ;
         assertTrue(redisManager.getValue(REFRESH_TOKEN, refreshToken).isEmpty());
     }
 
