@@ -33,12 +33,10 @@ public class UserController {
     private final UserService userService;
     private final HttpServletUtils httpServletUtils;
 
-    @PostMapping(consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
-    public ResponseEntity<Void> signUp(
-            @RequestPart(value = "file", required = false) MultipartFile file,
-            @Valid @RequestPart(value = "user_sign_up", required = false) UserSignUpRequest userSignUp) {
+    @PostMapping
+    public ResponseEntity<Void> signUp(@Valid @RequestBody UserSignUpRequest userSignUp) {
 
-        TokenResponse tokenResponse = userService.signUp(userSignUp, file);
+        TokenResponse tokenResponse = userService.signUp(userSignUp);
         applyToken(tokenResponse);
 
         return noContent().build();

@@ -59,18 +59,16 @@ public class UserServiceImpl extends EventPublisher implements UserService {
 
     @Override
     @Transactional
-    public TokenResponse signUp(UserSignUpRequest signUpDTO, MultipartFile file) {
+    public TokenResponse signUp(UserSignUpRequest signUpDTO) {
         checkEmailDuplication(signUpDTO.getEmail());
         checkUsernameDuplication(signUpDTO.getUsername());
         checkAuthCode(signUpDTO.getEmail(), signUpDTO.getAuthCode());
-
-        String profileImageUrl = uploadFile(file);
 
         UserEntity userEntity = createUser(
                 signUpDTO.getEmail(),
                 signUpDTO.getUsername(),
                 passwordEncoder.encode(signUpDTO.getPassword()),
-                profileImageUrl
+                null
         );
 
         userRepository.save(userEntity);

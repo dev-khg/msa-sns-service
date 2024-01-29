@@ -10,7 +10,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 public interface UserService {
 
-    TokenResponse signUp(UserSignUpRequest signUpDTO, MultipartFile file);
+    TokenResponse signUp(UserSignUpRequest signUpDTO);
 
     TokenResponse reissueToken(String refreshToken);
 
