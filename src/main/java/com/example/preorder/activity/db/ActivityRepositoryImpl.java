@@ -1,13 +1,12 @@
-package com.example.preorder.activity.core.repository;
+package com.example.preorder.activity.db;
 
 import com.example.preorder.activity.core.entity.ActivityEntity;
 import com.example.preorder.activity.core.entity.ActivityStatus;
 import com.example.preorder.activity.core.entity.ActivityType;
+import com.example.preorder.activity.core.repository.ActivityRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Repository;
-import org.springframework.transaction.annotation.Propagation;
-import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.Optional;

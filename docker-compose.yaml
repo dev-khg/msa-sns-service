@@ -3,7 +3,6 @@ version: '3.8'
 services:
   mysql:
     image: mysql:8.0
-    container_name: preorder-db
     environment:
       MYSQL_ROOT_PASSWORD: root1234
       MYSQL_DATABASE: preorder
@@ -13,12 +12,35 @@ services:
       - "3306:3306"
     volumes:
       - ./db:/var/lib/mysql
+    networks:
+      - pre-order-network
 
   redis:
     image: redis:7.2.4
-    container_name: preorder-redis
     ports:
       - "6379:6379"
+    networks:
+      - pre-order-network
+
+  preorder:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    restart: always
+    depends_on:
+      - mysql
+      - redis
+    ports:
+      - "8081:8081"
+    env_file:
+      - ./pre-order.env
+    networks:
+      - pre-order-network
+
 
 volumes:
   mysql_pre_order:
+
+networks:
+  pre-order-network:
+    driver: bridge

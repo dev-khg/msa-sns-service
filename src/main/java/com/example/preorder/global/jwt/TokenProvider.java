@@ -17,9 +17,9 @@ public class TokenProvider {
     @Value("${jwt.secret}")
     private String secretKey;
     @Value("${jwt.access_token_expiration}")
-    private Long accessTokenExpiration;
+    private Long accessTokenExpiration; // 0.5 H
     @Value("${jwt.refresh_token_expiration}")
-    private Long refreshTokenExpiration;
+    private Long refreshTokenExpiration; // 14 days
 
     private AtomicLong atomicLong = new AtomicLong(1L);
 

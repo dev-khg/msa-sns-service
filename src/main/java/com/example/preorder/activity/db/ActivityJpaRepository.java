@@ -1,4 +1,4 @@
-package com.example.preorder.activity.core.repository;
+package com.example.preorder.activity.db;
 
 import com.example.preorder.activity.core.entity.ActivityEntity;
 import com.example.preorder.activity.core.entity.ActivityStatus;
