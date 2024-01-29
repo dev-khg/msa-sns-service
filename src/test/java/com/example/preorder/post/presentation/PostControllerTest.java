@@ -1,5 +1,6 @@
 package com.example.preorder.post.presentation;
 
+import com.example.preorder.common.ApiResponse;
 import com.example.preorder.post.core.entity.PostEntity;
 import com.example.preorder.post.core.entity.PostLikeEntity;
 import com.example.preorder.post.core.repository.PostLikeRepository;
@@ -62,8 +63,8 @@ class PostControllerTest extends IntegrationTest {
                 .andReturn();
 
         // then
-        long savedPostId = Long.parseLong(mvcResult.getResponse().getContentAsString());
-        PostEntity postEntity = postRepository.findById(savedPostId).orElseThrow();
+        ApiResponse<Integer> apiResponse = readJson(mvcResult.getResponse().getContentAsString());
+        PostEntity postEntity = postRepository.findById(apiResponse.getData().longValue()).orElseThrow();
 
         assertEquals(postEntity.getUserEntity().getId(), userEntity.getId());
         assertEquals(postEntity.getContent(), postCreateRequest.getContent());
@@ -84,11 +85,11 @@ class PostControllerTest extends IntegrationTest {
         mockMvc.perform(post("/post/" + postId + "/like")
                         .contentType(APPLICATION_JSON)
                         .header(AUTHORIZATION, "Bearer " + accessToken)
-                ).andExpect(status().isOk())
+                ).andExpect(status().isNoContent())
                 .andDo(print())
                 .andReturn();
-
         flushAndClearPersistence();
+
         // then
         PostLikeEntity postLikeEntity = postLikeRepository.findByUserIdAndPostId(
                 userEntity.getId(), postId
@@ -111,13 +112,12 @@ class PostControllerTest extends IntegrationTest {
         mockMvc.perform(delete("/post/" + postId + "/like")
                         .contentType(APPLICATION_JSON)
                         .header(AUTHORIZATION, "Bearer " + accessToken)
-                ).andExpect(status().isOk())
+                ).andExpect(status().isNoContent())
                 .andDo(print())
                 .andReturn();
-
         flushAndClearPersistence();
-        // then
 
+        // then
         assertTrue(postLikeRepository.findByUserIdAndPostId(
                 userEntity.getId(), postId
         ).isEmpty());

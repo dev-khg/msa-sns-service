@@ -9,11 +9,12 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.lang.Nullable;
 
 @Getter
-@RequiredArgsConstructor
+@NoArgsConstructor
+@AllArgsConstructor
 @JsonInclude(JsonInclude.Include.NON_NULL)
 public class ApiResponse<T> {
-    private final String message;
-    private final T data;
+    private String message;
+    private T data;
 
     public static <T> ApiResponse<T> success(T data) {
         return new ApiResponse<>("SUCCESS", data);

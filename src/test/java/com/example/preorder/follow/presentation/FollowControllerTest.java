@@ -50,7 +50,7 @@ class FollowControllerTest extends IntegrationTest {
                         .header(AUTHORIZATION, accessToken)
                         .contentType(APPLICATION_JSON)
                 )
-                .andExpect(status().isOk())
+                .andExpect(status().isNoContent())
                 .andDo(print());
 
         flushAndClearPersistence();

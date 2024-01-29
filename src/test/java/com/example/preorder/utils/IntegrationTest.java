@@ -3,6 +3,7 @@ package com.example.preorder.utils;
 import com.example.preorder.comment.core.entity.CommentEntity;
 import com.example.preorder.comment.core.repository.CommentLikeRepository;
 import com.example.preorder.comment.core.repository.CommentRepository;
+import com.example.preorder.common.ApiResponse;
 import com.example.preorder.global.jwt.TokenProvider;
 import com.example.preorder.global.redis.RedisManager;
 import com.example.preorder.post.core.entity.PostEntity;
@@ -10,6 +11,7 @@ import com.example.preorder.post.core.repository.PostRepository;
 import com.example.preorder.user.core.entity.UserEntity;
 import com.example.preorder.user.core.repository.UserRepository;
 import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
@@ -154,5 +156,16 @@ public abstract class IntegrationTest {
         UserEntity foundUser = userRepository.findById(userId).orElseThrow();
         PostEntity postEntity = postRepository.findById(postId).orElseThrow();
         return commentRepository.save(CommentEntity.create(foundUser, postEntity, content));
+    }
+
+    protected ApiResponse readJson(String content) throws Exception {
+        return objectMapper.readValue(content, ApiResponse.class);
+    }
+
+    protected <T> ApiResponse<T> readJson(String content, Class<T> clazz) throws Exception {
+        TypeReference<ApiResponse<T>> typeReference = new TypeReference<>() { };
+        ApiResponse<T> apiResponse = objectMapper.readValue(content, typeReference);
+        T data = objectMapper.convertValue(apiResponse.getData(), clazz);
+        return new ApiResponse<>(apiResponse.getMessage(), data);
     }
 }

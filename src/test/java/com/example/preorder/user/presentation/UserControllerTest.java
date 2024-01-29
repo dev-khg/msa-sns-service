@@ -1,5 +1,6 @@
 package com.example.preorder.user.presentation;
 
+import com.example.preorder.common.ApiResponse;
 import com.example.preorder.common.utils.RandomGenerator;
 import com.example.preorder.user.core.entity.UserEntity;
 import com.example.preorder.user.presentation.resources.request.UserChangePasswordRequest;
@@ -213,7 +214,7 @@ class UserControllerTest extends IntegrationTest {
                                 .contentType(MediaType.APPLICATION_JSON)
                                 .header(AUTHORIZATION, "Bearer " + accessToken)
                 ).andDo(print())
-                .andExpect(status().isOk());
+                .andExpect(status().isNoContent());
 
         // then
         UserEntity changedEntity = userRepository.findById(userEntity.getId()).orElseThrow();
@@ -249,10 +250,10 @@ class UserControllerTest extends IntegrationTest {
                 .andReturn();
 
         // then
-        UserInfoResponse userInfoResponse = objectMapper.readValue(
-                mvcResult.getResponse().getContentAsString(),
-                UserInfoResponse.class
+        ApiResponse<UserInfoResponse> apiResponse = readJson(
+                mvcResult.getResponse().getContentAsString(), UserInfoResponse.class
         );
+        UserInfoResponse userInfoResponse = apiResponse.getData();
 
         assertEquals(userInfoResponse.getUsername(), userEntity.getUsername());
         assertEquals(userInfoResponse.getDescription(), userEntity.getDescription());
@@ -317,7 +318,7 @@ class UserControllerTest extends IntegrationTest {
                         .file(file)
                         .header(AUTHORIZATION, "Bearer " + accessToken)
                         .contentType(MediaType.MULTIPART_FORM_DATA)
-                ).andExpect(status().isOk())
+                ).andExpect(status().isNoContent())
                 .andDo(print());
         em.flush();
         em.clear();
