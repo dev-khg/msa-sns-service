@@ -3,6 +3,7 @@ package com.example.preorder.global.security.filter;
 import com.example.preorder.common.exception.InternalErrorException;
 import com.example.preorder.common.utils.HttpServletUtils;
 import com.example.preorder.global.jwt.TokenProvider;
+import com.example.preorder.global.redis.RedisManager;
 import com.example.preorder.user.core.entity.UserEntity;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import jakarta.servlet.FilterChain;
@@ -39,6 +40,8 @@ class LoginFilterTest {
     @InjectMocks
     LoginFilter loginFilter;
 
+    @Mock
+    RedisManager redisManager;
     @Mock
     ObjectMapper objectMapper;
     @Mock
@@ -157,6 +160,8 @@ class LoginFilterTest {
                 .addCookie(any(), any());
         verify(httpServletUtils, times(1))
                 .putHeader(any(), any());
+        verify(redisManager, times(1))
+                .putValue(any(), any(), any());
     }
 
     private String createRandomUUID() {

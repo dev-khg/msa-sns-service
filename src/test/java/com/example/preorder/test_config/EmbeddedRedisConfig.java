@@ -1,16 +1,16 @@
-package com.example.preorder.global.redis;
+package com.example.preorder.test_config;
 
 import jakarta.annotation.PostConstruct;
 import jakarta.annotation.PreDestroy;
-import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.boot.test.context.TestConfiguration;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Profile;
+import org.springframework.test.context.ActiveProfiles;
 import redis.embedded.RedisServer;
 
-@Slf4j
+@ActiveProfiles("test")
 @Configuration
-@Profile("test")
 public class EmbeddedRedisConfig {
     private final RedisServer redisServer;
 
@@ -23,7 +23,6 @@ public class EmbeddedRedisConfig {
         try {
             redisServer.start();
         } catch (Exception e) {
-            log.error("Can't start embedded redis server.\nmessage = {}", e.getMessage());
         }
     }
 
@@ -32,3 +31,4 @@ public class EmbeddedRedisConfig {
         redisServer.stop();
     }
 }
+

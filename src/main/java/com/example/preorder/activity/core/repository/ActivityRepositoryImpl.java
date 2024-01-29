@@ -6,6 +6,8 @@ import com.example.preorder.activity.core.entity.ActivityType;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Repository;
+import org.springframework.transaction.annotation.Propagation;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.Optional;
@@ -17,15 +19,14 @@ public class ActivityRepositoryImpl implements ActivityRepository {
 
     @Override
     public ActivityEntity save(ActivityEntity activityEntity) {
-        return activityJpaRepository.save(activityEntity);
+        return activityJpaRepository.saveAndFlush(activityEntity);
     }
 
-    //TODO: 수정필요
     @Override
     public List<ActivityEntity> findValidActivitiesByUserId(List<Long> userId,
                                                             ActivityStatus status,
                                                             Pageable pageable) {
-        return null;
+        return activityJpaRepository.findByUserIdInAndStatus(userId, status, pageable);
     }
 
     @Override

@@ -43,13 +43,7 @@ public class PostService implements ActivityOffer {
     }
 
     private ActivityResponse entityToActivityResponse(PostEntity postEntity) {
-        UserEntity userEntity = postEntity.getUserEntity();
-        return new PostInfoResponse(
-                userEntity.getUsername(),
-                postEntity.getId(),
-                userEntity.getId(),
-                postEntity.getCreatedAt()
-        );
+        return new PostInfoResponse(postEntity);
     }
 
     private UserEntity getUserEntity(Long userId) {

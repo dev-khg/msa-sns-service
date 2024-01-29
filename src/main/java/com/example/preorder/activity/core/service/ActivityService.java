@@ -36,6 +36,7 @@ public class ActivityService {
             activityResponses.addAll(activityCollector.combine(activityType, collect.get(activityType)));
         }
 
+        activityResponses.sort((a, b) -> b.getCreatedAt().compareTo(a.getCreatedAt()));
         return activityResponses;
     }
 

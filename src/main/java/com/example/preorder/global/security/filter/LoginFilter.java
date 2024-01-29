@@ -2,7 +2,9 @@ package com.example.preorder.global.security.filter;
 
 import com.example.preorder.common.exception.InternalErrorException;
 import com.example.preorder.common.utils.HttpServletUtils;
+import com.example.preorder.common.utils.RedisKeyGenerator;
 import com.example.preorder.global.jwt.TokenProvider;
+import com.example.preorder.global.redis.RedisManager;
 import com.example.preorder.user.core.entity.UserEntity;
 import com.example.preorder.user.core.repository.UserRepository;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -29,6 +31,7 @@ import java.util.Map;
 
 import static com.example.preorder.common.utils.HttpServletUtils.CookieType.*;
 import static com.example.preorder.common.utils.HttpServletUtils.HeaderType.*;
+import static com.example.preorder.common.utils.RedisKeyGenerator.*;
 import static org.springframework.util.StringUtils.*;
 
 @Component
@@ -36,15 +39,18 @@ public class LoginFilter extends UsernamePasswordAuthenticationFilter {
     private final ObjectMapper objectMapper;
     private final TokenProvider tokenProvider;
     private final HttpServletUtils httpServletUtils;
+    private final RedisManager redisManager;
 
     public LoginFilter(AuthenticationManager authenticationManager,
                        ObjectMapper objectMapper,
                        TokenProvider tokenProvider,
-                       HttpServletUtils httpServletUtils) {
+                       HttpServletUtils httpServletUtils,
+                       RedisManager redisManager) {
         super(authenticationManager);
         this.objectMapper = objectMapper;
         this.tokenProvider = tokenProvider;
         this.httpServletUtils = httpServletUtils;
+        this.redisManager = redisManager;
     }
 
     @Override
@@ -52,7 +58,7 @@ public class LoginFilter extends UsernamePasswordAuthenticationFilter {
         try {
             RequestLogin requestLogin = objectMapper.readValue(request.getInputStream(), RequestLogin.class);
 
-            if(!hasText(requestLogin.getEmail()) || !hasText(requestLogin.getPassword())) {
+            if (!hasText(requestLogin.getEmail()) || !hasText(requestLogin.getPassword())) {
                 throw new BadCredentialsException("email and password must be not null.");
             }
 
@@ -64,7 +70,7 @@ public class LoginFilter extends UsernamePasswordAuthenticationFilter {
                     )
             );
         } catch (IOException e) {
-            throw new RuntimeException(e);
+            return null;
         }
     }
 
@@ -81,6 +87,8 @@ public class LoginFilter extends UsernamePasswordAuthenticationFilter {
 
         httpServletUtils.addCookie(REFRESH_TOKEN, refreshToken);
         httpServletUtils.putHeader(ACCESS_TOKEN, accessToken);
+
+        redisManager.putValue(RedisKeyType.REFRESH_TOKEN, credentials.getEmail(), refreshToken);
     }
 
     @Getter

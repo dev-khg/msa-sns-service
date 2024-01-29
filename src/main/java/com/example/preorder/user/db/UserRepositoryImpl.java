@@ -5,6 +5,7 @@ import com.example.preorder.user.core.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
 
+import java.util.List;
 import java.util.Optional;
 
 @Repository
@@ -35,5 +36,10 @@ public class UserRepositoryImpl implements UserRepository {
     @Override
     public Optional<UserEntity> findByEmail(String email) {
         return userJpaRepository.findByEmail(email);
+    }
+
+    @Override
+    public List<UserEntity> findAll() {
+        return userJpaRepository.findAll();
     }
 }
