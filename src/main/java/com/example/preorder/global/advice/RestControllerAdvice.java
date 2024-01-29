@@ -1,5 +1,6 @@
 package com.example.preorder.global.advice;
 
+import com.example.preorder.common.ApiResponse;
 import com.example.preorder.common.exception.RuntimeExceptionBase;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
@@ -7,13 +8,16 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 
+import static com.example.preorder.common.ApiResponse.*;
+import static org.springframework.http.ResponseEntity.*;
+
 @Slf4j
 @org.springframework.web.bind.annotation.RestControllerAdvice
 public class RestControllerAdvice {
 
     @ExceptionHandler(RuntimeExceptionBase.class)
-    public ResponseEntity<String> handle(RuntimeExceptionBase e) {
-        return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
+    public ResponseEntity<ApiResponse<Void>> handle(RuntimeExceptionBase e) {
+        return badRequest().body(failure(e.getMessage()));
     }
 
     @ExceptionHandler(RuntimeException.class)
@@ -23,10 +27,9 @@ public class RestControllerAdvice {
     }
 
     @ExceptionHandler(MethodArgumentNotValidException.class)
-    public ResponseEntity<String> handle(MethodArgumentNotValidException e) {
+    public ResponseEntity<ApiResponse<Void>> handle(MethodArgumentNotValidException e) {
         String defaultMessage = e.getAllErrors().get(0).getDefaultMessage();
-        log.error(defaultMessage);
-        return new ResponseEntity<>(defaultMessage, HttpStatus.BAD_REQUEST);
+        return badRequest().body(failure(defaultMessage));
     }
 
     @ExceptionHandler(Exception.class)
