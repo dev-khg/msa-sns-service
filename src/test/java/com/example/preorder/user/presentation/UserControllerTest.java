@@ -47,13 +47,11 @@ class UserControllerTest extends IntegrationTest {
                 createRandomUUID(),
                 authCode
         );
-        MockMultipartFile jsonMultiPartFile = objectToMultiPart("user_sign_up", userSignUpRequest);
 
         // when
-        mockMvc.perform(multipart(HttpMethod.POST, "/user")
-                .file(jsonMultiPartFile)
-                .file(jsonMultiPartFile)
-                .contentType(MediaType.MULTIPART_FORM_DATA)
+        mockMvc.perform(post("/user")
+                .content(objectMapper.writeValueAsBytes(userSignUpRequest))
+                .contentType(MediaType.APPLICATION_JSON)
         ).andExpect(status().isBadRequest());
     }
 
@@ -68,13 +66,11 @@ class UserControllerTest extends IntegrationTest {
                 createRandomUUID(),
                 "123456"
         );
-        MockMultipartFile jsonMultiPartFile = objectToMultiPart("user_sign_up", userSignUpRequest);
 
         // when
-        mockMvc.perform(multipart("/user")
-                .file(jsonMultiPartFile)
-                .file(jsonMultiPartFile)
-                .contentType(MediaType.MULTIPART_FORM_DATA)
+        mockMvc.perform(post("/user")
+                .content(objectMapper.writeValueAsBytes(userSignUpRequest))
+                .contentType(MediaType.APPLICATION_JSON)
         ).andExpect(status().isBadRequest());
     }
 
@@ -89,13 +85,11 @@ class UserControllerTest extends IntegrationTest {
                 createRandomUUID(),
                 "123456"
         );
-        MockMultipartFile jsonMultiPartFile = objectToMultiPart("user_sign_up", userSignUpRequest);
 
         // when
-        mockMvc.perform(multipart("/user")
-                .file(jsonMultiPartFile)
-                .file(jsonMultiPartFile)
-                .contentType(MediaType.MULTIPART_FORM_DATA)
+        mockMvc.perform(post("/user")
+                .content(objectMapper.writeValueAsString(userSignUpRequest))
+                .contentType(MediaType.APPLICATION_JSON)
         ).andExpect(status().isBadRequest());
     }
 
@@ -111,14 +105,11 @@ class UserControllerTest extends IntegrationTest {
                 String.valueOf(RandomGenerator.generateSixDigitsRandomCode())
         );
         redisManager.putValue(EMAIL_CERT, userSignUpRequest.getEmail(), userSignUpRequest.getAuthCode());
-        MockMultipartFile jsonMultiPartFile = objectToMultiPart("user_sign_up", userSignUpRequest);
 
         // when
-        MvcResult mvcResult = mockMvc.perform(
-                multipart("/user")
-                        .file(jsonMultiPartFile)
-                        .file(jsonMultiPartFile)
-                        .contentType(MediaType.MULTIPART_FORM_DATA)
+        MvcResult mvcResult = mockMvc.perform(post("/user")
+                .content(objectMapper.writeValueAsString(userSignUpRequest))
+                .contentType(MediaType.APPLICATION_JSON)
         ).andReturn();
 
         // then
