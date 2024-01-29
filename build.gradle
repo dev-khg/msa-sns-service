@@ -1,7 +1,19 @@
+buildscript {
+    repositories {
+        mavenCentral()
+    }
+}
+
 plugins {
     id 'java'
     id 'org.springframework.boot' version '3.1.8'
     id 'io.spring.dependency-management' version '1.1.4'
+}
+
+allprojects {
+    repositories {
+        mavenCentral()
+    }
 }
 
 group = 'com.example'
@@ -11,53 +23,70 @@ java {
     sourceCompatibility = '17'
 }
 
-configurations {
-    compileOnly {
-        extendsFrom annotationProcessor
+subprojects {
+    apply plugin: 'java'
+    apply plugin: 'org.springframework.boot'
+    apply plugin: 'io.spring.dependency-management'
+
+    ext {
+        set('springCloudVersion', "2022.0.5")
     }
+
+    configurations {
+        compileOnly {
+            extendsFrom annotationProcessor
+        }
+    }
+
+    dependencies {
+//        implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
+//        implementation 'org.springframework.boot:spring-boot-starter-web'
+//
+//        //security
+//        implementation 'org.springframework.boot:spring-boot-starter-security'
+//        //redis
+//        implementation 'org.springframework.boot:spring-boot-starter-data-redis'
+//
+//        //email
+//        implementation 'org.springframework.boot:spring-boot-starter-mail'
+//
+//        //embedded-redis
+//        implementation 'it.ozimov:embedded-redis:0.7.2'
+//
+//        //validator
+//        implementation 'org.springframework.boot:spring-boot-starter-validation'
+//
+//        //jwt
+//        implementation("io.jsonwebtoken:jjwt-api:0.11.5")
+//        runtimeOnly("io.jsonwebtoken:jjwt-impl:0.11.5")
+//        runtimeOnly("io.jsonwebtoken:jjwt-jackson:0.11.5")
+//
+//        //mysql connector
+//        runtimeOnly 'com.mysql:mysql-connector-j'
+//
+//        testRuntimeOnly 'com.h2database:h2'
+//        compileOnly 'org.projectlombok:lombok'
+//        annotationProcessor "org.springframework.boot:spring-boot-configuration-processor"
+//        annotationProcessor 'org.projectlombok:lombok'
+//        testImplementation 'org.springframework.boot:spring-boot-starter-test'
+    }
+
+    dependencyManagement {
+        imports {
+            mavenBom "org.springframework.cloud:spring-cloud-dependencies:${springCloudVersion}"
+        }
+    }
+
+    test {
+        useJUnitPlatform()
+    }
+
 }
 
-repositories {
-    mavenCentral()
-}
-
-dependencies {
-    implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
-    implementation 'org.springframework.boot:spring-boot-starter-web'
-
-    //security
-    implementation 'org.springframework.boot:spring-boot-starter-security'
-    //redis
-    implementation 'org.springframework.boot:spring-boot-starter-data-redis'
-
-    //email
-    implementation 'org.springframework.boot:spring-boot-starter-mail'
-
-    //embedded-redis
-    implementation 'it.ozimov:embedded-redis:0.7.2'
-
-    //validator
-    implementation 'org.springframework.boot:spring-boot-starter-validation'
-
-    //jwt
-    implementation("io.jsonwebtoken:jjwt-api:0.11.5")
-    runtimeOnly("io.jsonwebtoken:jjwt-impl:0.11.5")
-    runtimeOnly("io.jsonwebtoken:jjwt-jackson:0.11.5")
-
-    //mysql connector
-    runtimeOnly 'com.mysql:mysql-connector-j'
-
-    testRuntimeOnly 'com.h2database:h2'
-    compileOnly 'org.projectlombok:lombok'
-    annotationProcessor "org.springframework.boot:spring-boot-configuration-processor"
-    annotationProcessor 'org.projectlombok:lombok'
-    testImplementation 'org.springframework.boot:spring-boot-starter-test'
-}
-
-tasks.named('bootBuildImage') {
-    builder = 'paketobuildpacks/builder-jammy-base:latest'
-}
-
-tasks.named('test') {
-    useJUnitPlatform()
-}
+//tasks.named('bootBuildImage') {
+//    builder = 'paketobuildpacks/builder-jammy-base:latest'
+//}
+//
+//tasks.named('test') {
+//    useJUnitPlatform()
+//}
