@@ -5,16 +5,19 @@ spring:
   application:
     name: pre-order
   datasource:
-    driver-class-name: com.mysql.cj.jdbc.Driver
+    driverClassName: com.mysql.cj.jdbc.Driver
     url: jdbc:mysql://127.0.0.1:3306/preorder
+    username: sa
+    password: 1234
   jpa:
     hibernate:
-      ddl-auto: create-drop
+      ddl-auto: none
     properties:
       hibernate:
         show_sql: true
         use_sql_comments: true
         format_sql: true
+        dialect: org.hibernate.dialect.MySQL8Dialect
   data:
     redis:
       port: 6379
@@ -31,12 +34,16 @@ spring:
           auth: true
           connectiontimeout: 5000
           writetimeout: 5000
-    host: ${MAIL_HOST}
-    username: ${MAIL_USERNAME}
-    password: ${MAIL_PASSWORD}
-    port: ${MAIL_PORT}
+    host: smtp.gmail.com
+    username: 111
+    password: 111
+    port: 587
+  sql:
+    init:
+      mode: always
+
 
 jwt:
-  secret: ${JWT_SECRET}
-  access_token_expiration: 1000 * 60 * 30 # 0.5 Hours
-  refresh_token_expiration: 1000 * 60 * 60 * 24 * 7 # 7 Days
+  secret: testhjgjkasgsfngadsgasgwgewgagdsgdsa34234afeasgajsgsafdss
+  access_token_expiration: 1800000 # 0.5 Hours
+  refresh_token_expiration: 604800000 # 7 Days

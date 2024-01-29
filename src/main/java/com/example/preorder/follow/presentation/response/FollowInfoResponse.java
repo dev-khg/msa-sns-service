@@ -6,6 +6,8 @@ import lombok.Getter;
 
 import java.time.LocalDateTime;
 
+import static com.example.preorder.activity.core.entity.ActivityType.FOLLOW;
+
 @Getter
 public class FollowInfoResponse implements ActivityResponse {
     private Long followerId;
@@ -13,6 +15,7 @@ public class FollowInfoResponse implements ActivityResponse {
     private String followerName;
     private String followeeName;
     private LocalDateTime createdAt;
+    private String activityType = FOLLOW.name();
 
     public FollowInfoResponse(FollowEntity followEntity) {
         this.followerId = followEntity.getFollower().getId();

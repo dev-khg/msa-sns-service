@@ -2,7 +2,7 @@ version: '3.8'
 
 services:
   mysql:
-    image: mysql:8.0.32
+    image: mysql:8.0
     container_name: preorder-db
     environment:
       MYSQL_ROOT_PASSWORD: root1234
@@ -12,7 +12,7 @@ services:
     ports:
       - "3306:3306"
     volumes:
-      - mysql_pre_order:/var/lib/mysql
+      - ./db:/var/lib/mysql
 
   redis:
     image: redis:7.2.4

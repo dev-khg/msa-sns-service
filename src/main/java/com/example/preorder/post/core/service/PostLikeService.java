@@ -9,12 +9,9 @@ import com.example.preorder.post.core.entity.PostLikeEntity;
 import com.example.preorder.post.core.event.PostLikeEventPublisher;
 import com.example.preorder.post.core.repository.PostLikeRepository;
 import com.example.preorder.post.core.repository.PostRepository;
-import com.example.preorder.post.presentation.response.PostInfoResponse;
 import com.example.preorder.post.presentation.response.PostLikeInfoResponse;
 import com.example.preorder.user.core.entity.UserEntity;
 import com.example.preorder.user.core.repository.UserRepository;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -43,7 +40,7 @@ public class PostLikeService implements ActivityOffer {
         }
 
         postLike.handleLike(like);
-        eventPublisher.handlePostLikeEvent(userId, postId, like ? LIKE : UNLIKE);
+        eventPublisher.handlePostLikeEvent(userId, postId, like ? LIKE_IT : UNLIKE_IT);
 
         postLikeRepository.save(postLike);
     }

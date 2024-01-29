@@ -7,6 +7,9 @@ import com.example.preorder.common.event.DomainEvent;
 import com.example.preorder.common.event.EventType;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
+import org.springframework.transaction.annotation.Transactional;
+
+import java.util.Optional;
 
 import static com.example.preorder.activity.core.entity.ActivityEntity.*;
 import static com.example.preorder.activity.core.entity.ActivityStatus.*;
@@ -48,12 +51,9 @@ public class CommentLikeEventHandler extends EventHandler {
     }
 
     private void handleUnlikeEvent(CommentLikeDomainEvent domainEvent) {
-        activityRepository.changeStatus(
-                domainEvent.getUserId(),
-                domainEvent.getCommentId(),
-                COMMENT_LIKE,
-                INVALID
-        );
+        Optional<ActivityEntity> byUserIdAndTargetIdAndTypeAndStatus = activityRepository.findByUserIdAndTargetIdAndTypeAndStatus(domainEvent.getUserId(), domainEvent.getCommentId(), COMMENT_LIKE, VALID);
+
+        byUserIdAndTargetIdAndTypeAndStatus.ifPresent(arg -> arg.changeStatus(INVALID));
     }
 
     @Override

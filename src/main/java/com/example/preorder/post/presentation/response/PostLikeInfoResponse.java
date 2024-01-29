@@ -7,6 +7,9 @@ import lombok.NoArgsConstructor;
 
 import java.time.LocalDateTime;
 
+import static com.example.preorder.activity.core.entity.ActivityType.COMMENT;
+import static com.example.preorder.activity.core.entity.ActivityType.POST_LIKE;
+
 @Getter
 @NoArgsConstructor
 public class PostLikeInfoResponse implements ActivityResponse {
@@ -14,6 +17,7 @@ public class PostLikeInfoResponse implements ActivityResponse {
     private Long postId;
     private String postUsername;
     private LocalDateTime createdAt;
+    private String activityType = POST_LIKE.name();
 
     public PostLikeInfoResponse(PostLikeEntity entity) {
         this.userId = entity.getPostEntity().getUserEntity().getId();

@@ -2,6 +2,7 @@ package com.example.preorder.user.core.repository;
 
 import com.example.preorder.user.core.entity.UserEntity;
 
+import java.util.List;
 import java.util.Optional;
 
 public interface UserRepository {
@@ -14,4 +15,6 @@ public interface UserRepository {
     UserEntity save(UserEntity userEntity);
 
     Optional<UserEntity> findByEmail(String email);
+
+    List<UserEntity> findAll();
 }

@@ -36,15 +36,14 @@ public class ActivityCollector {
 
     protected List<ActivityResponse> combine(ActivityType type, List<ActivityEntity> activityEntities) {
         final List<Long> targetIdList = collectTargetId(activityEntities);
-        switch (type) {
+        return switch (type) {
             case POST -> postService.handleActivity(targetIdList);
             case FOLLOW -> followService.handleActivity(targetIdList);
             case POST_LIKE -> postLikeService.handleActivity(targetIdList);
             case COMMENT -> commentService.handleActivity(targetIdList);
             case COMMENT_LIKE -> commentLikeService.handleActivity(targetIdList);
             default -> throw new InternalErrorException("Server Error.");
-        }
-        return null;
+        };
     }
 
     protected Map<ActivityType, List<ActivityEntity>> collectMapByActivityType(List<ActivityEntity> activities) {
