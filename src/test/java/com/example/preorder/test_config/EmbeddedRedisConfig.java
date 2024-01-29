@@ -10,7 +10,7 @@ import org.springframework.test.context.ActiveProfiles;
 import redis.embedded.RedisServer;
 
 @ActiveProfiles("test")
-@TestConfiguration
+@Configuration
 public class EmbeddedRedisConfig {
     private final RedisServer redisServer;
 
