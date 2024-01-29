@@ -49,7 +49,7 @@ subprojects {
     }
 
     dependencies {
-        List.of("pre-order").stream()
+        List.of("pre").stream()
         .filter(p -> project.name.contains(p))
         .forEach {
             project.dependencies {
