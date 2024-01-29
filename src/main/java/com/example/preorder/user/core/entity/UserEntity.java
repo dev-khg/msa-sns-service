@@ -65,6 +65,10 @@ public class UserEntity extends BaseTimeEntity {
         }
     }
 
+    public void changeProfileImage(String fileName) {
+        this.profileImage = fileName;
+    }
+
     public void changePassword(PasswordEncoder passwordEncoder, String currentPassword, String newPassword) {
         if (!passwordEncoder.matches(currentPassword, this.password))
             throw new BadRequestException("Current Password is not matched.");

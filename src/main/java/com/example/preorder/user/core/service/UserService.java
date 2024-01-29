@@ -23,4 +23,6 @@ public interface UserService {
     void editPassword(UserEntity userEntity, UserChangePasswordRequest changePasswordDTO);
 
     void editInfo(UserEntity userEntity, UserInfoEditRequest infoEditDTO, MultipartFile file);
+
+    void updateImage(Long userId, MultipartFile file);
 }

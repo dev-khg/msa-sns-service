@@ -24,6 +24,7 @@ import static com.example.preorder.common.utils.HttpServletUtils.CookieType.*;
 import static com.example.preorder.common.utils.HttpServletUtils.HeaderType.*;
 import static org.springframework.http.HttpHeaders.*;
 import static org.springframework.http.HttpStatus.*;
+import static org.springframework.http.MediaType.*;
 import static org.springframework.http.ResponseEntity.*;
 
 @RestController
@@ -74,7 +75,7 @@ public class UserController {
     }
 
     @AuthorizationRequired
-    @PatchMapping(consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+    @PatchMapping(consumes = MULTIPART_FORM_DATA_VALUE)
     public ResponseEntity<Void> changeMyInfo(
             @CurrentUser UserEntity userEntity,
             @RequestPart(value = "file", required = false) MultipartFile file,
@@ -96,6 +97,13 @@ public class UserController {
             @CookieValue(value = "RefreshToken", required = false) String refreshToken
     ) {
         userService.logout(accessToken, refreshToken);
+        return noContent().build();
+    }
+
+    @PostMapping(value = "/profile", consumes = MULTIPART_FORM_DATA_VALUE)
+    @AuthorizationRequired
+    public ResponseEntity<Void> profileUpdate(@CurrentUser UserEntity user, @RequestPart(name = "file") MultipartFile file) {
+        userService.updateImage(user.getId(), file);
         return noContent().build();
     }
 

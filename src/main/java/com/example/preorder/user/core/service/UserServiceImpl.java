@@ -160,6 +160,14 @@ public class UserServiceImpl extends EventPublisher implements UserService {
         userRepository.save(userEntity);
     }
 
+    @Override
+    @Transactional
+    public void updateImage(Long userId, MultipartFile file) {
+        UserEntity userEntity = userRepository.findById(userId).orElseThrow();
+        String fileName = storageService.uploadFile(file, IMAGE);
+        userEntity.changeProfileImage(fileName);
+    }
+
     private UserInfoResponse entityToInfoDTO(UserEntity userEntity) {
         UserInfoResponse userInfoResponse = new UserInfoResponse(userEntity.getUsername(), userEntity.getProfileImage(), userEntity.getDescription());
         return userInfoResponse;
