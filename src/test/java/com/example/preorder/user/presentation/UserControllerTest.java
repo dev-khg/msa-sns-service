@@ -329,7 +329,7 @@ class UserControllerTest extends IntegrationTest {
                 .header(AUTHORIZATION, "Bearer " + accessToken)
                 .cookie(new Cookie("RefreshToken", refreshToken))
                 .contentType(MediaType.MULTIPART_FORM_DATA)
-        ).andExpect(status().isNoContent());`
+        ).andExpect(status().isNoContent());
 
         // then
         assertTrue(redisManager.getValue(BLACKLIST_TOKEN, accessToken).isPresent());
