@@ -2,6 +2,7 @@ package hg.userservice.infrastructure.email;
 
 import com.example.commonproject.exception.InternalServerException;
 import hg.userservice.core.repository.KeyValueStorage;
+import hg.userservice.core.vo.KeyType;
 import jakarta.mail.internet.InternetAddress;
 import jakarta.mail.internet.MimeMessage;
 import lombok.RequiredArgsConstructor;
@@ -11,6 +12,8 @@ import org.springframework.stereotype.Service;
 
 import java.util.Objects;
 import java.util.Random;
+
+import static hg.userservice.core.vo.KeyType.*;
 
 @Slf4j
 @Service
@@ -24,12 +27,11 @@ public class EmailService {
     private final static int rangeBound = maxBound - minBound;
 
     public void sendCode(String receiver) {
-        Objects.requireNonNull(receiver, "receiver must be not null");
-
         try {
             String code = generateSixDigitsRandomCode();
             MimeMessage message = createMessage(receiver, "[PRE-ORDER] 회원가입 인증 코드 입니다.", code);
             mailSender.send(message);
+            keyValueStorage.putValue(EMAIL_CERT, receiver, code);
         } catch (Exception e) {
             log.error("Fail to send email.", e);
             throw new InternalServerException("fail to send email");
