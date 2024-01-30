@@ -9,9 +9,9 @@ name: CI Test
 
 on:
   push:
-    branches: [ "main", "devlope", "dev-msa"]
+    branches: [ "main", "develope", "dev-msa"]
   pull_request:
-    branches: [ "main", "devlope", "dev-msa" ]
+    branches: [ "main", "develope", "dev-msa" ]
 
 permissions:
   contents: read
