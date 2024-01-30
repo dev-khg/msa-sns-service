@@ -2,6 +2,5 @@ rootProject.name = 'pre-order'
 
 include('eureka-service')
 include('gateway-service')
-include('gateway-service')
 include('common-project')
-
+include('user-service')
