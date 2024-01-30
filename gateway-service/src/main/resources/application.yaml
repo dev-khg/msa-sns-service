@@ -11,3 +11,8 @@ eureka:
 spring:
   application:
     name: gateway-service
+
+jwt:
+  secret: testhjgjkasgsfngadsgasgwgewgagdsgdsa34234afeasgajsgsafdss
+  access_token_expiration: 1800000
+  refresh_token_expiration: 604800000
