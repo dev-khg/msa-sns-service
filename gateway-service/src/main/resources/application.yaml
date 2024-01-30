@@ -11,6 +11,13 @@ eureka:
 spring:
   application:
     name: gateway-service
+  cloud:
+    gateway:
+      default-filters:
+        - name: GlobalLoggingFilter
+          args:
+            preLogger: true
+            postLogger: true
 
 jwt:
   secret: testhjgjkasgsfngadsgasgwgewgagdsgdsa34234afeasgajsgsafdss
