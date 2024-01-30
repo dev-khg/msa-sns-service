@@ -1,5 +1,6 @@
 package hg.userservice.infrastructure.security.filter;
 
+import com.example.commonproject.exception.BadRequestException;
 import com.example.commonproject.exception.InternalServerException;
 import com.example.commonproject.exception.UnAuthorizedException;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -15,6 +16,7 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.http.HttpHeaders;
 import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
@@ -26,6 +28,7 @@ import java.io.IOException;
 import static hg.userservice.core.vo.KeyType.*;
 import static hg.userservice.utils.HttpServletUtils.*;
 import static org.springframework.http.HttpHeaders.*;
+import static org.springframework.util.StringUtils.hasText;
 
 @Component
 public class LoginFilter extends UsernamePasswordAuthenticationFilter {
@@ -47,11 +50,16 @@ public class LoginFilter extends UsernamePasswordAuthenticationFilter {
     public Authentication attemptAuthentication(HttpServletRequest request, HttpServletResponse response) throws AuthenticationException {
         try {
             LoginRequest loginRequest = objectMapper.readValue(request.getInputStream(), LoginRequest.class);
+
+            if (!hasText(loginRequest.getEmail()) || !hasText(loginRequest.getPassword())) {
+                throw new BadRequestException("email and password must be not null.");
+            }
+
             UsernamePasswordAuthenticationToken token = generateAuthenticationToken(loginRequest);
 
             return getAuthenticationManager().authenticate(token);
         } catch (IOException ioException) {
-            throw new UnAuthorizedException("Incorrect username or password.");
+            throw new BadRequestException("Incorrect username or password.");
         }
     }
 
