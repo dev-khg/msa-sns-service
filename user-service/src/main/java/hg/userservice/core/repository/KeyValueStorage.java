@@ -8,7 +8,7 @@ import static java.time.Duration.ofMillis;
 import static java.util.Optional.ofNullable;
 
 public interface KeyValueStorage {
-    void putValue(KeyType type, String key, String identifier);
+    void putValue(KeyType type, String key, String value);
 
     Optional<String> getValue(KeyType type, String identifier);
 

@@ -23,9 +23,9 @@ public class RedisManager implements KeyValueStorage {
     private final StringRedisTemplate stringRedisTemplate;
 
     @Override
-    public void putValue(KeyType type, String key, String identifier) {
+    public void putValue(KeyType type, String key, String value) {
         String redisKey = generation(type, key);
-        stringRedisTemplate.opsForValue().set(redisKey, identifier, ofMillis(type.getExpiration()));
+        stringRedisTemplate.opsForValue().set(redisKey, value, ofMillis(type.getExpiration()));
     }
 
     @Override
