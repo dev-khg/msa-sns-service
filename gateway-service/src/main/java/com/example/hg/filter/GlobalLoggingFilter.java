@@ -48,16 +48,16 @@ public class GlobalLoggingFilter extends AbstractGatewayFilterFactory<GlobalLogg
         String accessToken = getHeaderValue(request.getHeaders(), AUTHORIZATION).orElse(null);
         String refreshToken = getCookieValue(request.getCookies(), "RefreshToken").orElse(null);
 
-        log.info("=====> ID: [{}] Method: [{}] URI: [{}]", identifier, request.getMethod(), request.getURI());
-        log.info("=====> ID: [{}] AccessToken = [{}] RefreshToken: [{}]", identifier, accessToken, refreshToken);
+        log.info("==========> ID: [{}] Method: [{}] URI: [{}]", identifier, request.getMethod(), request.getURI());
+        log.info("==========> ID: [{}] AccessToken = [{}] RefreshToken: [{}]", identifier, accessToken, refreshToken);
     }
 
     private void printPostLog(String identifier, ServerHttpResponse response) {
         String accessToken = getHeaderValue(response.getHeaders(), AUTHORIZATION).orElse(null);
         String refreshToken = getCookieValue(response.getCookies(), "RefreshToken").orElse(null);
 
-        log.info("<===== ID: [{}] Status Code: [{}]", identifier, response.getStatusCode());
-        log.info("<===== ID: [{}] AccessToken: [{}] RefreshToken: [{}]", identifier, accessToken, refreshToken);
+        log.info("<========== ID: [{}] Status Code: [{}]", identifier, response.getStatusCode());
+        log.info("<========== ID: [{}] AccessToken: [{}] RefreshToken: [{}]", identifier, accessToken, refreshToken);
     }
 
     @Data
