@@ -6,7 +6,6 @@ import hg.userservice.core.entity.UserEntity;
 import hg.userservice.core.repository.FollowRepository;
 import hg.userservice.core.repository.UserRepository;
 import hg.userservice.core.repository.dto.FollowActivityDTO;
-import hg.userservice.core.repository.dto.FollowRelationDto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;

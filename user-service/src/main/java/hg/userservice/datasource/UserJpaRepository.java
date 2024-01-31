@@ -18,7 +18,7 @@ public interface UserJpaRepository extends JpaRepository<UserEntity, Long> {
 
     @Query("select new hg.userservice.core.repository.dto.UserNameInfoDTO(u.id, u.username) " +
             "from UserEntity u " +
-            "where u.id in (:user_id_list) " +
-            "order by u.id asc")
+            "where u.id in (:user_id_list)"
+    )
     List<UserNameInfoDTO> findActivitiesDTO(@Param("user_id_list") List<Long> userIdList);
 }

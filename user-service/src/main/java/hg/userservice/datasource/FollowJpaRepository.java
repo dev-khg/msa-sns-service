@@ -22,7 +22,7 @@ public interface FollowJpaRepository extends JpaRepository<FollowEntity, Long> {
             "from FollowEntity f " +
             "left join UserEntity u1 on u1.id = f.followee.id " +
             "left join UserEntity u2 on u2.id = f.follower.id " +
-            "where f.id in (:id_list) and f.deletedAt is null " +
-            "order by f.createdAt desc")
+            "where f.id in (:id_list) and f.deletedAt is null"
+    )
     List<FollowActivityDTO> findFollowActivities(@Param("id_list") List<Long> idList);
 }

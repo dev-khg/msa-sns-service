@@ -29,3 +29,5 @@ spring:
     username: 123241234
     password: 12341234
     port: 587
+server:
+  port: 0
