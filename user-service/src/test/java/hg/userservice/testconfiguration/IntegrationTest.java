@@ -4,6 +4,7 @@ import com.example.commonproject.response.ApiResponse;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import hg.userservice.core.entity.UserEntity;
+import hg.userservice.core.repository.FollowRepository;
 import hg.userservice.core.repository.KeyValueStorage;
 import hg.userservice.core.repository.UserRepository;
 import hg.userservice.infrastructure.jwt.TokenProvider;
@@ -44,6 +45,9 @@ public abstract class IntegrationTest {
     protected TokenProvider tokenProvider;
     @Autowired
     StringRedisTemplate stringRedisTemplate;
+    @Autowired
+    protected FollowRepository followRepository;
+
     protected List<UserEntity> saveUserList;
 
     @PersistenceContext
