@@ -38,6 +38,11 @@ public class FollowController {
         return noContent().build();
     }
 
+    @GetMapping("/{followerId}/follower-list")
+    public ResponseEntity<ApiResponse<List<Long>>> getFollowerList(@PathVariable Long followerId) {
+        return ok(success(followService.getFollowerList(followerId)));
+    }
+
     @PostMapping("/activity")
     public ResponseEntity<ApiResponse<List<FollowActivityDTO>>> getActivities(
             @RequestBody FollowActivityRequest request) {

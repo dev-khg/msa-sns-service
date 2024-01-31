@@ -33,6 +33,8 @@ public class FollowService {
         } else if(follow){
             followRepository.save(create(followerUser, followeeUser));
         }
+
+        // TODO : change event 처리 필요 (kafka? or feign?)
     }
 
     @Transactional(readOnly = true)
