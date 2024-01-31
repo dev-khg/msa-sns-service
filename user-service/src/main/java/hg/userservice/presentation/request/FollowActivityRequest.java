@@ -6,9 +6,8 @@ import lombok.NoArgsConstructor;
 
 import java.util.List;
 
-@NoArgsConstructor
-@AllArgsConstructor
 @Getter
+@NoArgsConstructor
 public class FollowActivityRequest {
     private List<Long> targetIdList;
 }
