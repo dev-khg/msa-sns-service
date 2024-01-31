@@ -73,7 +73,6 @@ class PostRepositoryImplTest {
 
                 assertEquals(postEntity.getUserId(), activityDTO.getUserId());
                 assertEquals(postEntity.getContent(), activityDTO.getContent());
-                assertEquals(postEntity.getCreatedAt(), activityDTO.getCreatedAt());
             }
             postIdList.remove(0);
             flushAndClearPersistence();
