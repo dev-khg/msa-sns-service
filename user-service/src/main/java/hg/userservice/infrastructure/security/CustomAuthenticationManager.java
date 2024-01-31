@@ -3,6 +3,7 @@ package hg.userservice.infrastructure.security;
 import com.example.commonproject.exception.UnAuthorizedException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -20,7 +21,7 @@ public class CustomAuthenticationManager implements AuthenticationManager {
         String rawPassword = (String) authentication.getCredentials();
 
         if(!passwordEncoder.matches(rawPassword, loginUser.getPassword())) {
-            throw new UnAuthorizedException("Password is not matched.");
+            throw new BadCredentialsException("Password is not matched.");
         }
         
         return loginUser;

@@ -20,8 +20,10 @@ import org.springframework.test.context.ActiveProfiles;
 import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
 
+import java.util.Optional;
 import java.util.UUID;
 
+import static java.util.Optional.*;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 import static org.springframework.http.HttpHeaders.*;
@@ -148,11 +150,13 @@ class AuthServiceTest {
                 .thenReturn(true);
         when(tokenProvider.getSubject(refreshToken))
                 .thenReturn(String.valueOf(1L));
+        when(keyValueStorage.getValue(any(), any()))
+                .thenReturn(ofNullable(refreshToken));
 
         authService.reissueToken();
 
         // then
-        verify(tokenProvider, times(1))
+        verify(tokenProvider, times(2))
                 .getSubject(any());
         verify(keyValueStorage, times(1))
                 .deleteKey(any(), any());

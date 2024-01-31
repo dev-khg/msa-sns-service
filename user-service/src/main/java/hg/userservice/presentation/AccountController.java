@@ -3,6 +3,7 @@ package hg.userservice.presentation;
 import hg.userservice.core.service.AuthService;
 import hg.userservice.core.service.UserService;
 import hg.userservice.infrastructure.email.EmailService;
+import hg.userservice.infrastructure.security.annotation.AuthorizationRequired;
 import hg.userservice.presentation.request.SignUpRequest;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -18,7 +19,7 @@ public class AccountController {
     private final UserService userService;
     private final EmailService emailService;
 
-    @DeleteMapping("/logout")
+    @DeleteMapping("/signout")
     public ResponseEntity<Void> logout() {
         authService.logout();
 

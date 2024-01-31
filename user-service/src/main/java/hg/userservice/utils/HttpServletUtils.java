@@ -45,6 +45,17 @@ public final class HttpServletUtils {
                 .findAny();
     }
 
+    public static void deleteCookie(String key) {
+        HttpServletResponse servletResponse = getServletResponse();
+        getCookie(key).ifPresent(cookie -> {
+            if( servletResponse != null) {
+                cookie.setValue("");
+                cookie.setMaxAge(0);
+                servletResponse.addCookie(cookie);
+            }
+        });
+    }
+
     public static HttpServletRequest getServletRequest() {
         return ((ServletRequestAttributes) RequestContextHolder.getRequestAttributes()).getRequest();
     }

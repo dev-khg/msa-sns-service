@@ -302,7 +302,7 @@ class UserServiceTest {
     }
 
     private SignUpRequest createSignUpForm(String email, String username, String password, String code) {
-        return new SignUpRequest(email, username, password, createRandomUUID(), code);
+        return new SignUpRequest(email, username, password, code);
     }
 
     private MockMultipartFile createMockMultipartFile() {
