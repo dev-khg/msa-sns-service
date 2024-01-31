@@ -7,6 +7,7 @@ import com.example.commonproject.response.ApiResponse;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
@@ -49,5 +50,11 @@ public class GlobalExceptionHandler {
     public ResponseEntity<ApiResponse<Void>> handleCheckException(Exception e) {
         log.error("Check error occurred!", e);
         return internalServerError().body(failure("Sorry! Server has problem."));
+    }
+
+    @ExceptionHandler(MethodArgumentNotValidException.class)
+    public ResponseEntity<ApiResponse<Void>> handle(MethodArgumentNotValidException e) {
+        String defaultMessage = e.getAllErrors().get(0).getDefaultMessage();
+        return badRequest().body(failure(defaultMessage));
     }
 }
