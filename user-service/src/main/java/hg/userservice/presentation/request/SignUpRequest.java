@@ -25,9 +25,6 @@ public class SignUpRequest {
     @Size(min = 8, max = 20, message = "password length must bigger than 8 and must smaller than 20.")
     private String password;
 
-    @NotBlank(message = "description must be not blank")
-    private String description;
-
     @Size(min = 6, max = 6, message = "Auth code length must be 6.")
     private String authCode;
 }

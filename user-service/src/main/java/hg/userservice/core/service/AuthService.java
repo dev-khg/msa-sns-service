@@ -8,9 +8,10 @@ import lombok.RequiredArgsConstructor;
 import org.apache.http.HttpHeaders;
 import org.springframework.stereotype.Service;
 
+import java.util.Optional;
+
 import static hg.userservice.core.vo.KeyType.*;
-import static hg.userservice.utils.HttpServletUtils.addCookie;
-import static hg.userservice.utils.HttpServletUtils.putHeader;
+import static hg.userservice.utils.HttpServletUtils.*;
 import static org.apache.http.HttpHeaders.*;
 import static org.springframework.http.HttpHeaders.AUTHORIZATION;
 
@@ -35,6 +36,7 @@ public class AuthService {
             if (tokenProvider.isValidateToken(refreshToken)) {
                 String userId = tokenProvider.getSubject(refreshToken);
                 keyValueStorage.deleteKey(REFRESH_TOKEN, userId);
+                deleteCookie(REFRESH_TOKEN.getKey());
             }
         });
     }
@@ -46,7 +48,7 @@ public class AuthService {
         HttpServletUtils.getCookie(REFRESH_TOKEN.getKey()).ifPresent(cookie -> {
             String refreshToken = cookie.getValue();
 
-            if (tokenProvider.isValidateToken(refreshToken)) {
+            if (tokenProvider.isValidateToken(refreshToken) && isStoredRefreshToken(refreshToken)) {
                 String userId = tokenProvider.getSubject(refreshToken);
                 keyValueStorage.deleteKey(REFRESH_TOKEN, userId);
 
@@ -68,5 +70,11 @@ public class AuthService {
 
         putHeader(AUTHORIZATION, accessToken);
         addCookie(REFRESH_TOKEN.getKey(), refreshToken, (int) REFRESH_TOKEN.getExpiration());
+    }
+
+    private boolean isStoredRefreshToken(String refreshToken) {
+        String userId = tokenProvider.getSubject(refreshToken);
+        Optional<String> value = keyValueStorage.getValue(REFRESH_TOKEN, userId);
+        return value.isPresent() && value.get().equals(refreshToken);
     }
 }

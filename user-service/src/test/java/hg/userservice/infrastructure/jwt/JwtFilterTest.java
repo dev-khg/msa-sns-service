@@ -2,6 +2,7 @@ package hg.userservice.infrastructure.jwt;
 
 import hg.userservice.infrastructure.redis.RedisManager;
 import hg.userservice.infrastructure.security.LoginUser;
+import hg.userservice.infrastructure.security.UserIdDetailService;
 import hg.userservice.utils.HttpServletUtils;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
@@ -42,7 +43,7 @@ class JwtFilterTest {
     @Mock
     RedisManager redisManager;
     @Mock
-    UserDetailsService userDetailsService;
+    UserIdDetailService userDetailsService;
 
     @Test
     @DisplayName("토큰이 없으면, 인증 권한을 가지면 안된다.")

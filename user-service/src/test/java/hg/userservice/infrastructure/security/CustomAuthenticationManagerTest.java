@@ -52,7 +52,7 @@ class CustomAuthenticationManagerTest {
 
         // then
         assertThatThrownBy(() -> authenticationManager.authenticate(authentication))
-                .isInstanceOf(UnAuthorizedException.class);
+                .isInstanceOf(BadCredentialsException.class);
     }
 
     @Test

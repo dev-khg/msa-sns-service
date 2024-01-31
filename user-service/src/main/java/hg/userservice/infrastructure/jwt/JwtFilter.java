@@ -3,6 +3,7 @@ package hg.userservice.infrastructure.jwt;
 import hg.userservice.core.repository.KeyValueStorage;
 import hg.userservice.core.vo.KeyType;
 import hg.userservice.infrastructure.security.LoginUser;
+import hg.userservice.infrastructure.security.UserIdDetailService;
 import hg.userservice.utils.HttpServletUtils;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
@@ -26,7 +27,7 @@ import static org.springframework.http.HttpHeaders.*;
 public class JwtFilter extends OncePerRequestFilter {
     private final TokenProvider tokenProvider;
     private final KeyValueStorage keyValueStorage;
-    private final UserDetailsService userDetailsService;
+    private final UserIdDetailService userDetailsService;
 
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {

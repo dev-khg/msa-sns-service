@@ -10,6 +10,7 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.test.context.ActiveProfiles;
 
 import java.util.UUID;
@@ -23,9 +24,9 @@ import static org.mockito.Mockito.when;
 
 @SpringBootTest
 @ActiveProfiles("test")
-class UserDetailServiceImplTest {
+class UserEmailDetailServiceTest {
     @InjectMocks
-    UserDetailServiceImpl userDetailsService;
+    UserEmailDetailService userDetailsService;
 
     @Mock
     UserRepository userRepository;
@@ -49,7 +50,7 @@ class UserDetailServiceImplTest {
         // then
         assertThatThrownBy(() ->
                 userDetailsService.loadUserByUsername(createRandomUUID())
-        ).isInstanceOf(BadRequestException.class);
+        ).isInstanceOf(UsernameNotFoundException.class);
     }
 
     @Test
