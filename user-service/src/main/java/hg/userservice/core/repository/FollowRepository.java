@@ -7,6 +7,8 @@ import java.util.List;
 import java.util.Optional;
 
 public interface FollowRepository {
+    Optional<FollowEntity> findById(Long id);
+
     FollowEntity save(FollowEntity followEntity);
 
     Optional<FollowEntity> findByFollowerIdAndFolloweeId(Long followerId, Long followeeID);

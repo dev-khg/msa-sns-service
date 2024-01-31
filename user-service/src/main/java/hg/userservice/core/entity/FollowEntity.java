@@ -1,5 +1,6 @@
 package hg.userservice.core.entity;
 
+import com.example.commonproject.exception.BadRequestException;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
 import lombok.Getter;
@@ -36,6 +37,10 @@ public class FollowEntity extends BaseTimeEntity {
     }
 
     public static FollowEntity create(UserEntity follower, UserEntity followee) {
+        if (follower == followee) {
+            throw new BadRequestException("can not follow yourself.");
+        }
+
         return new FollowEntity(follower, followee);
     }
 

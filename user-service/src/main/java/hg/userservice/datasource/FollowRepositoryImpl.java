@@ -15,6 +15,11 @@ public class FollowRepositoryImpl implements FollowRepository {
     private final FollowJpaRepository followJpaRepository;
 
     @Override
+    public Optional<FollowEntity> findById(Long id) {
+        return followJpaRepository.findById(id);
+    }
+
+    @Override
     public FollowEntity save(FollowEntity followEntity) {
         return followJpaRepository.save(followEntity);
     }
