@@ -1,5 +1,7 @@
 package hg.userservice.testconfiguration;
 
+import com.example.commonproject.response.ApiResponse;
+import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import hg.userservice.core.entity.UserEntity;
 import hg.userservice.core.repository.KeyValueStorage;
@@ -15,7 +17,6 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.context.annotation.Import;
 import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -80,5 +81,17 @@ public abstract class IntegrationTest {
 
     protected UserEntity createUserEntity() {
         return UserEntity.create(createRandomUUID(), createRandomUUID(), createRandomUUID());
+    }
+
+    protected ApiResponse readResponseJsonBody(String content) throws Exception {
+        return objectMapper.readValue(content, ApiResponse.class);
+    }
+
+    protected <T> T readResponseJsonBody(String content, Class<T> clazz) throws Exception {
+        TypeReference<ApiResponse<T>> typeReference = new TypeReference<>() { };
+        ApiResponse<T> apiResponse = objectMapper.readValue(content, typeReference);
+        T data = objectMapper.convertValue(apiResponse.getData(), clazz);
+
+        return data;
     }
 }
