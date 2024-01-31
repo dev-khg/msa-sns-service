@@ -8,6 +8,7 @@ import hg.userservice.core.repository.KeyValueStorage;
 import hg.userservice.core.repository.UserRepository;
 import hg.userservice.core.vo.KeyType;
 import hg.userservice.infrastructure.redis.RedisManager;
+import hg.userservice.infrastructure.storage.UploadService;
 import hg.userservice.presentation.request.EditInfoRequest;
 import hg.userservice.presentation.request.EditPasswordRequest;
 import hg.userservice.presentation.request.SignUpRequest;
@@ -55,6 +56,8 @@ class UserServiceTest {
     UserRepository userRepository;
     @Autowired
     StringRedisTemplate redisTemplate;
+    @Autowired
+    UploadService uploadService;
     @PersistenceContext
     EntityManager em;
 
@@ -283,6 +286,10 @@ class UserServiceTest {
             }
             previousPath = userEntity.getProfileImage();
             assertTrue(Files.exists(Paths.get(userEntity.getProfileImage())));
+        }
+
+        if(previousPath != null) {
+            uploadService.deleteAsync(previousPath);
         }
 
         // then
