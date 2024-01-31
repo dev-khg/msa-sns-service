@@ -34,7 +34,13 @@ public final class HttpServletUtils {
     }
 
     public static Optional<Cookie> getCookie(String key) {
-        return Arrays.stream(getServletRequest().getCookies())
+        Cookie[] cookies = getServletRequest().getCookies();
+
+        if (cookies == null) {
+            return empty();
+        }
+
+        return Arrays.stream(cookies)
                 .filter(cookie -> cookie.getName().equals(key))
                 .findAny();
     }
