@@ -47,7 +47,10 @@ public class UserService {
 
     @Transactional(readOnly = true)
     public UserInfoResponse getUserInfo(Long userId) {
-        return new UserInfoResponse(getUserEntity(userId));
+        UserEntity userEntity = userRepository.findById(userId).orElseThrow(
+                () -> new BadRequestException("Not exists user.")
+        );
+        return new UserInfoResponse(userEntity);
     }
 
     @Transactional

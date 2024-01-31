@@ -57,7 +57,7 @@ public class UserEntity extends BaseTimeEntity{
             throw new UnAuthorizedException("Current password is not matched.");
         }
 
-        this.password = newPassword;
+        this.password = passwordEncoder.encode(newPassword);
     }
 
     public void editInfo(String username, String description) {
