@@ -95,10 +95,6 @@ class CommentRepositoryImplTest {
         em.clear();
     }
 
-    private PostEntity createPostEntity(Long userId, String content) {
-        return PostEntity.create(userId, content);
-    }
-
     private String createRandomUUID() {
         return UUID.randomUUID().toString();
     }
