@@ -2,6 +2,9 @@ package com.example.newsfeedservice.presentation;
 
 import com.example.newsfeedservice.core.entity.PostEntity;
 import com.example.newsfeedservice.core.entity.PostLikeEntity;
+import com.example.newsfeedservice.core.repository.dto.PostActivityDTO;
+import com.example.newsfeedservice.core.repository.dto.PostLikeActivityDTO;
+import com.example.newsfeedservice.presentation.request.ActivityRequest;
 import com.example.newsfeedservice.presentation.request.PostCreateRequest;
 import com.example.newsfeedservice.testconfiguration.IntegrationTest;
 import org.junit.jupiter.api.DisplayName;
@@ -13,6 +16,9 @@ import org.springframework.test.web.servlet.MvcResult;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -24,6 +30,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 class PostControllerTest extends IntegrationTest {
 
     @Test
+    @DisplayName("포스트 등록시 조회가 가능해야 한다.")
     void success_enroll_post() throws Exception {
         // given
         Long userId = 1L;
@@ -159,5 +166,72 @@ class PostControllerTest extends IntegrationTest {
 
         assertNotNull(postLikeEntity.getDeletedAt());
         assertNotEquals(save.getUpdatedAt(), postLikeEntity.getUpdatedAt());
+    }
+
+    @Test
+    @DisplayName("포스트 내역은 올바르게 조회되어야 한다.")
+    void success_get_post_activities() throws Exception {
+        // given
+        Map<Long, PostEntity> postEntityMap = new HashMap<>();
+        for (int i = 0; i < 10; i++) {
+            PostEntity save = postRepository.save(PostEntity.create(1L, createRandomUUID()));
+            postEntityMap.put(save.getId(), save);
+        }
+        flushAndClearPersistence();
+
+        // when
+        List<Long> postIdList
+                = new java.util.ArrayList<>(postEntityMap.keySet().stream().toList());
+
+        // then
+        while (!postIdList.isEmpty()) {
+            ActivityRequest value = new ActivityRequest(postIdList);
+            MvcResult mvcResult = mockMvc.perform(post("/post/activity/post")
+                            .contentType(APPLICATION_JSON)
+                            .content(objectMapper.writeValueAsString(value))
+                    ).andExpect(status().isOk())
+                    .andReturn();
+
+            PostActivityDTO[] postActivityDTOS
+                    = readResponseJsonBody(mvcResult.getResponse().getContentAsString(), PostActivityDTO[].class);
+
+            assertEquals(postActivityDTOS.length, postIdList.size());
+            postIdList.remove(0);
+            flushAndClearPersistence();
+        }
+    }
+
+    @Test
+    @DisplayName("포스트 좋아요 내역은 올바르게 조회되어야 한다.")
+    void success_get_post_like_activities() throws Exception {
+        // given
+        Map<Long, PostLikeEntity> postEntityMap = new HashMap<>();
+        PostEntity postEntity = postEntities.get(0);
+        for (int i = 0; i < 10; i++) {
+            PostLikeEntity save = postLikeRepository.save(PostLikeEntity.create(1L, postEntity));
+            postEntityMap.put(save.getId(), save);
+        }
+        flushAndClearPersistence();
+
+        // when
+        List<Long> postLikeIdList
+                = new java.util.ArrayList<>(postEntityMap.keySet().stream().toList());
+
+        // then
+        while (!postLikeIdList.isEmpty()) {
+            ActivityRequest value = new ActivityRequest(postLikeIdList);
+            MvcResult mvcResult = mockMvc.perform(post("/post/activity/like")
+                            .contentType(APPLICATION_JSON)
+                            .content(objectMapper.writeValueAsString(value))
+                    ).andExpect(status().isOk())
+                    .andReturn();
+
+            PostLikeActivityDTO[] postLikeActivityDTOS
+                    = readResponseJsonBody(mvcResult.getResponse().getContentAsString(), PostLikeActivityDTO[].class);
+
+            assertEquals(postLikeActivityDTOS.length, postLikeIdList.size());
+            postLikeIdList.remove(0);
+            flushAndClearPersistence();
+        }
     }
 }
