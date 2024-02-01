@@ -1,30 +1,23 @@
 package hg.userservice.presentation;
 
-import com.example.commonproject.response.ApiResponse;
 import hg.userservice.core.entity.UserEntity;
 import hg.userservice.core.repository.dto.UserNameInfoDTO;
 import hg.userservice.presentation.request.EditInfoRequest;
 import hg.userservice.presentation.request.EditPasswordRequest;
-import hg.userservice.presentation.request.UserNameInfoRequest;
+import hg.userservice.presentation.request.ActivityRequest;
 import hg.userservice.presentation.response.UserInfoResponse;
 import hg.userservice.testconfiguration.IntegrationTest;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.HttpHeaders;
-import org.springframework.http.HttpMethod;
 import org.springframework.http.MediaType;
 import org.springframework.mock.web.MockMultipartFile;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.web.servlet.MvcResult;
-import org.springframework.test.web.servlet.ResultActions;
-import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
-import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.List;
-import java.util.Optional;
 
 import static hg.userservice.core.entity.UserEntity.*;
 import static org.junit.jupiter.api.Assertions.*;
@@ -223,18 +216,18 @@ class UserControllerTest extends IntegrationTest {
         List<Long> userIdList = saveUserList.stream()
                 .map(UserEntity::getId)
                 .toList();
-        UserNameInfoRequest userNameInfoRequest = new UserNameInfoRequest(userIdList);
+        ActivityRequest activityRequest = new ActivityRequest(userIdList);
 
         // when
         MvcResult mvcResult = mockMvc.perform(post("/user/name")
                         .contentType(APPLICATION_JSON)
-                        .content(objectMapper.writeValueAsBytes(userNameInfoRequest))
+                        .content(objectMapper.writeValueAsBytes(activityRequest))
                 ).andExpect(status().isOk())
                 .andReturn();
 
         // then
         UserNameInfoDTO[] userNameInfoDTOS =
-                readResponseJsonBody(mvcResult.getResponse().getContentAsString(), UserNameInfoDTO[].class);
+                objectMapper.readValue(mvcResult.getResponse().getContentAsString(), UserNameInfoDTO[].class);
 
         for (UserNameInfoDTO userNameInfoDTO : userNameInfoDTOS) {
             UserEntity samePk = saveUserList.stream()

@@ -193,7 +193,7 @@ class PostControllerTest extends IntegrationTest {
                     .andReturn();
 
             PostActivityDTO[] postActivityDTOS
-                    = readResponseJsonBody(mvcResult.getResponse().getContentAsString(), PostActivityDTO[].class);
+                    = objectMapper.readValue(mvcResult.getResponse().getContentAsString(), PostActivityDTO[].class);
 
             assertEquals(postActivityDTOS.length, postIdList.size());
             postIdList.remove(0);
@@ -227,7 +227,7 @@ class PostControllerTest extends IntegrationTest {
                     .andReturn();
 
             PostLikeActivityDTO[] postLikeActivityDTOS
-                    = readResponseJsonBody(mvcResult.getResponse().getContentAsString(), PostLikeActivityDTO[].class);
+                    = objectMapper.readValue(mvcResult.getResponse().getContentAsString(), PostLikeActivityDTO[].class);
 
             assertEquals(postLikeActivityDTOS.length, postLikeIdList.size());
             postLikeIdList.remove(0);
