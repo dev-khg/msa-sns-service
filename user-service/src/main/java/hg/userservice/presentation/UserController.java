@@ -8,7 +8,7 @@ import hg.userservice.infrastructure.security.annotation.AuthorizationRequired;
 import hg.userservice.infrastructure.security.annotation.CurrentUser;
 import hg.userservice.presentation.request.EditInfoRequest;
 import hg.userservice.presentation.request.EditPasswordRequest;
-import hg.userservice.presentation.request.UserNameInfoRequest;
+import hg.userservice.presentation.request.ActivityRequest;
 import hg.userservice.presentation.response.UserInfoResponse;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -67,9 +67,8 @@ public class UserController {
     }
 
     @PostMapping("/name")
-    public ResponseEntity<ApiResponse<List<UserNameInfoDTO>>> getUsernames(@RequestBody UserNameInfoRequest request) {
-        List<UserNameInfoDTO> activities = userService.getActivities(request.getUserIdList());
-        return ok(success(activities));
+    public ResponseEntity<List<UserNameInfoDTO>> getUsernames(@RequestBody ActivityRequest request) {
+        return ok(userService.getActivities(request.getTargetIdList()));
     }
 
 }

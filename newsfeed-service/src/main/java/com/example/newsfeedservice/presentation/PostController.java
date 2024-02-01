@@ -27,7 +27,7 @@ public class PostController {
 
     @PostMapping
     public ResponseEntity<ApiResponse<Long>> enrollPost(@CurrentUser Long userId,
-                                                       @Valid @RequestBody PostCreateRequest postCreateRequest) {
+                                                        @Valid @RequestBody PostCreateRequest postCreateRequest) {
         return ok(success(postService.enrollPost(userId, postCreateRequest.getContent())));
     }
 
@@ -46,14 +46,14 @@ public class PostController {
     }
 
     @PostMapping("/activity/post")
-    public ResponseEntity<ApiResponse<List<PostActivityDTO>>> getPostActivities(
+    public ResponseEntity<List<PostActivityDTO>> getPostActivities(
             @RequestBody ActivityRequest activityRequest) {
-        return ok(success(postService.getActivities(activityRequest.getTargetIdList())));
+        return ok(postService.getActivities(activityRequest.getTargetIdList()));
     }
 
     @PostMapping("/activity/like")
-    public ResponseEntity<ApiResponse<List<PostLikeActivityDTO>>> getPostLikeActivities(
+    public ResponseEntity<List<PostLikeActivityDTO>> getPostLikeActivities(
             @RequestBody ActivityRequest activityRequest) {
-        return ok(success(postLikeService.getActivities(activityRequest.getTargetIdList())));
+        return ok(postLikeService.getActivities(activityRequest.getTargetIdList()));
     }
 }

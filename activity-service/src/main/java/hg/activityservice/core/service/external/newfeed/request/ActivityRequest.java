@@ -1,4 +1,4 @@
-package hg.userservice.presentation.request;
+package hg.activityservice.core.service.external.newfeed.request;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -9,6 +9,6 @@ import java.util.List;
 @Getter
 @NoArgsConstructor
 @AllArgsConstructor
-public class UserNameInfoRequest {
-    private List<Long> userIdList;
+public class ActivityRequest {
+    private List<Long> targetIdList;
 }

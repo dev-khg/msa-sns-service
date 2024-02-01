@@ -6,6 +6,7 @@ import hg.userservice.core.repository.dto.FollowActivityDTO;
 import hg.userservice.core.service.FollowService;
 import hg.userservice.infrastructure.security.annotation.AuthorizationRequired;
 import hg.userservice.infrastructure.security.annotation.CurrentUser;
+import hg.userservice.presentation.request.ActivityRequest;
 import hg.userservice.presentation.request.FollowActivityRequest;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -39,13 +40,12 @@ public class FollowController {
     }
 
     @GetMapping("/{followerId}/follower-list")
-    public ResponseEntity<ApiResponse<List<Long>>> getFollowerList(@PathVariable Long followerId) {
-        return ok(success(followService.getFollowerList(followerId)));
+    public ApiResponse<List<Long>> getFollowerList(@PathVariable Long followerId) {
+        return success(followService.getFollowerList(followerId));
     }
 
     @PostMapping("/activity")
-    public ResponseEntity<ApiResponse<List<FollowActivityDTO>>> getActivities(
-            @RequestBody FollowActivityRequest request) {
-        return ok(success(followService.getFollowActivities(request.getTargetIdList())));
+    public ResponseEntity<List<FollowActivityDTO>> getActivities(@RequestBody ActivityRequest request) {
+        return ok(followService.getFollowActivities(request.getTargetIdList()));
     }
 }
