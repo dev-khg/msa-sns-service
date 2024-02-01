@@ -1,4 +1,4 @@
-package com.example.newsfeedservice.datasource;
+package com.example.newsfeedservice.core.service;
 
 import com.example.newsfeedservice.core.entity.CommentEntity;
 import com.example.newsfeedservice.core.entity.CommentLikeEntity;
@@ -6,33 +6,30 @@ import com.example.newsfeedservice.core.entity.PostEntity;
 import com.example.newsfeedservice.core.repository.CommentLikeRepository;
 import com.example.newsfeedservice.core.repository.CommentRepository;
 import com.example.newsfeedservice.core.repository.PostRepository;
-import com.example.newsfeedservice.core.repository.dto.CommentActivityDTO;
 import com.example.newsfeedservice.core.repository.dto.CommentLikeActivityDTO;
+import com.example.newsfeedservice.datasource.CommentLikeRepositoryImpl;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
-import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.*;
 
-import static com.example.newsfeedservice.core.entity.CommentEntity.create;
-import static com.example.newsfeedservice.core.entity.CommentLikeEntity.*;
-import static org.assertj.core.api.Assertions.*;
 import static org.junit.jupiter.api.Assertions.*;
 
 @SpringBootTest
 @ActiveProfiles("test")
 @Transactional
-class CommentLikeRepositoryImplTest {
+class CommentLikeServiceTest {
     @Autowired
-    CommentLikeRepositoryImpl commentLikeRepository;
+    CommentLikeRepository commentLikeRepository;
+    @Autowired
+    CommentLikeService commentLikeService;
     @Autowired
     CommentRepository commentRepository;
     @Autowired
@@ -53,7 +50,7 @@ class CommentLikeRepositoryImplTest {
     }
 
     @Test
-    @DisplayName("댓글 좋아요 저장시 디비에서 조회가 가능해야 한다.")
+    @DisplayName("댓글 좋아요 요청시 디비에서 조회가 가능해야 한다.")
     void save_comment_like() {
         // given
         Long userId = 1L;
@@ -61,7 +58,7 @@ class CommentLikeRepositoryImplTest {
         CommentLikeEntity likeEntity = CommentLikeEntity.create(1L, commentEntity);
 
         // when
-        commentLikeRepository.save(likeEntity);
+        commentLikeService.handleCommentLike(userId, commentId, true);
         flushAndClearPersistence();
 
         // then
@@ -92,7 +89,7 @@ class CommentLikeRepositoryImplTest {
         // then
         List<Long> commentLikeIdList = new ArrayList<>(commentLikeEntityMap.keySet().stream().toList());
         while (!commentLikeIdList.isEmpty()) {
-            List<CommentLikeActivityDTO> commentLikeActivityDTOS = commentLikeRepository.findByIdList(commentLikeIdList);
+            List<CommentLikeActivityDTO> commentLikeActivityDTOS = commentLikeService.getActivities(commentLikeIdList);
             assertEquals(commentLikeActivityDTOS.size(), commentLikeIdList.size());
             commentLikeIdList.remove(0);
             flushAndClearPersistence();
