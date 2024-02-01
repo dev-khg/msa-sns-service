@@ -25,10 +25,4 @@ public class PostService {
     public List<PostActivityDTO> getActivities(List<Long> targetIdList) {
         return postRepository.findPostIdList(targetIdList);
     }
-
-    private PostActivityDTO entityToActivityResponse(PostEntity postEntity) {
-        return new PostActivityDTO(
-                postEntity.getUserId(), postEntity.getId(), postEntity.getContent(), postEntity.getCreatedAt()
-        );
-    }
 }
