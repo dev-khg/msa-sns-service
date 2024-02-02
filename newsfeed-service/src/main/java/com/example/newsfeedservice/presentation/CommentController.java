@@ -45,13 +45,13 @@ public class CommentController {
         return noContent().build();
     }
 
-    @PostMapping("/activity/comment")
+    @PostMapping("/activity")
     public ResponseEntity<ApiResponse<List<CommentActivityDTO>>> getCommentActivities(
             @RequestBody ActivityRequest activityRequest) {
         return ok(success(commentService.getCommentActivities(activityRequest.getTargetIdList())));
     }
 
-    @PostMapping("/activity/like")
+    @PostMapping("/like/activity")
     public ResponseEntity<ApiResponse<List<CommentLikeActivityDTO>>> getCommentLikeActivities(
             @RequestBody ActivityRequest activityRequest) {
         return ok(success(commentLikeService.getActivities(activityRequest.getTargetIdList())));

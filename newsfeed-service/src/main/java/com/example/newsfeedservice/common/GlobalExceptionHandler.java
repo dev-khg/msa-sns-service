@@ -6,6 +6,8 @@ import com.example.commonproject.exception.UnAuthorizedException;
 import com.example.commonproject.response.ApiResponse;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
+import org.springframework.http.converter.HttpMessageNotReadableException;
+import org.springframework.web.HttpMediaTypeNotSupportedException;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseStatus;
@@ -57,5 +59,16 @@ public class GlobalExceptionHandler {
     public ResponseEntity<ApiResponse<Void>> handle(MethodArgumentNotValidException e) {
         String defaultMessage = e.getAllErrors().get(0).getDefaultMessage();
         return badRequest().body(failure(defaultMessage));
+    }
+
+
+    @ExceptionHandler(HttpMessageNotReadableException.class)
+    public ResponseEntity<ApiResponse<Void>> handle(HttpMessageNotReadableException e) {
+        return badRequest().body(failure("please input correct data."));
+    }
+
+    @ExceptionHandler(HttpMediaTypeNotSupportedException.class)
+    public ResponseEntity<ApiResponse<Void>> handle(HttpMediaTypeNotSupportedException e) {
+        return badRequest().body(failure("not supported content-type."));
     }
 }

@@ -19,7 +19,7 @@ public class AccountController {
     private final UserService userService;
     private final EmailService emailService;
 
-    @DeleteMapping("/signout")
+    @DeleteMapping("/sign-out")
     public ResponseEntity<Void> logout() {
         authService.logout();
 

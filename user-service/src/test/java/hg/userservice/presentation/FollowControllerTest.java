@@ -26,11 +26,10 @@ class FollowControllerTest extends IntegrationTest {
     void failure_follow_request() throws Exception {
         // given
         UserEntity follower = saveUserList.get(0);
-        String accessToken = tokenProvider.createAccessToken(String.valueOf(follower.getId()));
 
         // when
         mockMvc.perform(post("/follow/" + Long.MAX_VALUE)
-                .header(AUTHORIZATION, accessToken)
+                .header("user-id", follower.getId())
         ).andExpect(status().isBadRequest());
     }
 
@@ -40,11 +39,10 @@ class FollowControllerTest extends IntegrationTest {
         // given
         UserEntity follower = saveUserList.get(0);
         UserEntity followee = saveUserList.get(1);
-        String accessToken = tokenProvider.createAccessToken(String.valueOf(follower.getId()));
 
         // when
         mockMvc.perform(post("/follow/" + followee.getId())
-                .header(AUTHORIZATION, accessToken)
+                .header("user-id", follower.getId())
         ).andExpect(status().isNoContent());
 
         // then
@@ -57,11 +55,10 @@ class FollowControllerTest extends IntegrationTest {
     void failure_un_follow_request() throws Exception {
         // given
         UserEntity follower = saveUserList.get(0);
-        String accessToken = tokenProvider.createAccessToken(String.valueOf(follower.getId()));
 
         // when
         mockMvc.perform(delete("/follow/" + Long.MAX_VALUE)
-                .header(AUTHORIZATION, accessToken)
+                .header("user-id", follower.getId())
         ).andExpect(status().isBadRequest());
     }
 
@@ -71,11 +68,10 @@ class FollowControllerTest extends IntegrationTest {
         // given
         UserEntity follower = saveUserList.get(0);
         UserEntity followee = saveUserList.get(1);
-        String accessToken = tokenProvider.createAccessToken(String.valueOf(follower.getId()));
 
         // when
         mockMvc.perform(delete("/follow/" + followee.getId())
-                .header(AUTHORIZATION, accessToken)
+                .header("user-id", follower.getId())
         ).andExpect(status().isNoContent());
     }
 }

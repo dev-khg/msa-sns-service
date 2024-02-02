@@ -34,34 +34,30 @@ public class UserController {
     }
 
     @GetMapping("/me")
-    @AuthorizationRequired
-    public ResponseEntity<ApiResponse<UserInfoResponse>> getMyInfo(@CurrentUser UserEntity userEntity) {
-        return ok(success(userService.getUserInfo(userEntity.getId())));
+    public ResponseEntity<ApiResponse<UserInfoResponse>> getMyInfo(@CurrentUser Long userId) {
+        return ok(success(userService.getUserInfo(userId)));
     }
 
     @PutMapping("/me")
-    @AuthorizationRequired
     public ResponseEntity<Void> changeMyInfo(
-            @CurrentUser UserEntity userEntity, @Valid @RequestBody EditInfoRequest request) {
-        userService.editUserInfo(userEntity.getId(), request);
+            @CurrentUser Long userId, @Valid @RequestBody EditInfoRequest request) {
+        userService.editUserInfo(userId, request);
 
         return noContent().build();
     }
 
     @PatchMapping("/me/password")
-    @AuthorizationRequired
     public ResponseEntity<Void> changePassword(
-            @CurrentUser UserEntity userEntity, @Valid @RequestBody EditPasswordRequest request) {
-        userService.changePassword(userEntity.getId(), request);
+            @CurrentUser Long userId, @Valid @RequestBody EditPasswordRequest request) {
+        userService.changePassword(userId, request);
 
         return noContent().build();
     }
 
     @PatchMapping(value = "/me/profile", consumes = MULTIPART_FORM_DATA_VALUE)
-    @AuthorizationRequired
     public ResponseEntity<Void> changeProfile(
-            @CurrentUser UserEntity userEntity, @RequestPart(name = "file") MultipartFile file) {
-        userService.changeProfile(userEntity.getId(), file);
+            @CurrentUser Long userId, @RequestPart(name = "file") MultipartFile file) {
+        userService.changeProfile(userId, file);
 
         return noContent().build();
     }

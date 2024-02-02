@@ -32,7 +32,7 @@ class AccountControllerTest extends IntegrationTest {
         String accessToken = tokenProvider.createAccessToken(String.valueOf(userEntity.getId()));
 
         // when
-        mockMvc.perform(delete("/signout")
+        mockMvc.perform(delete("/sign-out")
                 .header(AUTHORIZATION, accessToken)
         ).andExpect(status().isNoContent());
 
@@ -50,7 +50,7 @@ class AccountControllerTest extends IntegrationTest {
         keyValueStorage.putValue(REFRESH_TOKEN, String.valueOf(userEntity.getId()), refreshToken);
 
         // when
-        MvcResult mvcResult = mockMvc.perform(delete("/signout")
+        MvcResult mvcResult = mockMvc.perform(delete("/sign-out")
                         .header(AUTHORIZATION, refreshTokenCookie)
                         .cookie(refreshTokenCookie)
                 ).andExpect(status().isNoContent())

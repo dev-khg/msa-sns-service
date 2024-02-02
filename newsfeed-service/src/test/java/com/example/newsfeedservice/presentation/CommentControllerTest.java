@@ -159,7 +159,7 @@ class CommentControllerTest extends IntegrationTest {
     }
 
     @Test
-    @DisplayName("댓글 좋아요 내역은 올바르게 조회되어야 한다.")
+    @DisplayName("댓글 내역은 올바르게 조회되어야 한다.")
     void success_get_comment_activities() throws Exception {
         // given
         Long userId = 1L;
@@ -178,7 +178,7 @@ class CommentControllerTest extends IntegrationTest {
         // then
         while (!commentIdList.isEmpty()) {
             ActivityRequest value = new ActivityRequest(commentIdList);
-            MvcResult mvcResult = mockMvc.perform(post("/comment/activity/comment")
+            MvcResult mvcResult = mockMvc.perform(post("/comment/activity")
                             .contentType(APPLICATION_JSON)
                             .content(objectMapper.writeValueAsString(value))
                     ).andExpect(status().isOk())
@@ -215,7 +215,7 @@ class CommentControllerTest extends IntegrationTest {
         // then
         while (!commentLikeIdList.isEmpty()) {
             ActivityRequest value = new ActivityRequest(commentLikeIdList);
-            MvcResult mvcResult = mockMvc.perform(post("/comment/activity/like")
+            MvcResult mvcResult = mockMvc.perform(post("/comment/like/activity")
                             .contentType(APPLICATION_JSON)
                             .content(objectMapper.writeValueAsString(value))
                     ).andExpect(status().isOk())

@@ -186,7 +186,7 @@ class PostControllerTest extends IntegrationTest {
         // then
         while (!postIdList.isEmpty()) {
             ActivityRequest value = new ActivityRequest(postIdList);
-            MvcResult mvcResult = mockMvc.perform(post("/post/activity/post")
+            MvcResult mvcResult = mockMvc.perform(post("/post/post/activity")
                             .contentType(APPLICATION_JSON)
                             .content(objectMapper.writeValueAsString(value))
                     ).andExpect(status().isOk())
@@ -220,7 +220,7 @@ class PostControllerTest extends IntegrationTest {
         // then
         while (!postLikeIdList.isEmpty()) {
             ActivityRequest value = new ActivityRequest(postLikeIdList);
-            MvcResult mvcResult = mockMvc.perform(post("/post/activity/like")
+            MvcResult mvcResult = mockMvc.perform(post("/post/like/activity")
                             .contentType(APPLICATION_JSON)
                             .content(objectMapper.writeValueAsString(value))
                     ).andExpect(status().isOk())

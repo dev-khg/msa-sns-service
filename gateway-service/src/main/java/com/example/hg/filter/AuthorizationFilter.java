@@ -1,11 +1,12 @@
 package com.example.hg.filter;
 
-import com.example.hg.jwt.TokenProvider;
+import com.example.hg.infra.redis.KeyType;
+import com.example.hg.infra.redis.RedisManager;
+import com.example.hg.infra.jwt.TokenProvider;
 import com.example.hg.utils.HttpUtils;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.cloud.gateway.filter.GatewayFilter;
 import org.springframework.cloud.gateway.filter.factory.AbstractGatewayFilterFactory;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.server.reactive.ServerHttpRequest;
 import org.springframework.http.server.reactive.ServerHttpResponse;
 import org.springframework.stereotype.Component;
@@ -21,10 +22,12 @@ import static org.springframework.http.HttpStatus.*;
 @Component
 public class AuthorizationFilter extends AbstractGatewayFilterFactory<AuthorizationFilter.Config> {
     private final TokenProvider tokenProvider;
+    private final RedisManager redisManager;
 
-    public AuthorizationFilter(TokenProvider tokenProvider) {
+    public AuthorizationFilter(TokenProvider tokenProvider, RedisManager redisManager) {
         super(Config.class);
         this.tokenProvider = tokenProvider;
+        this.redisManager = redisManager;
     }
 
     @Override
@@ -33,18 +36,24 @@ public class AuthorizationFilter extends AbstractGatewayFilterFactory<Authorizat
             ServerHttpRequest request = exchange.getRequest();
 
             Optional<String> accessToken = HttpUtils.getHeaderValue(request.getHeaders(), AUTHORIZATION);
-            Optional<String> refreshToken = HttpUtils.getCookieValue(request.getCookies(), "RefreshToken");
 
-            if (accessToken.isEmpty() && refreshToken.isEmpty()) {
+            if (accessToken.isEmpty()) {
+                return onError(exchange);
+            } else if (!tokenProvider.isValidateToken(accessToken.get()) || isBlackListToken(accessToken.get())) {
                 return onError(exchange);
             }
 
-            if(accessToken.isEmpty() && !reissueRefreshToken()) {
-                return onError(exchange);
-            }
+            String userId = tokenProvider.getSubject(accessToken.get());
 
-            return chain.filter(exchange);
+            ServerHttpRequest build = request.mutate().header("user-id", userId).build();
+            ServerWebExchange newWebExchange = exchange.mutate().request(build).build();
+
+            return chain.filter(newWebExchange);
         };
+    }
+
+    private boolean isBlackListToken(String accessToken) {
+        return redisManager.getValue(KeyType.BLACKLIST_TOKEN, accessToken).isPresent();
     }
 
     private Mono<Void> onError(ServerWebExchange exchange) {
@@ -52,10 +61,6 @@ public class AuthorizationFilter extends AbstractGatewayFilterFactory<Authorizat
         response.setStatusCode(UNAUTHORIZED);
 
         return response.setComplete();
-    }
-
-    private boolean reissueRefreshToken() {
-        return false;
     }
 
     static class Config {

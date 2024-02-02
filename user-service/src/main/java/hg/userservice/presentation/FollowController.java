@@ -24,17 +24,15 @@ public class FollowController {
     private final FollowService followService;
 
     @PostMapping("/{followeeId}")
-    @AuthorizationRequired
-    public ResponseEntity<Void> follow(@CurrentUser UserEntity userEntity, @PathVariable Long followeeId) {
-        followService.handleFollow(userEntity.getId(), followeeId, true);
+    public ResponseEntity<Void> follow(@CurrentUser Long userId, @PathVariable Long followeeId) {
+        followService.handleFollow(userId, followeeId, true);
 
         return noContent().build();
     }
 
     @DeleteMapping("/{followeeId}")
-    @AuthorizationRequired
-    public ResponseEntity<Void> unFollow(@CurrentUser UserEntity userEntity, @PathVariable Long followeeId) {
-        followService.handleFollow(userEntity.getId(), followeeId, false);
+    public ResponseEntity<Void> unFollow(@CurrentUser Long userId, @PathVariable Long followeeId) {
+        followService.handleFollow(userId, followeeId, false);
 
         return noContent().build();
     }

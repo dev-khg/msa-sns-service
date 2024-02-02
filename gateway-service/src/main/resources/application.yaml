@@ -3,6 +3,7 @@ server:
 
 eureka:
   client:
+    registry-fetch-interval-seconds: 10
     register-with-eureka: true
     fetch-registry: true
     service-url:
@@ -18,6 +19,69 @@ spring:
           args:
             preLogger: true
             postLogger: true
+      routes:
+        # USER-SERVICE
+        - id: not-allowed-user-service
+          uri: no://op
+          predicates:
+            - Path=/api/user/name,/api/*/activity,/api/reissue,/follow/*/follower-list,/api/comment/like/activity,/api/post/like/activity
+            - Method=GET,POST,PATCH,PUT,DELETE
+          filters:
+            - SetStatus=404
+        - id: user-service-membership
+          uri: lb://USER-SERVICE
+          predicates:
+            - Path=/api/login,/api/signup,/api/signup/email,/api/sign-out
+          filters:
+            - RewritePath=/api/(?<segment>.*), /$\{segment}
+        - id: user-service-need-auth
+          uri: lb://USER-SERVICE
+          predicates:
+            - Path=/api/user/me/profile,/api/user/me/password,/api/user/me
+            - Method=POST,PATCH,PUT,GET
+          filters:
+            - RewritePath=/api/(?<segment>.*), /$\{segment}
+            - AuthorizationFilter
+        - id: user-service-all
+          uri: lb://USER-SERVICE
+          predicates:
+            - Path=/api/user/**
+            - Method=POST,GET,DELETE,PATCH
+          filters:
+            - RewritePath=/api/(?<segment>.*), /$\{segment}
+        - id: user-service
+          uri: lb://USER-SERVICE
+          predicates:
+            - Path=/api/follow/**
+            - Method=DELETE,POST
+          filters:
+            - RewritePath=/api/(?<segment>.*), /$\{segment}
+            - AuthorizationFilter
+        # NEWSFEED-SERVICE
+        - id: not-allowed-newsfeed-service
+          uri: no://op
+          predicates:
+            - Path=/api/post/*/activity,/api/comment/*/activity
+            - Method=GET,POST,PATH,PUT,DELETE
+          filters:
+            - SetStatus=404
+        - id: newsfeed-service
+          uri: lb://NEWSFEED-SERVICE
+          predicates:
+            - Path=/api/comment/**,/api/post/**
+            - Method=GET,POST,DELETE,PUT,PATCH
+          filters:
+            - RewritePath=/api/(?<segment>.*), /$\{segment}
+            - AuthorizationFilter
+        # ACTIVITY-SERVICE
+        - id: activity-service
+          uri: lb://ACTIVITY-SERVICE
+          predicates:
+            - Path=/api/feed
+            - Method=GET
+          filters:
+            - RewritePath=/api/feed, /
+            - AuthorizationFilter
 
 jwt:
   secret: testhjgjkasgsfngadsgasgwgewgagdsgdsa34234afeasgajsgsafdss
