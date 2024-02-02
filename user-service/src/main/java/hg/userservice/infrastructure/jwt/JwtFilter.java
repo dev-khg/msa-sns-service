@@ -22,7 +22,7 @@ import java.util.ArrayList;
 import static hg.userservice.core.vo.KeyType.*;
 import static org.springframework.http.HttpHeaders.*;
 
-@Component
+//@Component
 @RequiredArgsConstructor
 public class JwtFilter extends OncePerRequestFilter {
     private final TokenProvider tokenProvider;

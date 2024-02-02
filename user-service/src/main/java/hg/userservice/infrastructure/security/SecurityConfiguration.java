@@ -24,7 +24,7 @@ import static org.springframework.security.config.http.SessionCreationPolicy.*;
 public class SecurityConfiguration {
 
     @Bean
-    public SecurityFilterChain securityFilterChain(HttpSecurity httpSecurity, JwtFilter jwtFilter) throws Exception {
+    public SecurityFilterChain securityFilterChain(HttpSecurity httpSecurity) throws Exception {
         return httpSecurity
                 .csrf(AbstractHttpConfigurer::disable)
                 .cors(withDefaults())
@@ -36,7 +36,6 @@ public class SecurityConfiguration {
                 .sessionManagement(management ->
                         management.sessionCreationPolicy(STATELESS)
                 )
-                .addFilterBefore(jwtFilter, UsernamePasswordAuthenticationFilter.class)
                 .build();
     }
 

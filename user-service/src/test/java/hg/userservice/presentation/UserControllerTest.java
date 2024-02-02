@@ -83,11 +83,10 @@ class UserControllerTest extends IntegrationTest {
     void get_my_info_with_access_token() throws Exception {
         // given
         UserEntity me = saveUserList.get(0);
-        String accessToken = tokenProvider.createAccessToken(String.valueOf(me.getId()));
 
         // when
         MvcResult mvcResult = mockMvc.perform(get("/user/me")
-                        .header(HttpHeaders.AUTHORIZATION, accessToken)
+                        .header("user-id", me.getId())
                 ).andExpect(status().isOk())
                 .andReturn();
 
@@ -122,12 +121,11 @@ class UserControllerTest extends IntegrationTest {
     void change_my_info_with_valid_access_token() throws Exception {
         // given
         UserEntity me = saveUserList.get(0);
-        String accessToken = tokenProvider.createAccessToken(String.valueOf(me.getId()));
         EditInfoRequest editInfoRequest = new EditInfoRequest(createRandomUUID(), createRandomUUID());
 
         // when
         mockMvc.perform(put("/user/me")
-                .header(HttpHeaders.AUTHORIZATION, accessToken)
+                .header("user-id", me.getId())
                 .contentType(APPLICATION_JSON)
                 .content(objectMapper.writeValueAsBytes(editInfoRequest))
         ).andExpect(status().isNoContent());
@@ -172,12 +170,11 @@ class UserControllerTest extends IntegrationTest {
 
         userRepository.save(userEntity);
         flushAndClearPersistence();
-        String accessToken = tokenProvider.createAccessToken(String.valueOf(userEntity.getId()));
         EditPasswordRequest passwordRequest = new EditPasswordRequest(currentPassword, newPassword);
 
         // when
         mockMvc.perform(patch("/user/me/password")
-                .header(HttpHeaders.AUTHORIZATION, accessToken)
+                .header("user-id", userEntity.getId())
                 .contentType(APPLICATION_JSON)
                 .content(objectMapper.writeValueAsBytes(passwordRequest))
         ).andExpect(status().isNoContent());
@@ -193,13 +190,12 @@ class UserControllerTest extends IntegrationTest {
     void change_profile_image() throws Exception {
         // given
         UserEntity userEntity = saveUserList.get(0);
-        String accessToken = tokenProvider.createAccessToken(String.valueOf(userEntity.getId()));
 
         // when
         mockMvc.perform(multipart(PATCH, "/user/me/profile")
                 .file(createMockMultipartFile())
                 .contentType(MULTIPART_FORM_DATA)
-                .header(HttpHeaders.AUTHORIZATION, accessToken)
+                .header("user-id", userEntity.getId())
         ).andExpect(status().isNoContent());
         flushAndClearPersistence();
 

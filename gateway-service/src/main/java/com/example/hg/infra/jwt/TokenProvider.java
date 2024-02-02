@@ -1,4 +1,4 @@
-package com.example.hg.jwt;
+package com.example.hg.infra.jwt;
 
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;

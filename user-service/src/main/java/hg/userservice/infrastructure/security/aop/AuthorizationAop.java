@@ -12,7 +12,7 @@ import org.springframework.stereotype.Component;
 @Component
 public class AuthorizationAop {
 
-    @Before("@annotation(hg.userservice.infrastructure.security.annotation.AuthorizationRequired)")
+//    @Before("@annotation(hg.userservice.infrastructure.security.annotation.AuthorizationRequired)")
     public void process(JoinPoint joinPoint) {
         if (!isValidAuthentication()) {
             throw new UnAuthorizedException("please do login first.");
