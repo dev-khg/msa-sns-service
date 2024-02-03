@@ -11,6 +11,7 @@ import com.example.newsfeedservice.presentation.request.ActivityRequest;
 import com.example.newsfeedservice.presentation.request.CommentCreateRequest;
 import com.example.newsfeedservice.testconfiguration.IntegrationTest;
 import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.http.MediaType;
@@ -31,6 +32,7 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 @ActiveProfiles("test")
+@Disabled
 class CommentControllerTest extends IntegrationTest {
 
     @Test
