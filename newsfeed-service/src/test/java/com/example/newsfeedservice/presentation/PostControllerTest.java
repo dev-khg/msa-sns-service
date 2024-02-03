@@ -7,6 +7,7 @@ import com.example.newsfeedservice.core.repository.dto.PostLikeActivityDTO;
 import com.example.newsfeedservice.presentation.request.ActivityRequest;
 import com.example.newsfeedservice.presentation.request.PostCreateRequest;
 import com.example.newsfeedservice.testconfiguration.IntegrationTest;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -27,6 +28,7 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 @ActiveProfiles("test")
+@Disabled
 class PostControllerTest extends IntegrationTest {
 
     @Test

@@ -13,18 +13,18 @@ import org.springframework.web.bind.annotation.RequestBody;
 
 import java.util.List;
 
-@FeignClient(name = "news-feed")
+@FeignClient(name = "NEWSFEED-SERVICE")
 public interface NewsFeedFeignClient {
 
-    @PostMapping("/post/activity/post")
+    @PostMapping("/post/activity")
     ResponseEntity<List<PostActivityDTO>> getPostActivities(@RequestBody ActivityRequest activityRequest);
 
-    @PostMapping("/activity/like")
+    @PostMapping("/post/like/activity")
     ResponseEntity<List<PostLikeActivityDTO>> getPostLikeActivities(@RequestBody ActivityRequest activityRequest);
 
-    @PostMapping("/activity/comment")
-    ResponseEntity<List<CommentActivityDTO>> getCommentActivities(@RequestBody ActivityRequest activityRequest);
+    @PostMapping("/comment/activity")
+    ResponseEntity<ApiResponse<List<CommentActivityDTO>>> getCommentActivities(@RequestBody ActivityRequest activityRequest);
 
-    @PostMapping("/activity/like")
-    ResponseEntity<List<CommentLikeActivityDTO>> getCommentLikeActivities(@RequestBody ActivityRequest activityRequest);
+    @PostMapping("/comment/like/activity")
+    ResponseEntity<ApiResponse<List<CommentLikeActivityDTO>>> getCommentLikeActivities(@RequestBody ActivityRequest activityRequest);
 }

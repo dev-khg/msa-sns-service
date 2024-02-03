@@ -1,5 +1,6 @@
 package hg.activityservice.presentation.response;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import hg.activityservice.core.service.external.user.response.FollowActivityDTO;
 import lombok.Getter;
 
@@ -11,6 +12,7 @@ public class FollowActivityResponse implements ActivityResponse{
     private String followerName;
     private Long followeeId;
     private String followeeName;
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", timezone = "Asia/Seoul")
     private LocalDateTime createdAt;
 
     public FollowActivityResponse(FollowActivityDTO followActivityDTO) {

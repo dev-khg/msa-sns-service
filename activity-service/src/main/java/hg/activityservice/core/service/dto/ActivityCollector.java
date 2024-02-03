@@ -53,7 +53,7 @@ public class ActivityCollector {
 
         if (postActivities != null) {
             List<PostActivityResponse> postActivityResponses = postActivities.stream()
-                    .map(p -> new PostActivityResponse(p, usernameMap.get(p)))
+                    .map(p -> new PostActivityResponse(p, usernameMap.get(p.getUserId())))
                     .toList();
             activityResponses.addAll(postActivityResponses);
         }
@@ -97,7 +97,7 @@ public class ActivityCollector {
     }
 
     private List<CommentLikeActivityDTO> handleCommentLikeActivity(ActivityRequest activityRequest) {
-        List<CommentLikeActivityDTO> commentLikeActivities = newsFeedFeignClient.getCommentLikeActivities(activityRequest).getBody();
+        List<CommentLikeActivityDTO> commentLikeActivities = newsFeedFeignClient.getCommentLikeActivities(activityRequest).getBody().getData();
         List<Long> commentUserIdList = commentLikeActivities.stream()
                 .map(CommentLikeActivityDTO::getCommentUserId)
                 .toList();
@@ -106,7 +106,7 @@ public class ActivityCollector {
     }
 
     private List<CommentActivityDTO> handleCommentActivity(ActivityRequest activityRequest) {
-        List<CommentActivityDTO> commentActivities = newsFeedFeignClient.getCommentActivities(activityRequest).getBody();
+        List<CommentActivityDTO> commentActivities = newsFeedFeignClient.getCommentActivities(activityRequest).getBody().getData();
         List<Long> postUserIdList = commentActivities.stream()
                 .map(CommentActivityDTO::getPostUserId)
                 .toList();
@@ -133,7 +133,7 @@ public class ActivityCollector {
 
     private List<Long> getTargetIdList(List<ActivityEntity> activityEntities) {
         return activityEntities.stream()
-                .map(ActivityEntity::getUserId)
+                .map(ActivityEntity::getTargetId)
                 .toList();
     }
 

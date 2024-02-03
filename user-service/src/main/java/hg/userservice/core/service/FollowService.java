@@ -6,12 +6,16 @@ import hg.userservice.core.entity.UserEntity;
 import hg.userservice.core.repository.FollowRepository;
 import hg.userservice.core.repository.UserRepository;
 import hg.userservice.core.repository.dto.FollowActivityDTO;
+import hg.userservice.core.service.external.ActivityFeignClient;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
+import static com.example.commonproject.activity.ActivityEvent.create;
+import static com.example.commonproject.activity.ActivityType.FOLLOW;
+import static com.example.commonproject.activity.ActivityType.UNFOLLOW;
 import static hg.userservice.core.entity.FollowEntity.*;
 
 @Service
@@ -19,6 +23,7 @@ import static hg.userservice.core.entity.FollowEntity.*;
 public class FollowService {
     private final FollowRepository followRepository;
     private final UserRepository userRepository;
+    private final ActivityFeignClient activityFeignClient;
 
     @Transactional
     public void handleFollow(Long followerId, Long followeeId, boolean follow) {
@@ -29,16 +34,17 @@ public class FollowService {
 
         if (followEntity != null) {
             followEntity.makeDelete(!follow);
+            activityFeignClient.handleEvent(create(UNFOLLOW, followerId, followEntity.getId()));
         } else if(follow){
-            followRepository.save(create(followerUser, followeeUser));
+            followRepository.save(FollowEntity.create(followerUser, followeeUser));
+            activityFeignClient.handleEvent(create(FOLLOW, followerId, followEntity.getId()));
         }
-
-        // TODO : change event 처리 필요 (kafka? or feign?)
     }
 
     @Transactional(readOnly = true)
     public List<Long> getFollowerList(Long followerId) {
-        return followRepository.findFolloweeIdList(followerId);
+        List<Long> followeeIdList = followRepository.findFolloweeIdList(followerId);
+        return followeeIdList;
     }
 
     @Transactional(readOnly = true)

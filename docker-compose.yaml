@@ -1,41 +1,42 @@
 version: '3.8'
 
 services:
-  mysql:
+  user-mysql:
     image: mysql:8.0
     environment:
       MYSQL_ROOT_PASSWORD: root1234
-      MYSQL_DATABASE: preorder
+      MYSQL_DATABASE: user-db
       MYSQL_USER: sa
       MYSQL_PASSWORD: 1234
     ports:
       - "3306:3306"
-    volumes:
-      - ./db:/var/lib/mysql
-    networks:
-      - pre-order-network
+    restart: always
 
+  newsfeed-mysql:
+    image: mysql:8.0
+    environment:
+      MYSQL_ROOT_PASSWORD: root1234
+      MYSQL_DATABASE: newsfeed-db
+      MYSQL_USER: sa
+      MYSQL_PASSWORD: 1234
+    ports:
+      - "3307:3306"
+    restart: always
+
+  activity-mysql:
+    image: mysql:8.0
+    environment:
+      MYSQL_ROOT_PASSWORD: root1234
+      MYSQL_DATABASE: activity-db
+      MYSQL_USER: sa
+      MYSQL_PASSWORD: 1234
+    ports:
+      - "3308:3306"
+    restart: always
   redis:
     image: redis:7.2.4
     ports:
       - "6379:6379"
-    networks:
-      - pre-order-network
-
-  preorder:
-    build:
-      context: .
-      dockerfile: Dockerfile
-    restart: always
-    depends_on:
-      - mysql
-      - redis
-    ports:
-      - "8081:8081"
-    env_file:
-      - ./pre-order.env
-    networks:
-      - pre-order-network
 
 
 volumes:

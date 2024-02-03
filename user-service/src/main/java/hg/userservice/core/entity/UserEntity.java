@@ -17,7 +17,7 @@ import static lombok.AccessLevel.*;
 public class UserEntity extends BaseTimeEntity{
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "number_id")
+    @Column(name = "user_number")
     private Long id;
 
     @Column(nullable = false, unique = true, length = 100)

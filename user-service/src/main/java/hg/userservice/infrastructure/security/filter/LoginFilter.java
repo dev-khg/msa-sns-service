@@ -2,21 +2,17 @@ package hg.userservice.infrastructure.security.filter;
 
 import com.example.commonproject.exception.BadRequestException;
 import com.example.commonproject.exception.InternalServerException;
-import com.example.commonproject.exception.UnAuthorizedException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import hg.userservice.core.entity.UserEntity;
 import hg.userservice.core.repository.KeyValueStorage;
-import hg.userservice.core.vo.KeyType;
 import hg.userservice.infrastructure.jwt.TokenProvider;
 import hg.userservice.presentation.request.LoginRequest;
-import hg.userservice.utils.HttpServletUtils;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
+import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
-import org.springframework.http.HttpHeaders;
 import org.springframework.security.authentication.AuthenticationManager;
-import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
@@ -26,7 +22,6 @@ import org.springframework.stereotype.Component;
 import java.io.IOException;
 
 import static hg.userservice.core.vo.KeyType.*;
-import static hg.userservice.utils.HttpServletUtils.*;
 import static org.springframework.http.HttpHeaders.*;
 import static org.springframework.util.StringUtils.hasText;
 
@@ -78,13 +73,23 @@ public class LoginFilter extends UsernamePasswordAuthenticationFilter {
 
         keyValueStorage.putValue(REFRESH_TOKEN, userId, refreshToken);
 
-        putHeader(AUTHORIZATION, accessToken);
-        addCookie(REFRESH_TOKEN.getKey(), refreshToken, (int) REFRESH_TOKEN.getExpiration());
+        response.addHeader(AUTHORIZATION, accessToken);
+        response.addCookie(createCookie(REFRESH_TOKEN.getKey(), refreshToken, (int) REFRESH_TOKEN.getExpiration()));
+//        putHeader(AUTHORIZATION, accessToken);
+//        createCookie(REFRESH_TOKEN.getKey(), refreshToken, (int) REFRESH_TOKEN.getExpiration());
     }
 
     private UsernamePasswordAuthenticationToken generateAuthenticationToken(LoginRequest loginRequest) {
         return new UsernamePasswordAuthenticationToken(
                 loginRequest.getEmail(), loginRequest.getPassword()
         );
+    }
+
+    private Cookie createCookie(String key, String value, int expiration) {
+        Cookie cookie = new Cookie(key, value);
+        cookie.setPath("/");
+        cookie.setHttpOnly(true);
+        cookie.setMaxAge(expiration);
+        return cookie;
     }
 }

@@ -16,7 +16,7 @@ public class PostRepositoryImpl implements PostRepository {
 
     @Override
     public PostEntity save(PostEntity entity) {
-        return postJpaRepository.save(entity);
+        return postJpaRepository.saveAndFlush(entity);
     }
 
     @Override

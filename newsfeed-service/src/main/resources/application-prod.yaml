@@ -4,15 +4,16 @@ eureka:
     fetch-registry: true
     service-url:
       defaultZone: http://localhost:8761/eureka
+
 server:
   port: 0
 
 spring:
   application:
-    name: activity-service
+    name: newsfeed-service
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver
-    url: jdbc:mysql://localhost:3308/activity-db
+    url: jdbc:mysql://localhost:3307/newsfeed-db
     username: sa
     password: 1234
   jpa:

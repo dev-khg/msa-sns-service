@@ -18,4 +18,6 @@ public interface UserRepository {
     Optional<UserEntity> findByEmail(String email);
 
     List<UserNameInfoDTO> findUsername(List<Long> userIdList);
+
+    List<UserEntity> findAll();
 }

@@ -6,22 +6,30 @@ import com.example.newsfeedservice.core.entity.PostEntity;
 import com.example.newsfeedservice.core.repository.CommentRepository;
 import com.example.newsfeedservice.core.repository.PostRepository;
 import com.example.newsfeedservice.core.repository.dto.CommentActivityDTO;
+import com.example.newsfeedservice.core.service.external.ActivityFeignClient;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
+import static com.example.commonproject.activity.ActivityEvent.create;
+import static com.example.commonproject.activity.ActivityType.COMMENT;
+import static com.example.commonproject.activity.ActivityType.COMMENT_LIKE;
+
 @Service
 @RequiredArgsConstructor
 public class CommentService {
     private final CommentRepository commentRepository;
     private final PostRepository postRepository;
+    private final ActivityFeignClient activityFeignClient;
 
     @Transactional
     public Long enrollComment(Long userId, Long postId, String content) {
         PostEntity postEntity = getPostEntity(postId);
-        return commentRepository.save(CommentEntity.create(userId, postEntity, content)).getId();
+        Long savedId = commentRepository.save(CommentEntity.create(userId, postEntity, content)).getId();
+        activityFeignClient.handleEvent(create(COMMENT, userId, savedId));
+        return savedId;
     }
 
     @Transactional(readOnly = true)

@@ -16,7 +16,7 @@ public class PostLikeRepositoryImpl implements PostLikeRepository {
 
     @Override
     public PostLikeEntity save(PostLikeEntity entity) {
-        return postLikeJpaRepository.save(entity);
+        return postLikeJpaRepository.saveAndFlush(entity);
     }
 
     @Override

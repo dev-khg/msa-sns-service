@@ -45,15 +45,17 @@ public class PostController {
         return noContent().build();
     }
 
-    @PostMapping("/post/activity")
+    @PostMapping("/activity")
     public ResponseEntity<List<PostActivityDTO>> getPostActivities(
             @RequestBody ActivityRequest activityRequest) {
-        return ok(postService.getActivities(activityRequest.getTargetIdList()));
+        List<PostActivityDTO> activities = postService.getActivities(activityRequest.getTargetIdList());
+        return ok(activities);
     }
 
     @PostMapping("/like/activity")
     public ResponseEntity<List<PostLikeActivityDTO>> getPostLikeActivities(
             @RequestBody ActivityRequest activityRequest) {
-        return ok(postLikeService.getActivities(activityRequest.getTargetIdList()));
+        List<PostLikeActivityDTO> activities = postLikeService.getActivities(activityRequest.getTargetIdList());
+        return ok(activities);
     }
 }
