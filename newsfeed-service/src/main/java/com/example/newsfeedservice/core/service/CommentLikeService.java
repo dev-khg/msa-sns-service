@@ -34,8 +34,8 @@ public class CommentLikeService {
             commentLikeEntity.makeDelete(!like);
             activityFeignClient.handleEvent(create(COMMENT_UNLIKE, userId, commentLikeEntity.getId()));
         } else if (like) {
-            commentLikeRepository.save(CommentLikeEntity.create(userId, commentEntity));
-            activityFeignClient.handleEvent(create(COMMENT_LIKE, userId, commentLikeEntity.getId()));
+            CommentLikeEntity saved = commentLikeRepository.save(CommentLikeEntity.create(userId, commentEntity));
+            activityFeignClient.handleEvent(create(COMMENT_LIKE, userId, saved.getId()));
         }
     }
 

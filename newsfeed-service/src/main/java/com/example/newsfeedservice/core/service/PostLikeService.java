@@ -33,8 +33,8 @@ public class PostLikeService {
             postLikeEntity.makeDelete(!like);
             activityFeignClient.handleEvent(create(POST_UNLIKE, userId, postLikeEntity.getId()));
         } else if (like) {
-            postLikeRepository.save(PostLikeEntity.create(userId, postEntity));
-            activityFeignClient.handleEvent(create(POST_LIKE, userId, postLikeEntity.getId()));
+            PostLikeEntity saved = postLikeRepository.save(PostLikeEntity.create(userId, postEntity));
+            activityFeignClient.handleEvent(create(POST_LIKE, userId, saved.getId()));
         }
     }
 

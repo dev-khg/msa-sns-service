@@ -28,7 +28,6 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 @ActiveProfiles("test")
-@Disabled
 class PostControllerTest extends IntegrationTest {
 
     @Test
@@ -188,7 +187,7 @@ class PostControllerTest extends IntegrationTest {
         // then
         while (!postIdList.isEmpty()) {
             ActivityRequest value = new ActivityRequest(postIdList);
-            MvcResult mvcResult = mockMvc.perform(post("/post/post/activity")
+            MvcResult mvcResult = mockMvc.perform(post("/post/activity")
                             .contentType(APPLICATION_JSON)
                             .content(objectMapper.writeValueAsString(value))
                     ).andExpect(status().isOk())
