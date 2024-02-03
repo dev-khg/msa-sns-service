@@ -43,4 +43,9 @@ public class UserRepositoryImpl implements UserRepository {
     public List<UserNameInfoDTO> findUsername(List<Long> userIdList) {
         return userJpaRepository.findActivitiesDTO(userIdList);
     }
+
+    @Override
+    public List<UserEntity> findAll() {
+        return userJpaRepository.findAll();
+    }
 }

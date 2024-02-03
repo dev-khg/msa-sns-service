@@ -1,5 +1,6 @@
 package hg.activityservice.presentation.response;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import hg.activityservice.core.service.external.newfeed.response.PostLikeActivityDTO;
 import lombok.Getter;
 
@@ -11,6 +12,7 @@ public class PostLikeActivityResponse implements ActivityResponse {
     private String username;
     private Long postUserId;
     private String postUsername;
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", timezone = "Asia/Seoul")
     private LocalDateTime createdAt;
 
     public PostLikeActivityResponse(

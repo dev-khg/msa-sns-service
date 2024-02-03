@@ -21,7 +21,7 @@ public class FollowRepositoryImpl implements FollowRepository {
 
     @Override
     public FollowEntity save(FollowEntity followEntity) {
-        return followJpaRepository.save(followEntity);
+        return followJpaRepository.saveAndFlush(followEntity);
     }
 
     @Override

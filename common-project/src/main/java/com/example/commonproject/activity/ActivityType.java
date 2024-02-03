@@ -8,4 +8,5 @@ public enum ActivityType {
     COMMENT,
     COMMENT_LIKE,
     COMMENT_UNLIKE,
+    UNFOLLOW
 }

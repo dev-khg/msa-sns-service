@@ -27,8 +27,14 @@ public class ActivityService {
     @Transactional
     public void deleteActivity(ActivityEvent event) {
         activityRepository.findByUserIdAndTargetIdAndType(event.getUserId(), event.getTargetId(), event.getType()).ifPresent(
-                activity -> activity.makeDelete()
+                ActivityEntity::makeDelete
         );
+    }
+
+    @Transactional
+    public void handleUnfollow(ActivityEvent event) {
+        activityRepository.findByUserIdAndTargetIdAndType(event.getUserId(), event.getTargetId(), ActivityType.FOLLOW)
+                .ifPresent(ActivityEntity::makeDelete);
     }
 
     @Transactional

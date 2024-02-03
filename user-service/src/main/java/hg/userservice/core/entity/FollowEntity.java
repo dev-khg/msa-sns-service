@@ -18,14 +18,15 @@ import java.time.LocalDateTime;
 public class FollowEntity extends BaseTimeEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "follow_number")
     private Long id;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(referencedColumnName = "number_id", name = "follower_id", nullable = false)
+    @JoinColumn(referencedColumnName = "user_number", name = "follower_id", nullable = false)
     private UserEntity follower;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(referencedColumnName = "number_id", name = "followee_id", nullable = false)
+    @JoinColumn(referencedColumnName = "user_number", name = "followee_id", nullable = false)
     private UserEntity followee;
 
     @Column

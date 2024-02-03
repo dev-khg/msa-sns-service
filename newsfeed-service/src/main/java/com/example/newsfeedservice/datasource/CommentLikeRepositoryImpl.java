@@ -21,7 +21,7 @@ public class CommentLikeRepositoryImpl implements CommentLikeRepository {
 
     @Override
     public CommentLikeEntity save(CommentLikeEntity entity) {
-        return commentLikeJpaRepository.save(entity);
+        return commentLikeJpaRepository.saveAndFlush(entity);
     }
 
     @Override

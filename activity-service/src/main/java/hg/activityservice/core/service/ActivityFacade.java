@@ -5,6 +5,7 @@ import com.example.commonproject.activity.ActivityType;
 import hg.activityservice.core.entity.ActivityEntity;
 import hg.activityservice.core.service.dto.ActivityCollector;
 import hg.activityservice.core.service.external.newfeed.NewsFeedFeignClient;
+import hg.activityservice.core.service.external.user.FollowerActivityRequest;
 import hg.activityservice.core.service.external.user.UserFeignClient;
 import hg.activityservice.presentation.response.ActivityResponse;
 import lombok.RequiredArgsConstructor;
@@ -35,7 +36,7 @@ public class ActivityFacade {
 
         ActivityCollector activityCollector = new ActivityCollector(activities, userFeignClient, newsFeedFeignClient);
         List<ActivityResponse> collect = activityCollector.collect();
-        collect.sort(Comparator.comparing(ActivityResponse::getCreatedAt));
+        collect.sort(Comparator.comparing(ActivityResponse::getCreatedAt).reversed());
         return collect;
     }
 
@@ -44,6 +45,8 @@ public class ActivityFacade {
             case POST_UNLIKE, COMMENT_UNLIKE:
                 activityService.deleteActivity(event);
                 break;
+            case UNFOLLOW:
+                activityService.handleUnfollow(event);
             default:
                 activityService.saveActivity(event);
                 break;
@@ -51,6 +54,7 @@ public class ActivityFacade {
     }
 
     private List<Long> getFollowerList(Long userId) {
-        return userFeignClient.getFollowerList(userId).getBody();
+        List<Long> body = userFeignClient.getFollowerList(new FollowerActivityRequest(userId)).getBody().getData();
+        return body;
     }
 }

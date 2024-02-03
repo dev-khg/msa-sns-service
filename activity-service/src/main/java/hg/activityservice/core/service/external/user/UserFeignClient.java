@@ -13,14 +13,14 @@ import org.springframework.web.bind.annotation.RequestBody;
 
 import java.util.List;
 
-@FeignClient(name = "user-service")
+@FeignClient(name = "USER-SERVICE")
 public interface UserFeignClient {
 
     @PostMapping("/user/name")
     ResponseEntity<List<UserNameInfoDTO>> getUsernames(@RequestBody ActivityRequest request);
 
-    @GetMapping("/follow/{followerId}/follower-list")
-    ResponseEntity<List<Long>> getFollowerList(@PathVariable Long followerId);
+    @PostMapping("/follow/follower-list")
+    ResponseEntity<ApiResponse<List<Long>>> getFollowerList(@RequestBody FollowerActivityRequest request);
 
     @GetMapping("/follow/activity")
     ResponseEntity<List<FollowActivityDTO>> getFollowActivities(@RequestBody ActivityRequest request);

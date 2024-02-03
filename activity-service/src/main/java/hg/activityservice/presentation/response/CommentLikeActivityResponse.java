@@ -1,5 +1,6 @@
 package hg.activityservice.presentation.response;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import hg.activityservice.core.service.external.newfeed.response.CommentLikeActivityDTO;
 import lombok.Getter;
 
@@ -12,6 +13,7 @@ public class CommentLikeActivityResponse implements ActivityResponse{
     private Long userId;
     private String username;
     private String commentUsername;
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", timezone = "Asia/Seoul")
     private LocalDateTime createdAt;
 
     public CommentLikeActivityResponse(

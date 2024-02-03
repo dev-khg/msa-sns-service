@@ -6,17 +6,22 @@ import com.example.newsfeedservice.core.entity.PostLikeEntity;
 import com.example.newsfeedservice.core.repository.PostLikeRepository;
 import com.example.newsfeedservice.core.repository.PostRepository;
 import com.example.newsfeedservice.core.repository.dto.PostLikeActivityDTO;
+import com.example.newsfeedservice.core.service.external.ActivityFeignClient;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
+import static com.example.commonproject.activity.ActivityEvent.create;
+import static com.example.commonproject.activity.ActivityType.*;
+
 @Service
 @RequiredArgsConstructor
 public class PostLikeService {
     private final PostLikeRepository postLikeRepository;
     private final PostRepository postRepository;
+    private final ActivityFeignClient activityFeignClient;
 
     @Transactional
     public void handlePostLike(Long userId, Long postId, boolean like) {
@@ -26,23 +31,16 @@ public class PostLikeService {
 
         if (postLikeEntity != null) {
             postLikeEntity.makeDelete(!like);
+            activityFeignClient.handleEvent(create(POST_UNLIKE, userId, postLikeEntity.getId()));
         } else if (like) {
             postLikeRepository.save(PostLikeEntity.create(userId, postEntity));
+            activityFeignClient.handleEvent(create(POST_LIKE, userId, postLikeEntity.getId()));
         }
     }
 
     @Transactional(readOnly = true)
     public List<PostLikeActivityDTO> getActivities(List<Long> idList) {
         return postLikeRepository.findByIdList(idList);
-    }
-
-    private PostLikeActivityDTO entitiesToActivityDTO(PostLikeEntity postLikeEntity) {
-        return new PostLikeActivityDTO(
-                postLikeEntity.getUserId(),
-                postLikeEntity.getPostEntity().getUserId(),
-                postLikeEntity.getPostEntity().getId(),
-                postLikeEntity.getUpdatedAt()
-        );
     }
 
     private PostEntity getPostEntity(Long postId) {

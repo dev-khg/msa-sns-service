@@ -8,6 +8,7 @@ import hg.userservice.infrastructure.security.annotation.AuthorizationRequired;
 import hg.userservice.infrastructure.security.annotation.CurrentUser;
 import hg.userservice.presentation.request.ActivityRequest;
 import hg.userservice.presentation.request.FollowActivityRequest;
+import hg.userservice.presentation.request.FollowerActivityRequest;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -37,9 +38,9 @@ public class FollowController {
         return noContent().build();
     }
 
-    @GetMapping("/{followerId}/follower-list")
-    public ApiResponse<List<Long>> getFollowerList(@PathVariable Long followerId) {
-        return success(followService.getFollowerList(followerId));
+    @PostMapping("/follower-list")
+    public ApiResponse<List<Long>> getFollowerList(@RequestBody FollowerActivityRequest request) {
+        return success(followService.getFollowerList(request.getUserId()));
     }
 
     @PostMapping("/activity")

@@ -1,19 +1,18 @@
-upload:
-    folder: ${user.dir}/uploads
-
-jwt:
-  secret: testhjgjkasgsfngadsgasgwgewgagdsgdsa34234afeasgajsgsafdss
-  access_token_expiration: 1800000
-  refresh_token_expiration: 604800000
-
-eureka:
-  client:
-    register-with-eureka: false
-    fetch-registry: false
-    service-url:
-      defaultZone: http://localhost:8761/eureka
-
 spring:
+  datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    url: jdbc:mysql://localhost:3306/user-db
+    username: sa
+    password: 1234
+  jpa:
+    hibernate:
+      ddl-auto: none
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.MySQL8Dialect
+        show_sql: true
+        use_sql_comments: true
+        format_sql: true
   mail:
     properties:
       mail:
@@ -29,5 +28,25 @@ spring:
     username: 123241234
     password: 12341234
     port: 587
+  application:
+    name: user-service
+  sql:
+    init:
+      mode: always
+
+upload:
+    folder: ${user.dir}/uploads
+
+jwt:
+  secret: testhjgjkasgsfngadsgasgwgewgagdsgdsa34234afeasgajsgsafdss
+  access_token_expiration: 1800000
+  refresh_token_expiration: 604800000
+
+eureka:
+  client:
+    register-with-eureka: true
+    fetch-registry: true
+    service-url:
+      defaultZone: http://localhost:8761/eureka
 server:
   port: 0
