@@ -6,6 +6,7 @@ import com.example.newsfeedservice.core.repository.CommentLikeRepository;
 import com.example.newsfeedservice.core.repository.CommentRepository;
 import com.example.newsfeedservice.core.repository.PostLikeRepository;
 import com.example.newsfeedservice.core.repository.PostRepository;
+import com.example.newsfeedservice.core.service.external.ActivityFeignClient;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import jakarta.persistence.EntityManager;
@@ -15,6 +16,7 @@ import org.junit.jupiter.api.Disabled;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.context.annotation.Import;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.transaction.annotation.Transactional;
@@ -40,6 +42,8 @@ public abstract class IntegrationTest {
     protected PostRepository postRepository;
     @Autowired
     protected PostLikeRepository postLikeRepository;
+    @MockBean
+    ActivityFeignClient activityFeignClient;
     @PersistenceContext
     protected EntityManager em;
 

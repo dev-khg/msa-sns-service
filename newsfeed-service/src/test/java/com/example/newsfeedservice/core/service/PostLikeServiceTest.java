@@ -5,6 +5,7 @@ import com.example.newsfeedservice.core.entity.PostLikeEntity;
 import com.example.newsfeedservice.core.repository.PostLikeRepository;
 import com.example.newsfeedservice.core.repository.PostRepository;
 import com.example.newsfeedservice.core.repository.dto.PostLikeActivityDTO;
+import com.example.newsfeedservice.core.service.external.ActivityFeignClient;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
 import org.junit.jupiter.api.BeforeEach;
@@ -13,6 +14,7 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -23,7 +25,6 @@ import static org.junit.jupiter.api.Assertions.*;
 @SpringBootTest
 @ActiveProfiles("test")
 @Transactional
-@Disabled
 class PostLikeServiceTest {
     @Autowired
     PostLikeService postLikeService;
@@ -31,6 +32,8 @@ class PostLikeServiceTest {
     PostLikeRepository postLikeRepository;
     @Autowired
     PostRepository postRepository;
+    @MockBean
+    ActivityFeignClient activityFeignClient;
 
     @PersistenceContext
     EntityManager em;

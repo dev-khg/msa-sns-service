@@ -36,8 +36,8 @@ public class FollowService {
             followEntity.makeDelete(!follow);
             activityFeignClient.handleEvent(create(UNFOLLOW, followerId, followEntity.getId()));
         } else if(follow){
-            followRepository.save(FollowEntity.create(followerUser, followeeUser));
-            activityFeignClient.handleEvent(create(FOLLOW, followerId, followEntity.getId()));
+            FollowEntity saved = followRepository.save(FollowEntity.create(followerUser, followeeUser));
+            activityFeignClient.handleEvent(create(FOLLOW, followerId, saved.getId()));
         }
     }
 

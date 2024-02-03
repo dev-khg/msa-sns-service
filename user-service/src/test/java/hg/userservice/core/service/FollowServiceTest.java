@@ -4,6 +4,7 @@ import hg.userservice.core.entity.FollowEntity;
 import hg.userservice.core.entity.UserEntity;
 import hg.userservice.core.repository.UserRepository;
 import hg.userservice.core.repository.dto.FollowActivityDTO;
+import hg.userservice.core.service.external.ActivityFeignClient;
 import hg.userservice.datasource.FollowRepositoryImpl;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
@@ -13,6 +14,7 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -27,7 +29,6 @@ import static org.junit.jupiter.api.Assertions.*;
 @SpringBootTest
 @ActiveProfiles("test")
 @Transactional
-@Disabled
 class FollowServiceTest {
 
     @Autowired
@@ -38,6 +39,9 @@ class FollowServiceTest {
 
     @Autowired
     FollowService followService;
+
+    @MockBean
+    ActivityFeignClient activityFeignClient;
 
     @PersistenceContext
     EntityManager em;

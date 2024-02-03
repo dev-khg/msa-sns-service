@@ -7,6 +7,7 @@ import com.example.newsfeedservice.core.repository.CommentLikeRepository;
 import com.example.newsfeedservice.core.repository.CommentRepository;
 import com.example.newsfeedservice.core.repository.PostRepository;
 import com.example.newsfeedservice.core.repository.dto.CommentLikeActivityDTO;
+import com.example.newsfeedservice.core.service.external.ActivityFeignClient;
 import com.example.newsfeedservice.datasource.CommentLikeRepositoryImpl;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
@@ -16,6 +17,7 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -26,7 +28,6 @@ import static org.junit.jupiter.api.Assertions.*;
 @SpringBootTest
 @ActiveProfiles("test")
 @Transactional
-@Disabled
 class CommentLikeServiceTest {
     @Autowired
     CommentLikeRepository commentLikeRepository;
@@ -36,6 +37,8 @@ class CommentLikeServiceTest {
     CommentRepository commentRepository;
     @Autowired
     PostRepository postRepository;
+    @MockBean
+    ActivityFeignClient activityFeignClient;
 
     @PersistenceContext
     EntityManager em;
