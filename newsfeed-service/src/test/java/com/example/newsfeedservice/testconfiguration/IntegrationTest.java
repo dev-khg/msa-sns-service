@@ -1,5 +1,6 @@
 package com.example.newsfeedservice.testconfiguration;
 
+import com.example.commonproject.event.EventPublisher;
 import com.example.commonproject.response.ApiResponse;
 import com.example.newsfeedservice.core.entity.PostEntity;
 import com.example.newsfeedservice.core.repository.CommentLikeRepository;
@@ -30,6 +31,8 @@ import java.util.UUID;
 @SpringBootTest
 @AutoConfigureMockMvc
 public abstract class IntegrationTest {
+    @MockBean
+    EventPublisher eventPublisher;
     @Autowired
     protected MockMvc mockMvc;
     @Autowired

@@ -1,5 +1,6 @@
 package com.example.newsfeedservice.core.service;
 
+import com.example.commonproject.event.EventPublisher;
 import com.example.newsfeedservice.core.entity.PostEntity;
 import com.example.newsfeedservice.core.entity.PostLikeEntity;
 import com.example.newsfeedservice.core.repository.PostLikeRepository;
@@ -34,7 +35,8 @@ class PostLikeServiceTest {
     PostRepository postRepository;
     @MockBean
     ActivityFeignClient activityFeignClient;
-
+    @MockBean
+    EventPublisher eventPublisher;
     @PersistenceContext
     EntityManager em;
 
