@@ -30,5 +30,4 @@ dependencies {
     implementation 'org.springframework.cloud:spring-cloud-starter-openfeign'
 
     implementation 'org.springframework.kafka:spring-kafka'
-    implementation 'io.github.resilience4j:resilience4j-spring-boot2'
 }
