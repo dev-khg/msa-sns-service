@@ -1,5 +1,6 @@
 package hg.userservice.testconfiguration;
 
+import com.example.commonproject.event.EventPublisher;
 import com.example.commonproject.response.ApiResponse;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -17,6 +18,7 @@ import org.mockito.Mock;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.context.annotation.Import;
 import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -49,7 +51,8 @@ public abstract class IntegrationTest {
     StringRedisTemplate stringRedisTemplate;
     @Autowired
     protected FollowRepository followRepository;
-
+    @MockBean
+    EventPublisher eventPublisher;
     protected List<UserEntity> saveUserList;
 
     @PersistenceContext

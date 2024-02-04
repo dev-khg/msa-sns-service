@@ -1,5 +1,6 @@
 package com.example.newsfeedservice.core.service;
 
+import com.example.commonproject.event.EventPublisher;
 import com.example.commonproject.exception.BadRequestException;
 import com.example.newsfeedservice.core.entity.PostEntity;
 import com.example.newsfeedservice.core.entity.PostLikeEntity;
@@ -21,7 +22,7 @@ import static com.example.commonproject.activity.ActivityType.*;
 public class PostLikeService {
     private final PostLikeRepository postLikeRepository;
     private final PostRepository postRepository;
-    private final ActivityFeignClient activityFeignClient;
+    private final EventPublisher eventPublisher;
 
     @Transactional
     public void handlePostLike(Long userId, Long postId, boolean like) {
@@ -29,12 +30,15 @@ public class PostLikeService {
         PostLikeEntity postLikeEntity = postLikeRepository.findByUserIdAndPostId(userId, postId).orElse(null);
 
 
-        if (postLikeEntity != null) {
-            postLikeEntity.makeDelete(!like);
-            activityFeignClient.handleEvent(create(POST_UNLIKE, userId, postLikeEntity.getId()));
-        } else if (like) {
+        if (postLikeEntity != null && !like) {
+            postLikeEntity.makeDelete(true);
+            eventPublisher.publish(create(POST_UNLIKE, userId, postLikeEntity.getId()));
+        } else if (postLikeEntity != null && like && postLikeEntity.getDeletedAt() != null) {
+            postLikeEntity.makeDelete(false);
+            eventPublisher.publish(create(POST_LIKE, userId, postLikeEntity.getId()));
+        } else if(postLikeEntity == null && like) {
             PostLikeEntity saved = postLikeRepository.save(PostLikeEntity.create(userId, postEntity));
-            activityFeignClient.handleEvent(create(POST_LIKE, userId, saved.getId()));
+            eventPublisher.publish(create(POST_LIKE, userId, saved.getId()));
         }
     }
 

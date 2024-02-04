@@ -1,5 +1,6 @@
 package hg.userservice.core.service;
 
+import com.example.commonproject.event.EventPublisher;
 import hg.userservice.core.entity.FollowEntity;
 import hg.userservice.core.entity.UserEntity;
 import hg.userservice.core.repository.UserRepository;
@@ -30,7 +31,8 @@ import static org.junit.jupiter.api.Assertions.*;
 @ActiveProfiles("test")
 @Transactional
 class FollowServiceTest {
-
+    @MockBean
+    EventPublisher eventPublisher;
     @Autowired
     FollowRepositoryImpl followRepository;
 

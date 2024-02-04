@@ -1,5 +1,6 @@
 package hg.userservice.core.service;
 
+import com.example.commonproject.event.EventPublisher;
 import com.example.commonproject.exception.BadRequestException;
 import hg.userservice.core.entity.FollowEntity;
 import hg.userservice.core.entity.UserEntity;
@@ -23,7 +24,7 @@ import static hg.userservice.core.entity.FollowEntity.*;
 public class FollowService {
     private final FollowRepository followRepository;
     private final UserRepository userRepository;
-    private final ActivityFeignClient activityFeignClient;
+    private final EventPublisher publisher;
 
     @Transactional
     public void handleFollow(Long followerId, Long followeeId, boolean follow) {
@@ -32,12 +33,15 @@ public class FollowService {
 
         FollowEntity followEntity = getFollowEntity(followerId, followeeId);
 
-        if (followEntity != null) {
-            followEntity.makeDelete(!follow);
-            activityFeignClient.handleEvent(create(UNFOLLOW, followerId, followEntity.getId()));
-        } else if(follow){
+        if (followEntity != null && !follow) {
+            followEntity.makeDelete(true);
+            publisher.publish(create(UNFOLLOW, followerId, followEntity.getId()));
+        } else if(followEntity != null && follow && followEntity.getDeletedAt() != null){
+            followEntity.makeDelete(false);
+            publisher.publish(create(FOLLOW, followerId, followEntity.getId()));
+        } else if(followEntity == null && follow) {
             FollowEntity saved = followRepository.save(FollowEntity.create(followerUser, followeeUser));
-            activityFeignClient.handleEvent(create(FOLLOW, followerId, saved.getId()));
+            publisher.publish(create(FOLLOW, followerId, saved.getId()));
         }
     }
 
