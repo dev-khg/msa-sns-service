@@ -1,5 +1,6 @@
 package com.example.newsfeedservice.core.service;
 
+import com.example.commonproject.event.EventPublisher;
 import com.example.commonproject.exception.BadRequestException;
 import com.example.newsfeedservice.core.entity.CommentEntity;
 import com.example.newsfeedservice.core.entity.PostEntity;
@@ -22,13 +23,13 @@ import static com.example.commonproject.activity.ActivityType.COMMENT_LIKE;
 public class CommentService {
     private final CommentRepository commentRepository;
     private final PostRepository postRepository;
-    private final ActivityFeignClient activityFeignClient;
+    private final EventPublisher eventPublisher;
 
     @Transactional
     public Long enrollComment(Long userId, Long postId, String content) {
         PostEntity postEntity = getPostEntity(postId);
         Long savedId = commentRepository.save(CommentEntity.create(userId, postEntity, content)).getId();
-        activityFeignClient.handleEvent(create(COMMENT, userId, savedId));
+        eventPublisher.publish(create(COMMENT, userId, savedId));
         return savedId;
     }
 

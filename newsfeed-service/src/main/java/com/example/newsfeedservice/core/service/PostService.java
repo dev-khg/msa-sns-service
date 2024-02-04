@@ -1,5 +1,6 @@
 package com.example.newsfeedservice.core.service;
 
+import com.example.commonproject.event.EventPublisher;
 import com.example.newsfeedservice.core.entity.PostEntity;
 import com.example.newsfeedservice.core.repository.PostRepository;
 import com.example.newsfeedservice.core.repository.dto.PostActivityDTO;
@@ -18,14 +19,14 @@ import static com.example.commonproject.activity.ActivityType.POST;
 @RequiredArgsConstructor
 public class PostService {
     private final PostRepository postRepository;
-    private final ActivityFeignClient activityFeignClient;
+    private final EventPublisher eventPublisher;
 
     @Transactional
     public Long enrollPost(Long userId, String content) {
         PostEntity postEntity = PostEntity.create(userId, content);
         Long savedId = postRepository.save(postEntity).getId();
 
-        activityFeignClient.handleEvent(create(POST, userId, savedId));
+        eventPublisher.publish(create(POST, userId, savedId));
 
         return savedId;
     }

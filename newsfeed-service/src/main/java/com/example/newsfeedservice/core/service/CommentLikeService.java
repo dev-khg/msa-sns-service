@@ -2,6 +2,7 @@ package com.example.newsfeedservice.core.service;
 
 import com.example.commonproject.activity.ActivityEvent;
 import com.example.commonproject.activity.ActivityType;
+import com.example.commonproject.event.EventPublisher;
 import com.example.commonproject.exception.BadRequestException;
 import com.example.newsfeedservice.core.entity.CommentEntity;
 import com.example.newsfeedservice.core.entity.CommentLikeEntity;
@@ -23,19 +24,22 @@ import static com.example.commonproject.activity.ActivityType.*;
 public class CommentLikeService {
     private final CommentLikeRepository commentLikeRepository;
     private final CommentRepository commentRepository;
-    private final ActivityFeignClient activityFeignClient;
+    private final EventPublisher eventPublisher;
 
     @Transactional
     public void handleCommentLike(Long userId, Long commentId, boolean like) {
         CommentEntity commentEntity = getCommentEntity(commentId);
         CommentLikeEntity commentLikeEntity = getCommentLikeEntity(userId, commentId);
 
-        if (commentLikeEntity != null) {
-            commentLikeEntity.makeDelete(!like);
-            activityFeignClient.handleEvent(create(COMMENT_UNLIKE, userId, commentLikeEntity.getId()));
-        } else if (like) {
+        if (commentLikeEntity != null && !like) {
+            commentLikeEntity.makeDelete(true);
+            eventPublisher.publish(create(COMMENT_UNLIKE, userId, commentLikeEntity.getId()));
+        } else if (commentLikeEntity != null && like && commentEntity.getDeletedAt() != null) {
+            commentLikeEntity.makeDelete(false);
+            eventPublisher.publish(create(COMMENT_LIKE, userId, commentLikeEntity.getId()));
+        } else if(commentLikeEntity == null && like) {
             CommentLikeEntity saved = commentLikeRepository.save(CommentLikeEntity.create(userId, commentEntity));
-            activityFeignClient.handleEvent(create(COMMENT_LIKE, userId, saved.getId()));
+            eventPublisher.publish(create(COMMENT_LIKE, userId, saved.getId()));
         }
     }
 
