@@ -1,5 +1,6 @@
 package hg.activityservice.presentation.response;
 
+import com.example.commonproject.activity.ActivityType;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import hg.activityservice.core.service.external.user.response.FollowActivityDTO;
 import lombok.Getter;
@@ -7,7 +8,7 @@ import lombok.Getter;
 import java.time.LocalDateTime;
 
 @Getter
-public class FollowActivityResponse implements ActivityResponse{
+public class FollowActivityResponse extends ActivityBase{
     private Long followerId;
     private String followerName;
     private Long followeeId;
@@ -16,6 +17,7 @@ public class FollowActivityResponse implements ActivityResponse{
     private LocalDateTime createdAt;
 
     public FollowActivityResponse(FollowActivityDTO followActivityDTO) {
+        super(ActivityType.FOLLOW);
         this.followerId = followActivityDTO.getFollowerId();
         this.followerName = followActivityDTO.getFollowerName();
         this.followeeId = followActivityDTO.getFolloweeId();

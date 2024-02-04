@@ -124,7 +124,12 @@ public class ActivityCollector {
     }
 
     private List<PostActivityDTO> handlePostActivity(ActivityRequest activityRequest) {
-        return newsFeedFeignClient.getPostActivities(activityRequest).getBody();
+        List<PostActivityDTO> postActivityDTOS = newsFeedFeignClient.getPostActivities(activityRequest).getBody();
+        List<Long> userPostIdList = postActivityDTOS.stream()
+                .map(p -> p.getUserId())
+                .toList();
+        userIdSet.addAll(userPostIdList);
+        return postActivityDTOS;
     }
 
     private List<FollowActivityDTO> handleFollowActivity(ActivityRequest activityRequest) {

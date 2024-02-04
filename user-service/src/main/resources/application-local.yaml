@@ -1,9 +1,9 @@
 spring:
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver
-    url: ${USER_DB_URL}
-    username: ${USER_DB_USERNAME}
-    password: ${USER_DB_PASSWORD}
+    url: jdbc:mysql://localhost:3306/user-db
+    username: sa
+    password: 1234
   jpa:
     hibernate:
       ddl-auto: none
@@ -25,8 +25,8 @@ spring:
           connectiontimeout: 5000
           writetimeout: 5000
     host: smtp.gmail.com
-    username: ${MAIL_USERNAME}
-    password: ${MAIL_PASSWORD}
+    username: teastsa1234
+    password: terst123124
     port: 587
   application:
     name: user-service
@@ -35,21 +35,21 @@ spring:
       mode: always
   data:
     redis:
-      host: ${REDIS_HOST}
-      port: ${REDIS_PORT}
+      host: localhost
+      port: 6379
 upload:
-    folder: ${user.dir}/uploads
+  folder: ${user.dir}/uploads
 
 jwt:
-  secret: ${JWT_SECRET}
-  access_token_expiration: ${JWT_ACCESS_EXPIRATION}
-  refresh_token_expiration: ${JWT_REFRESH_EXPIRATION}
+  secret: testhjgjkasgsfngadsgasgwgewgagdsgdsa34234afeasgajsgsafdss
+  access_token_expiration: 1800000
+  refresh_token_expiration: 604800000
 
 eureka:
   client:
     register-with-eureka: true
     fetch-registry: true
     service-url:
-      defaultZone: ${DISCOVERY_SERVER_URL}
+      defaultZone: http://localhost:8761/eureka
 server:
   port: 0

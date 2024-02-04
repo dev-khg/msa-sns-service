@@ -1,6 +1,26 @@
 version: '3.8'
 
 services:
+
+# ---------- user service ----------
+#  user-server:
+#    build:
+#      context: ./user-service
+#      dockerfile: Dockerfile
+#    restart: always
+#    depends_on:
+#      - my-redis
+#      - user-mysql
+#      - eureka-server
+#    env_file:
+#      - ./pre-order.env
+#    networks:
+#      - pre-order-network
+#    healthcheck:
+#      test: ["CMD", "curl", "-f", "http://user-mysql:3306"]
+#      interval: 30s
+#      timeout: 10s
+#      retries: 5
   user-mysql:
     image: mysql:8.0
     environment:
@@ -11,7 +31,23 @@ services:
     ports:
       - "3306:3306"
     restart: always
+    networks:
+      - pre-order-network
 
+# ---------- newsfeed service ----------
+#  newsfeed-service:
+#    build:
+#      context: ./newsfeed-service
+#      dockerfile: Dockerfile
+#    restart: always
+#    depends_on:
+#      - newsfeed-mysql
+#      - eureka-server
+#    env_file:
+#      - ./pre-order.env
+#    networks:
+#      - pre-order-network
+#
   newsfeed-mysql:
     image: mysql:8.0
     environment:
@@ -22,7 +58,22 @@ services:
     ports:
       - "3307:3306"
     restart: always
-
+    networks:
+      - pre-order-network
+## ---------- activity service ----------
+#  activity-server:
+#    build:
+#      context: ./activity-service
+#      dockerfile: Dockerfile
+#    restart: always
+#    depends_on:
+#      - activity-mysql
+#      - eureka-server
+#    env_file:
+#      - ./pre-order.env
+#    networks:
+#      - pre-order-network
+#
   activity-mysql:
     image: mysql:8.0
     environment:
@@ -33,14 +84,44 @@ services:
     ports:
       - "3308:3306"
     restart: always
-  redis:
+    networks:
+      - pre-order-network
+# ----------- Eureka Service ---------
+#  eureka-server:
+#    build:
+#      context: ./eureka-service
+#      dockerfile: Dockerfile
+#    restart: always
+#    ports:
+#      - "8761:8761"
+#    networks:
+#      - pre-order-network
+#    env_file:
+#      - ./pre-order.env
+
+# ------------ Gateway Service ----------
+#  gateway-server:
+#    build:
+#      context: ./gateway-service
+#      dockerfile: Dockerfile
+#    restart: always
+#    depends_on:
+#      - my-redis
+#      - eureka-server
+#    env_file:
+#      - ./pre-order.env
+#    ports:
+#      - "8000:8000"
+#    networks:
+#      - pre-order-network
+#
+  my-redis:
     image: redis:7.2.4
     ports:
       - "6379:6379"
+    networks:
+      - pre-order-network
 
-
-volumes:
-  mysql_pre_order:
 
 networks:
   pre-order-network:
