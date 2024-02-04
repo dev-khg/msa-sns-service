@@ -7,6 +7,7 @@ import hg.activityservice.core.service.dto.ActivityCollector;
 import hg.activityservice.core.service.external.newfeed.NewsFeedFeignClient;
 import hg.activityservice.core.service.external.user.FollowerActivityRequest;
 import hg.activityservice.core.service.external.user.UserFeignClient;
+import hg.activityservice.infrastructure.feign.NewsFeedFeignProxy;
 import hg.activityservice.presentation.response.ActivityResponse;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -24,7 +25,7 @@ import java.util.Map;
 public class ActivityFacade {
     private final ActivityService activityService;
     private final UserFeignClient userFeignClient;
-    private final NewsFeedFeignClient newsFeedFeignClient;
+    private final NewsFeedFeignProxy newsFeedFeignClient;
 
     public List<ActivityResponse> getFeeds(Long userId, Pageable pageable) {
         List<Long> followerList = getFollowerList(userId);

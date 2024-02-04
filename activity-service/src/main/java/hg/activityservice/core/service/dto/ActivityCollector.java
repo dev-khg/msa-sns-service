@@ -11,6 +11,7 @@ import hg.activityservice.core.service.external.newfeed.response.PostLikeActivit
 import hg.activityservice.core.service.external.user.UserFeignClient;
 import hg.activityservice.core.service.external.user.response.FollowActivityDTO;
 import hg.activityservice.core.service.external.user.response.UserNameInfoDTO;
+import hg.activityservice.infrastructure.feign.NewsFeedFeignProxy;
 import hg.activityservice.presentation.response.*;
 import lombok.RequiredArgsConstructor;
 
@@ -28,7 +29,7 @@ public class ActivityCollector {
     List<FollowActivityDTO> followActivities = null;
     private final Map<ActivityType, List<ActivityEntity>> activities;
     private final UserFeignClient userFeignClient;
-    private final NewsFeedFeignClient newsFeedFeignClient;
+    private final NewsFeedFeignProxy newsFeedFeignClient;
 
     public List<ActivityResponse> collect() {
         for (ActivityType activityType : activities.keySet()) {
