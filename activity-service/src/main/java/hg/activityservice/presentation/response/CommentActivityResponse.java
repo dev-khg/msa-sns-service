@@ -1,5 +1,6 @@
 package hg.activityservice.presentation.response;
 
+import com.example.commonproject.activity.ActivityType;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import hg.activityservice.core.service.external.newfeed.response.CommentActivityDTO;
 import lombok.Getter;
@@ -7,7 +8,7 @@ import lombok.Getter;
 import java.time.LocalDateTime;
 
 @Getter
-public class CommentActivityResponse implements ActivityResponse{
+public class CommentActivityResponse extends ActivityBase {
     private Long commentId;
     private Long userId;
     private String username;
@@ -19,6 +20,7 @@ public class CommentActivityResponse implements ActivityResponse{
 
     public CommentActivityResponse(
             CommentActivityDTO commentActivityDTO, String username, String postUsername) {
+        super(ActivityType.COMMENT);
         this.commentId = commentActivityDTO.getCommentId();
         this.userId = commentActivityDTO.getUserId();
         this.username = username;
