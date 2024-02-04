@@ -4,10 +4,7 @@
 #    spring.kafka.consumer.value-deserializer=org.apache.kafka.common.serialization.StringDeserializer
 spring:
   kafka:
-    producer:
-      key-serializer: org.apache.kafka.common.serialization.StringSerializer
-      value-serializer: org.apache.kafka.common.serialization.StringSerializer
-      bootstrap-servers: localhost:9092
+    bootstrap-servers: localhost:9092
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver
     url: jdbc:mysql://localhost:3306/user-db

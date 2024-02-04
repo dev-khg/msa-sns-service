@@ -1,4 +1,6 @@
 spring:
+  kafka:
+    bootstrap-servers: ${KAFKA_SERVER_URL}
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver
     url: ${USER_DB_URL}
