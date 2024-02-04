@@ -1,4 +1,4 @@
-version: '3.8'
+version: '3.9'
 
 services:
 
@@ -9,10 +9,10 @@ services:
       dockerfile: Dockerfile
     restart: always
     depends_on:
-      - my-redis
-      - user-mysql
-      - eureka-server
-      - kafka-service
+      my-redis:
+        condition: service_started
+      user-mysql:
+        condition: service_healthy
     env_file:
       - ./pre-order.env
     networks:
@@ -34,6 +34,11 @@ services:
     restart: always
     networks:
       - pre-order-network
+    healthcheck:
+      test: [ "CMD", "mysql", "-h", "user-mysql", "-u", "sa", "-p1234", "-e", "SELECT 1" ]
+      interval: 5s
+      timeout: 3s
+      retries: 10
 
 # ---------- newsfeed service ----------
   newsfeed-service:
@@ -42,9 +47,8 @@ services:
       dockerfile: Dockerfile
     restart: always
     depends_on:
-      - newsfeed-mysql
-      - eureka-server
-      - kafka-service
+      newsfeed-mysql:
+        condition: service_healthy
     env_file:
       - ./pre-order.env
     networks:
@@ -62,6 +66,11 @@ services:
     restart: always
     networks:
       - pre-order-network
+    healthcheck:
+      test: [ "CMD", "mysql", "-h", "newsfeed-mysql", "-u", "sa", "-p1234", "-e", "SELECT 1" ]
+      interval: 5s
+      timeout: 3s
+      retries: 10
 ## ---------- activity service ----------
   activity-server:
     build:
@@ -69,9 +78,8 @@ services:
       dockerfile: Dockerfile
     restart: always
     depends_on:
-      - activity-mysql
-      - eureka-server
-      - kafka-service
+      activity-mysql:
+        condition: service_healthy
     env_file:
       - ./pre-order.env
     networks:
@@ -89,6 +97,11 @@ services:
     restart: always
     networks:
       - pre-order-network
+    healthcheck:
+      test: [ "CMD", "mysql", "-h", "activity-mysql", "-u", "sa", "-p1234", "-e", "SELECT 1" ]
+      interval: 5s
+      timeout: 3s
+      retries: 10
 # ----------- Eureka Service ---------
   eureka-server:
     build:
