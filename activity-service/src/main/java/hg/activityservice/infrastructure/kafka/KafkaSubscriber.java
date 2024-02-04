@@ -16,16 +16,10 @@ import org.springframework.stereotype.Service;
 @RequiredArgsConstructor
 public class KafkaSubscriber {
     private final ActivityFacade activityFacade;
-    private final ObjectMapper objectMapper;
 
     @KafkaListener(topics = Topic.ACTIVITY_EVENT, groupId = "activity-service")
-    public void consume(String message) {
-        try {
-            ActivityEvent event = objectMapper.readValue(message, ActivityEvent.class);
-            log.info("type=[{}] user=[{}] target=[{}]", event.getType(), event.getUserId(), event.getTargetId());
-            activityFacade.handleActivityEvent(event);
-        } catch (JsonProcessingException e) {
-            throw new RuntimeException(e);
-        }
+    public void consume(ActivityEvent event) {
+        log.info("type=[{}] user=[{}] target=[{}]", event.getType(), event.getUserId(), event.getTargetId());
+        activityFacade.handleActivityEvent(event);
     }
 }

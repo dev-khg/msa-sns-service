@@ -20,19 +20,14 @@ import static com.example.commonproject.event.Topic.*;
 @Slf4j
 public class KafkaPublisher implements EventPublisher {
     private final ActivityFeignClient activityFeignClient;
-    private final KafkaTemplate<String, String> kafkaTemplate;
+    private final KafkaTemplate<String, ActivityEvent> kafkaTemplate;
     private final ObjectMapper objectMapper;
 
     @Override
     @CircuitBreaker(name = "activityCircuitBreaker", fallbackMethod = "fallback")
     public void publish(ActivityEvent event) {
-        try {
-            String content = objectMapper.writeValueAsString(event);
-            kafkaTemplate.send(ACTIVITY_EVENT, content);
-            log.info("[KAFKA] =======> Event [{}] User [{}] Target [{}]", event.getType(), event.getUserId(), event.getTargetId());
-        } catch (JsonProcessingException e) {
-            throw new RuntimeException(e);
-        }
+        log.info("[KAFKA] =======> Event [{}] User [{}] Target [{}]", event.getType(), event.getUserId(), event.getTargetId());
+        kafkaTemplate.send(ACTIVITY_EVENT, event);
     }
 
     @Override

@@ -4,6 +4,7 @@ import hg.userservice.core.service.AuthService;
 import hg.userservice.core.service.UserService;
 import hg.userservice.infrastructure.email.EmailService;
 import hg.userservice.infrastructure.security.annotation.AuthorizationRequired;
+import hg.userservice.presentation.request.EmailRequest;
 import hg.userservice.presentation.request.SignUpRequest;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -34,8 +35,8 @@ public class AccountController {
     }
 
     @PostMapping("/signup/email")
-    public ResponseEntity<Void> sendEmail(@RequestParam("email") String email) {
-        emailService.sendCode(email);
+    public ResponseEntity<Void> sendEmail(@RequestBody EmailRequest request) {
+        emailService.sendCode(request.getEmail());
 
         return noContent().build();
     }

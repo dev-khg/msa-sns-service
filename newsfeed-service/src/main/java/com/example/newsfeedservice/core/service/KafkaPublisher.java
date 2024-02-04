@@ -15,17 +15,11 @@ import static com.example.commonproject.event.Topic.ACTIVITY_EVENT;
 @RequiredArgsConstructor
 public class KafkaPublisher implements EventPublisher {
     private final ActivityFeignClient activityFeignClient;
-    private final KafkaTemplate<String, String> kafkaTemplate;
-    private final ObjectMapper objectMapper;
+    private final KafkaTemplate<String, ActivityEvent> kafkaTemplate;
 
     @Override
     public void publish(ActivityEvent event) {
-        try {
-            String content = objectMapper.writeValueAsString(event);
-            kafkaTemplate.send(ACTIVITY_EVENT, content);
-        } catch (JsonProcessingException e) {
-            throw new RuntimeException(e);
-        }
+        kafkaTemplate.send(ACTIVITY_EVENT, event);
     }
 
     @Override

@@ -9,6 +9,8 @@ server:
   port: 0
 
 spring:
+  kafka:
+    bootstrap-servers: ${KAFKA_SERVER_URL}
   application:
     name: newsfeed-service
   datasource:
