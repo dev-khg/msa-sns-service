@@ -1,12 +1,13 @@
 ## 개요
 - SNS 서비스를 제공하기 위한 백엔드 서버 입니다.
-- 모놀리스 아키텍쳐로 구현하고, MSA 아키텍쳐를 적용하는 방식으로 진행하였습니다.
+- <a href='https://github.com/dev-khg/preorder/tree/prod-monolith'>모놀리스 아키텍쳐</a>로 구현하고, 추후 MSA 아키텍쳐로 변경하는 방식으로 진행하였습니다.
 
 ## 기술 스택
 - Java 21, Spring boot 3.1.8
 - Spring Security, Spring Cloud Gateway, OpenFeign, Eureka, Resilience4j, JWT, JPA
 - MySQL, Redis, Kafka, H2(로컬 테스트용)
 - Junit5, Mockito
+- Docker, Docker-Compose
 
 ## Module 구조
 #### `common-project` : 모든 프로젝트에 공통적으로 포함할 것들을 모듈화한 프로젝트
