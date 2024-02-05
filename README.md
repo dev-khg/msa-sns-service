@@ -1,15 +1,17 @@
-## 개요
+## 📘 개요
 - SNS 서비스를 제공하기 위한 백엔드 서버 입니다.
 - <a href='https://github.com/dev-khg/preorder/tree/prod-monolith'>모놀리스 아키텍쳐</a>로 구현하고, 추후 MSA 아키텍쳐로 변경하는 방식으로 진행하였습니다.
 
-## 기술 스택
+
+## 📕 기술 스택
 - Java 21, Spring boot 3.1.8
 - Spring Security, Spring Cloud Gateway, OpenFeign, Eureka, Resilience4j, JWT, JPA
 - MySQL, Redis, Kafka, H2(로컬 테스트용)
 - Junit5, Mockito
 - Docker, Docker-Compose
 
-## Module 구조
+
+## 📙 Module 구조
 #### `common-project` : 모든 프로젝트에 공통적으로 포함할 것들을 모듈화한 프로젝트
 
 #### `eureka-service` : 동적으로 각 서비스를 등록하고, 식별하기 위한 서비스
@@ -22,7 +24,9 @@
 
 #### `activity-service` : 활동 도메인 서버 (유저의 활동 내역 (게시글 작성, 팔로우, 좋아요 등)을 저장 및 처리하는 서버)
 
-## E-R 다이어그램
+<br/>
+
+## 📘 E-R 다이어그램
 <p align='center'>
     <img width="677" alt="image" src="https://github.com/dev-khg/preorder/assets/108642272/441f6cbb-30dc-4991-86bb-4b75547da1e4">
 </p>
@@ -31,7 +35,9 @@
 - <strong style="font-size: 16px;">NewFeed-Service</strong> : 게시글, 댓글 관련 데이터 집합<br/>
 - <strong style="font-size: 16px;">Activity-Service</strong> : 활동 관련 데이터 집합 (= 팔로우 이력, 게시글, 댓글 이력 등)<br/>
 
-## Architecture & Description
+<br/>
+
+## 📕 Architecture & Description
 <p align='center'>
     <img width="1296" alt="image" src="https://github.com/dev-khg/preorder/assets/108642272/f1d223b6-7275-4e65-b53f-8bc0383e31fb">
 </p>
@@ -53,8 +59,10 @@
 
   - <strong style="font-size: 16px;">서버의 수평적 확장 용이</strong> : 도메인 서버확장 시 카프카 인터페이스를 두어 수평적확장에 용이함
 
+<br/><br/>
 
-## 요구사항 명세서
+
+## 📙 요구사항 명세서
 ### ✏️ User
 - 유저는 회원가입을 통해 계정을 생성할 수 있다.
 - 유저는 중복 및 무분별한 계정 생성 방지를 위한 이메일 인증 기능이 필요하다.
@@ -80,16 +88,17 @@
 - 사용자가 포스트에 작성한 댓글은 수정할 수 있어야 한다.
 - 사용자는 댓글 좋아요/좋아요 취소 기능을 사용할 수 있어야 한다.
 
-## 도커 실행(docker-compose)
+<br/><br/>
+
+## 📘 도커 실행(docker-compose)
 ```
 1. ./gradlew clean build
-2. setting variable in "pre-order.env" file (** if not, you cannot use email serivce)
+2. setting variable in "pre-order.env" file (설정하지 않으면 이메일 관련 인증은 사용 불가)
 3. docker-compose up -d
 ```
-
-### POSTMAN (API 문서)
-<a href='https://documenter.getpostman.com/view/25250187/2s9YyweJyz'>포스트맨 API 문서 링크 </a> <br/>
 <br/>
+
+## 📕 <a href='https://documenter.getpostman.com/view/25250187/2s9YyweJyz'>POSTMAN (API 문서 링크)</a>
 <strong>테스트 계정</strong> <br/>
  메인 화원 | ID : test1234@test.com / PW : test1234 <br/>
  메인 회원이 팔로우 하는 회원 | ID : tester-2@test.com / PW : test1234
