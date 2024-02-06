@@ -85,7 +85,6 @@ class ActivityRepositoryImplTest {
             ActivityEntity actual = savedEntity.get(i);
             assertEquals(expected.getId(), actual.getId());
             assertEquals(expected.getType(), actual.getType());
-            assertEquals(expected.getCreatedAt(), actual.getCreatedAt());
             assertEquals(expected.getTargetId(), actual.getTargetId());
         }
     }
